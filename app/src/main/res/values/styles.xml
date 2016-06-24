@@ -103,19 +103,20 @@
         <item name="android:text">@string/mail_text</item>
     </style>
     <style name="input_text.vk">
-        <item name="android:inputType">textWebEditText</item>
+        <item name="android:inputType">textWebEditText|textImeMultiLine</item>
+        <item name="android:maxLines">2</item>
         <item name="android:hint">@string/vk_hint</item>
         <item name="android:text">@string/vk_text</item>
     </style>
     <style name="input_text.repo">
-        <item name="android:inputType">textWebEditText</item>
+        <item name="android:inputType">textWebEditText|textMultiLine</item>
+        <item name="android:maxLines">3</item>
         <item name="android:hint">@string/github_hint</item>
         <item name="android:text">@string/git_text</item>
     </style>
     <style name="input_text.self">
         <item name="android:inputType">textMultiLine</item>
-        <item name="android:lines">10</item>
-        <item name="android:minLines">3</item>
+        <item name="android:minLines">1</item>
         <item name="android:hint">@string/self_hint</item>
         <item name="android:text">@string/self_text</item>
     </style>

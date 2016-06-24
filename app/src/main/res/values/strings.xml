@@ -3,22 +3,21 @@
     <string name="mobile_hint">Мобильный</string>
     <string name="email_hint">E-mail</string>
     <string name="vk_hint">Профиль в VK</string>
-    <string name="github_hint">Репозитарий</string>
+    <string name="github_hint">Репозиторий</string>
     <string name="self_hint">О себе</string>
 
     <!--Временный текст для информации-->
-    <string name="mobile_text">+7(900)1235566</string>
-    <string name="mail_text">test@test.ru</string>
-    <string name="vk_text">www.vk.com/id0000000</string>
-    <string name="git_text">www.github.com/user/repo</string>
+    <string name="mobile_text">+7(953)7094950</string>
+    <string name="mail_text">nikotin13@mail.ru</string>
+    <string name="vk_text">www.vk.com/id4646406</string>
+    <string name="git_text">www.github.com/smalew/DevIntensive</string>
     <string name="self_text">Увлечения: Sci-Fi \n
                             Автор: Лавкрафт \n
                             Фильм: Назад в будущее \n
                             Награды: нет \n
-                            Стремления: Java programmer \n
-                            Стремления: Android programmer \n
+                            Стремления: Java \n
+                            Стремления: Android \n
                             Стремления: Спорт \n
-                            Стремления: Администрирование \n
                             Возраст: 28 \n
                             Привычки: без вредных</string>
 </resources>
