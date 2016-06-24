@@ -89,7 +89,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
-        <item name="android:background">#fafafa</item>
+        <item name="android:background">#00fafafa</item>
     </style>
 
     <style name="input_text.mobile">
