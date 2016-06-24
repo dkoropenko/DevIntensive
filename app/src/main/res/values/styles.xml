@@ -27,7 +27,7 @@
     </style>
 
     <!--Head-->
-    <style name="head_info_container">
+    <style name="head_text_view_container">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>>
         <item name="android:layout_marginTop">@dimen/margin_24</item>
@@ -35,44 +35,38 @@
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="head_text_view_num" parent="text_style.head_num">
+
+    <style name="head_text_view_number" parent="text_style.head_num">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>>
-        <item name="android:layout_marginTop">@dimen/margin_8</item>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
     <style name="head_text_view_info" parent="text_style.head_text">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
 
 
     <!--Body-->
     <!-- Information container -->
-    <style name="info_container">
+    <style name="body_view_container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/size_large_72</item>
         <item name="android:layout_marginTop">@dimen/margin_24</item>
         <item name="android:orientation">horizontal</item>
     </style>
-    <style name="info_container.self_info">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
 
     <style name="icon">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">24dp</item>
-        <item name="android:layout_weight">0.5</item>
+        <item name="android:layout_weight">0.25</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
     <style name="icon.left">
-        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginLeft">@dimen/margin_16</item>
     </style>
     <style name="icon.right">
-        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginRight">@dimen/margin_24</item>
     </style>
 
@@ -80,8 +74,9 @@
     <style name="input_text_layout">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">2</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8</item>
     </style>
 
     <style name="input_text" parent="@style/text_style.body_edit_text">
@@ -89,7 +84,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
-        <item name="android:background">#00fafafa</item>
+        <item name="android:background">@color/edit_text_background</item>
     </style>
 
     <style name="input_text.mobile">
@@ -103,13 +98,13 @@
         <item name="android:text">@string/mail_text</item>
     </style>
     <style name="input_text.vk">
-        <item name="android:inputType">textWebEditText|textImeMultiLine</item>
+        <item name="android:inputType">textImeMultiLine</item>
         <item name="android:maxLines">2</item>
         <item name="android:hint">@string/vk_hint</item>
         <item name="android:text">@string/vk_text</item>
     </style>
     <style name="input_text.repo">
-        <item name="android:inputType">textWebEditText|textMultiLine</item>
+        <item name="android:inputType">textMultiLine</item>
         <item name="android:maxLines">3</item>
         <item name="android:hint">@string/github_hint</item>
         <item name="android:text">@string/git_text</item>
@@ -125,7 +120,7 @@
     <style name="separator_horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
-        <item name="android:layout_marginLeft">@dimen/margin_72</item>
+        <item name="android:layout_marginLeft">@dimen/margin_80</item>
         <item name="android:background">@color/separator</item>
     </style>
     <style name="separator_vertical">

@@ -23,11 +23,11 @@
 
                 <!--Рейтинг-->
                 <LinearLayout
-                    style="@style/head_info_container"
+                    style="@style/head_text_view_container"
                     android:layout_weight="0.25">
 
                     <TextView
-                        style="@style/head_text_view_num"
+                        style="@style/head_text_view_number"
                         android:text="99"/>
 
                     <TextView
@@ -40,11 +40,11 @@
 
                 <!--Количество строк-->
                 <LinearLayout
-                    style="@style/head_info_container"
+                    style="@style/head_text_view_container"
                     android:layout_weight="0.5">
 
                     <TextView
-                        style="@style/head_text_view_num"
+                        style="@style/head_text_view_number"
                         android:text="10 000"/>
 
                     <TextView
@@ -57,11 +57,11 @@
 
                 <!--Проекты-->
                 <LinearLayout
-                    style="@style/head_info_container"
+                    style="@style/head_text_view_container"
                     android:layout_weight="0.25">
 
                     <TextView
-                        style="@style/head_text_view_num"
+                        style="@style/head_text_view_number"
                         android:text="8"/>
 
                     <TextView
@@ -74,7 +74,7 @@
             <!--BODY-->
             <!--Мобильный-->
             <LinearLayout
-                style="@style/info_container">
+                style="@style/body_view_container">
 
                 <ImageView
                     style="@style/icon.left"
@@ -99,7 +99,7 @@
 
             <!--Почта-->
             <LinearLayout
-                style="@style/info_container">
+                style="@style/body_view_container">
 
                 <ImageView
                     style="@style/icon.left"
@@ -124,7 +124,7 @@
 
             <!--Профиль в VK-->
             <LinearLayout
-                style="@style/info_container">
+                style="@style/body_view_container">
 
                 <ImageView
                     style="@style/icon.left"
@@ -149,7 +149,7 @@
 
             <!--Репозиторий-->
             <LinearLayout
-                style="@style/info_container">
+                style="@style/body_view_container">
 
                 <ImageView
                     style="@style/icon.left"
@@ -174,24 +174,23 @@
 
             <!--О себе-->
             <LinearLayout
-                style="@style/info_container.self_info">
+                style="@style/body_view_container"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     style="@style/icon.left"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.15"
                     android:src="@drawable/ic_account_circle_black_24dp"/>
 
                 <android.support.design.widget.TextInputLayout
-                    style="@style/input_text_layout">
+                    style="@style/input_text_layout"
+                    android:layout_weight="0.85">
 
                     <android.support.design.widget.TextInputEditText
                         style="@style/input_text.self">
                     </android.support.design.widget.TextInputEditText>
                 </android.support.design.widget.TextInputLayout>
-
-                <ImageView
-                    style="@style/icon.right"
-                    />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
