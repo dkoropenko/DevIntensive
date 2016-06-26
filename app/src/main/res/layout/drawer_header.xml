@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/drawer_header"
+    android:background="@drawable/header_bg"
+    >
+
+    <ImageView
+        android:id="@+id/avatar_img"
+        style="@style/drawer_avatar"
+        android:src="@drawable/avatar"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        style="@style/drawer_txt_container">
+
+        <TextView
+            android:id="@+id/user_profile_name"
+            style="@style/drawer_txt_name"
+            />
+
+        <TextView
+            android:id="@+id/user_profile_mail"
+            style="@style/drawer_txt_mail"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

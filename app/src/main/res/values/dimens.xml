@@ -13,22 +13,14 @@
     <dimen name="font_size_24">24sp</dimen>
 
     <!--sizes-->
-    <dimen name="size_small_24">24dp</dimen>
-    <dimen name="size_medium_56">56dp</dimen>
-    <dimen name="size_large_72">72dp</dimen>
-    <dimen name="size_larger_96">96dp</dimen>
-
-    <!--margins-->
-    <dimen name="margin_8">8dp</dimen>
-    <dimen name="margin_16">16dp</dimen>
-    <dimen name="margin_24">24dp</dimen>
-    <dimen name="margin_32">32dp</dimen>
-    <dimen name="margin_48">48dp</dimen>
-    <dimen name="margin_56">56dp</dimen>
-    <dimen name="margin_72">72dp</dimen>
-    <dimen name="margin_80">80dp</dimen>
-    <dimen name="margin_96">96dp</dimen>
-    <dimen name="margin_104">104dp</dimen>
+    <dimen name="size_24">24dp</dimen>
+    <dimen name="size_56">56dp</dimen>
+    <dimen name="size_60">60dp</dimen>
+    <dimen name="size_72">72dp</dimen>
+    <dimen name="size_96">96dp</dimen>
+    <dimen name="size_172">172dp</dimen>
+    <dimen name="size_256">256dp</dimen>
+    <dimen name="fab_right_margin">8dp</dimen>
 
     <!--spaces-->
     <dimen name="spacing_8">8dp</dimen>
@@ -38,5 +30,10 @@
     <dimen name="spacing_48">48dp</dimen>
     <dimen name="spacing_56">56dp</dimen>
     <dimen name="spacing_72">72dp</dimen>
+    <dimen name="spacing_80">80dp</dimen>
+    <dimen name="spacing_88">88dp</dimen>
+    <dimen name="spacing_96">96dp</dimen>
+    <dimen name="spacing_104">104dp</dimen>
+
 </resources>
 
