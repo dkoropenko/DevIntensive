@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.utils.CircleImageView;
+import com.softdesign.devintensive.ui.views.behaviors.InfoPanelBehavior;
 import com.softdesign.devintensive.utils.ConstantManager;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private EditText userPhone, userMail, userVK, userRepo, userSelf;
     private View mDrawerHeader;
     private NavigationView mNavigationView;
-    private CircleImageView mAvatar;
+    private ImageView mAvatar;
 
     private List<EditText> mUserInfo;
     private boolean mCurrentEditMode;
@@ -55,16 +55,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
 
-        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mAvatar = (CircleImageView)mDrawerHeader.findViewById(R.id.avatar_img);
-        mAvatar.setImageResource(R.drawable.avatar);
-
         userPhone = (EditText) findViewById(R.id.user_phone);
         userMail = (EditText) findViewById(R.id.user_mail);
         userVK = (EditText) findViewById(R.id.user_vk);
         userRepo = (EditText) findViewById(R.id.user_repo);
         userSelf = (EditText) findViewById(R.id.user_self);
+
+        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
+        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
+        mAvatar.setImageResource(R.drawable.avatar);
 
         mUserInfo = new ArrayList();
         mUserInfo.add(userPhone);
@@ -79,6 +79,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setupToolbar();
         setupNavigation();
         loadUserInfoValue();
+
+        mBehavior();
 
         if (savedInstanceState != null) {
             //Проверяем режим редактирования данных
@@ -227,5 +229,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
+    }
+
+    private void mBehavior(){
+        InfoPanelBehavior tvBehavior = new InfoPanelBehavior();
+
+        ImageView test = (ImageView) findViewById(R.id.testImage);
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) test.getLayoutParams();
+        params.setBehavior(tvBehavior);
     }
 }

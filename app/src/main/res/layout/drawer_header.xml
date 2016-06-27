@@ -7,17 +7,16 @@
     android:background="@drawable/header_bg"
     >
 
-    <com.softdesign.devintensive.utils.CircleImageView
+    <com.softdesign.devintensive.ui.views.CircleImageView
         android:id="@+id/avatar_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
         style="@style/drawer_avatar"
+        android:src="@drawable/empty_avatar"
         android:scaleType="centerCrop"/>
 
     <LinearLayout
+        style="@style/drawer_txt_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/drawer_txt_container">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/user_profile_name"

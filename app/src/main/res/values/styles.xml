@@ -21,13 +21,8 @@
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
-    <style name="text.profile_num">
+    <style name="text.profile">
         <item name="android:textColor">@color/profile_txt</item>
-        <item name="android:textSize">@dimen/font_size_24</item>
-    </style>
-    <style name="text.profile_txt">
-        <item name="android:textColor">@color/profile_txt</item>
-        <item name="android:textSize">@dimen/font_size_16</item>
     </style>
     <style name="text.user_info">
         <item name="android:textColor">@color/user_info_txt</item>
@@ -50,21 +45,20 @@
     <style name="profile_info">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>>
-        <item name="android:layout_marginTop">@dimen/spacing_24</item>
-        <item name="android:layout_marginBottom">@dimen/spacing_24</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="profile_num" parent="text.profile_num">
+    <style name="profile" parent="text.profile">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
-    <style name="profile_txt" parent="text.profile_txt">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>>
-        <item name="android:layout_centerHorizontal">true</item>
+    <style name="profile.num">
+        <item name="android:textSize">@dimen/font_size_24</item>
+    </style>
+    <style name="profile.txt">
+        <item name="android:textSize">@dimen/font_size_16</item>
     </style>
     <!--/HEAD-->
 
@@ -146,8 +140,6 @@
     <style name="separator_vertical">
         <item name="android:layout_width">2dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">@dimen/spacing_16</item>
-        <item name="android:layout_marginBottom">@dimen/spacing_16</item>
         <item name="android:background">@color/separator_background</item>
     </style>
     <!--/Separator-->
