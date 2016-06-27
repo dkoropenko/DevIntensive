@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
+import com.softdesign.devintensive.utils.CircleImageView;
 import com.softdesign.devintensive.utils.ConstantManager;
 
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private DrawerLayout mNavigationDrawer;
     private FloatingActionButton mFab;
     private EditText userPhone, userMail, userVK, userRepo, userSelf;
+    private View mDrawerHeader;
+    private NavigationView mNavigationView;
+    private CircleImageView mAvatar;
 
     private List<EditText> mUserInfo;
     private boolean mCurrentEditMode;
@@ -50,6 +54,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
+
+        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
+        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        mAvatar = (CircleImageView)mDrawerHeader.findViewById(R.id.avatar_img);
+        mAvatar.setImageResource(R.drawable.avatar);
 
         userPhone = (EditText) findViewById(R.id.user_phone);
         userMail = (EditText) findViewById(R.id.user_mail);
@@ -210,5 +219,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START))
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 }
