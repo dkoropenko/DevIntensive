@@ -12,6 +12,7 @@ import java.util.List;
  * Created by smalew on 26.06.16.
  */
 public class PreferencesManager {
+    private static final String TAG = ConstantManager.PREFIX_TAG + "PreferenceManager";
 
     private SharedPreferences mSharedPreferences;
     private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY,

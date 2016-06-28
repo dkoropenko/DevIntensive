@@ -1,9 +1,12 @@
 package com.softdesign.devintensive.data.managers;
 
+import com.softdesign.devintensive.utils.ConstantManager;
+
 /**
  * Created by smalew on 26.06.16.
  */
 public class DataManager {
+    private static final String TAG = ConstantManager.PREFIX_TAG + "DataManager";
 
     private static DataManager instance = null;
     private PreferencesManager mPreferencesManager;

@@ -19,13 +19,13 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar_background">
+            android:background="@color/profile_background">
             
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/toolbar_background"
+                app:contentScrim="@color/profile_background"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
-                    android:titleTextColor="@color/tv_background"
+                    android:titleTextColor="@color/profile_background"
                     app:layout_collapseMode="pin"/>
 
 
@@ -54,7 +54,7 @@
             android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_48"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <!--BODY-->
             <LinearLayout
@@ -199,14 +199,16 @@
 
         <!--HEAD-->
         <LinearLayout
-            android:id="@+id/test"
+            android:id="@+id/info_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/spacing_24"
+            android:paddingBottom="@dimen/spacing_24"
             android:background="@color/profile_background"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_anchor="@id/nested_scroll_view"
-            app:layout_anchorGravity="clip_vertical"
+            app:layout_anchorGravity="top"
             app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior">
 
             <!--Рейтинг-->

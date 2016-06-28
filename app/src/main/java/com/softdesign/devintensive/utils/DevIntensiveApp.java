@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class DevIntensiveApp extends Application {
+    private static final String TAG = ConstantManager.PREFIX_TAG + "DevIntensiveApp";
 
     public static SharedPreferences sSharedPreferences;
 

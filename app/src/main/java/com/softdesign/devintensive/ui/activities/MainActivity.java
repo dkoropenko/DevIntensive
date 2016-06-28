@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.ui.views.behaviors.InfoPanelBehavior;
 import com.softdesign.devintensive.utils.ConstantManager;
 
 import java.util.ArrayList;
@@ -48,27 +47,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Инициализация ярлыков для взаимодействия с user information
         mCallImg = (ImageView) findViewById(R.id.call_img);
         mCallImg.setOnClickListener(this);
 
+        //Инициализация слоев для бокового меню и user content
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
         mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
 
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setOnClickListener(this);
-
-        mInfoPanel = (LinearLayout) findViewById(R.id.test);
-
+        //User container
+        mInfoPanel = (LinearLayout) findViewById(R.id.info_container);
         userPhone = (EditText) findViewById(R.id.user_phone);
         userMail = (EditText) findViewById(R.id.user_mail);
         userVK = (EditText) findViewById(R.id.user_vk);
         userRepo = (EditText) findViewById(R.id.user_repo);
         userSelf = (EditText) findViewById(R.id.user_self);
-
-        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
-        mAvatar.setImageResource(R.drawable.avatar);
 
         mUserInfo = new ArrayList();
         mUserInfo.add(userPhone);
@@ -76,55 +69,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfo.add(userVK);
         mUserInfo.add(userRepo);
         mUserInfo.add(userSelf);
-
         mDataManager = DataManager.getInstance();
 
+        //Боковое меню
+        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
+        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
+        mAvatar.setImageResource(R.drawable.avatar);
+
+        //ToolBar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar();
         setupNavigation();
         loadUserInfoValue();
 
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(this);
+
         if (savedInstanceState != null) {
             //Проверяем режим редактирования данных
             fabChangeMode(savedInstanceState.getBoolean(ConstantManager.EDIT_MODE_KEY));
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveUserInfoValue();
-        Log.d(TAG, "onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart");
     }
 
     @Override
@@ -169,6 +134,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mFab.setImageResource(R.drawable.ic_mode_edit_black_24dp);
     }
 
+    /**
+     * Загружает переменные бользователя
+     */
     private void loadUserInfoValue() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
 
@@ -178,6 +146,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * Сохраняет переменные пользователя
+     */
     private void saveUserInfoValue() {
         List<String> userData = new ArrayList<>();
 
@@ -187,6 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
     }
+
 
     private void showSnackBar(String message) {
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
@@ -232,4 +204,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         else
             super.onBackPressed();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveUserInfoValue();
+        Log.d(TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart");
+    }
+
+
 }
