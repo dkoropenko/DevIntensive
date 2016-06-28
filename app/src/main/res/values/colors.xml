@@ -8,6 +8,7 @@
     <color name="separator_background">#ababab</color>
     <color name="profile_background">#666666</color>
     <color name="user_info_txt_background">#00fafafa</color>
+    <color name="toolbar_background">#6e6e6e</color>
 
     <!--text colors-->
     <color name="profile_txt">#d7d7d7</color>

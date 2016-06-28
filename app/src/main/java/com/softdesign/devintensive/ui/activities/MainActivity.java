@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View mDrawerHeader;
     private NavigationView mNavigationView;
     private ImageView mAvatar;
+    private LinearLayout mInfoPanel;
 
     private List<EditText> mUserInfo;
     private boolean mCurrentEditMode;
@@ -54,6 +56,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
+
+        mInfoPanel = (LinearLayout) findViewById(R.id.test);
 
         userPhone = (EditText) findViewById(R.id.user_phone);
         userMail = (EditText) findViewById(R.id.user_mail);
@@ -79,8 +83,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setupToolbar();
         setupNavigation();
         loadUserInfoValue();
-
-        mBehavior();
 
         if (savedInstanceState != null) {
             //Проверяем режим редактирования данных
@@ -229,14 +231,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
-    }
-
-    private void mBehavior(){
-        InfoPanelBehavior tvBehavior = new InfoPanelBehavior();
-
-        ImageView test = (ImageView) findViewById(R.id.testImage);
-
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) test.getLayoutParams();
-        params.setBehavior(tvBehavior);
     }
 }

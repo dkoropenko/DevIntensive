@@ -19,15 +19,15 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_primary">
+            android:background="@color/toolbar_background">
             
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/color_primary"
+                app:contentScrim="@color/toolbar_background"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-                
+
                 <ImageView
                     android:id="@+id/user_photo_img"
                     android:layout_width="wrap_content"
@@ -41,76 +41,28 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:titleTextColor="@color/white"
+                    android:fitsSystemWindows="true"
+                    android:titleTextColor="@color/tv_background"
                     app:layout_collapseMode="pin"/>
 
 
-            </android.support.design.widget.CollapsingToolbarLayout>            
+            </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
         <!--Content-->
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_24"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+            <!--BODY-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/spacing_24"
                 android:orientation="vertical">
 
-
-                <!--HEAD-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/font_size_24"
-                    android:paddingBottom="@dimen/font_size_24"
-                    android:background="@color/profile_background"
-                    android:orientation="horizontal">
-
-                    <!--Рейтинг-->
-                    <LinearLayout
-                        style="@style/profile_info"
-                        android:layout_weight="0.25">
-                        <TextView
-                            style="@style/profile.num"
-                            android:text="99"/>
-                        <TextView
-                            style="@style/profile.txt"
-                            android:text="Рейтинг"/>
-                    </LinearLayout>
-                    <View
-                        style="@style/separator_vertical"/>
-
-                    <!--Количество строк-->
-                    <LinearLayout
-                        style="@style/profile_info"
-                        android:layout_weight="0.5">
-                        <TextView
-                            style="@style/profile.num"
-                            android:text="10 000"/>
-                        <TextView
-                            style="@style/profile.txt"
-                            android:text="Написано строк кода"/>
-                    </LinearLayout>
-                    <View
-                        style="@style/separator_vertical"/>
-
-                    <!--Проекты-->
-                    <LinearLayout
-                        style="@style/profile_info"
-                        android:layout_weight="0.25">
-                        <TextView
-                            style="@style/profile.num"
-                            android:text="8"/>
-                        <TextView
-                            style="@style/profile.txt"
-                            android:text="Проектов"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!--BODY-->
                 <!--Мобильный-->
                 <LinearLayout
                     style="@style/user_info_container">
@@ -127,6 +79,7 @@
                             style="@style/user_info.mobile">
                         </android.support.design.widget.TextInputEditText>
                     </android.support.design.widget.TextInputLayout>
+
 
                     <ImageView
                         android:id="@+id/call_img"
@@ -244,6 +197,59 @@
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
+        <!--HEAD-->
+        <LinearLayout
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/profile_background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_anchor="@id/nested_scroll_view"
+            app:layout_anchorGravity="clip_vertical"
+            app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior">
+
+            <!--Рейтинг-->
+            <LinearLayout
+                style="@style/profile_info"
+                android:layout_weight="0.25">
+                <TextView
+                    style="@style/profile.num"
+                    android:text="99"/>
+                <TextView
+                    style="@style/profile.txt"
+                    android:text="Рейтинг"/>
+            </LinearLayout>
+            <View
+                style="@style/separator_vertical"/>
+
+            <!--Количество строк-->
+            <LinearLayout
+                style="@style/profile_info"
+                android:layout_weight="0.5">
+                <TextView
+                    style="@style/profile.num"
+                    android:text="10 000"/>
+                <TextView
+                    style="@style/profile.txt"
+                    android:text="Написано строк кода"/>
+            </LinearLayout>
+            <View
+                style="@style/separator_vertical"/>
+
+            <!--Проекты-->
+            <LinearLayout
+                style="@style/profile_info"
+                android:layout_weight="0.25">
+                <TextView
+                    style="@style/profile.num"
+                    android:text="8"/>
+                <TextView
+                    style="@style/profile.txt"
+                    android:text="Проектов"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <!--FloatActionButton-->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -254,6 +260,7 @@
             app:layout_anchor="@id/appbar_layout"
             app:layout_anchorGravity="bottom|right"/>
     </android.support.design.widget.CoordinatorLayout>
+
 
     <!--Drawable menu-->
     <android.support.design.widget.NavigationView
