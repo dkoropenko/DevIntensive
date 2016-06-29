@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--BODY-->
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:orientation="vertical">
+
+        <!--Мобильный-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_phone_black_24dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/input_text_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_phone"
+                    style="@style/user_info.mobile">
+                </android.support.design.widget.TextInputEditText>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <ImageView
+                android:id="@+id/call_img"
+                style="@style/icon.right"
+                android:src="@drawable/ic_phone_in_talk_black_24dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Почта-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_email_black_24dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/input_text_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_mail"
+                    style="@style/user_info.email">
+                </android.support.design.widget.TextInputEditText>
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_send_black_24dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Профиль в VK-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/vk_circle"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/input_text_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_vk"
+                    style="@style/user_info.vk">
+                </android.support.design.widget.TextInputEditText>
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Репозиторий-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/github_box"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/input_text_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_repo"
+                    style="@style/user_info.repo">
+                </android.support.design.widget.TextInputEditText>
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--О себе-->
+        <LinearLayout
+            style="@style/user_info_container"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.15"
+                android:src="@drawable/ic_account_circle_black_24dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/input_text_layout"
+                android:layout_weight="0.85">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_self"
+                    style="@style/user_info.self">
+                </android.support.design.widget.TextInputEditText>
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
