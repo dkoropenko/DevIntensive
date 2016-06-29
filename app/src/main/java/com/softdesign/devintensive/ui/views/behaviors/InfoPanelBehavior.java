@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -43,6 +44,11 @@ public class InfoPanelBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
     }
 
     @Override
+    public boolean layoutDependsOn(CoordinatorLayout parent, LinearLayout child, View dependency) {
+        return dependency instanceof NestedScrollView;
+    }
+
+    @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, LinearLayout child, View dependency) {
 
         //Начальная инициализация переменных
@@ -66,6 +72,9 @@ public class InfoPanelBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
             mNestedScrollParam.topMargin = mTopMarginMax - (int)((mTopMarginMax * mProcScroll) / 140);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 child.setPaddingRelative(0, (int)mCurrentPaddingSize, 0, (int)mCurrentPaddingSize);
+            }
+            else{
+                child.setPadding(0, (int)mCurrentPaddingSize, 0, (int)mCurrentPaddingSize);
             }
         }
         return true;

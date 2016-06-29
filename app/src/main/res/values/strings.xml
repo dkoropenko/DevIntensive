@@ -30,4 +30,5 @@
                             Стремления: Спорт \n
                             Возраст: 28 \n
                             Привычки: без вредных</string>
+    <string name="load_user_avatar">Загрузите свое фото</string>
 </resources>

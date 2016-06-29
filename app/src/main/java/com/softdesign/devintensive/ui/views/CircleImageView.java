@@ -3,6 +3,7 @@ package com.softdesign.devintensive.ui.views;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -18,6 +19,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
 
 /**
  * Created by koropenkods on 27.06.16.
@@ -48,16 +50,19 @@ public class CircleImageView extends ImageView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        mXRadius = canvas.getWidth()/2;
-        mYRadius = canvas.getHeight()/2;
-        mRadius = Math.max(mXRadius,mYRadius);
+    public void setImageResource(int resId) {
+        Bitmap avatar = BitmapFactory.decodeResource(getResources(), resId);
+        this.setImageBitmap(avatar);
+    }
 
-        Path path = new Path();
-        path.addCircle(mXRadius, mYRadius, mRadius, Path.Direction.CCW);
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        RoundedAvatarDrawable drawableAvatar = new RoundedAvatarDrawable(bm);
+        this.setImageDrawable(drawableAvatar);
+    }
 
-        canvas.clipPath(path);
-
-        super.onDraw(canvas);
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
     }
 }

@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
         mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
         mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
-        mAvatar.setImageResource(R.drawable.avatar);
+        mAvatar.setImageResource(R.drawable.empty_avatar);
 
         //ToolBar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

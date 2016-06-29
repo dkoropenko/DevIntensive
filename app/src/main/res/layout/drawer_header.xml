@@ -10,8 +10,7 @@
     <com.softdesign.devintensive.ui.views.CircleImageView
         android:id="@+id/avatar_img"
         style="@style/drawer_avatar"
-        android:src="@drawable/empty_avatar"
-        android:scaleType="centerCrop"/>
+        android:src="@drawable/empty_avatar"/>
 
     <LinearLayout
         style="@style/drawer_txt_container"
