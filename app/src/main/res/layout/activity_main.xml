@@ -31,7 +31,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_256"
-                    android:background="@color/profile_background"
+                    android:background="@drawable/nav_header_bg"
                     android:visibility="gone">
 
                     <TextView

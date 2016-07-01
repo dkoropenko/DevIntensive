@@ -4,7 +4,7 @@
     style="@style/drawer_header"
     android:layout_width="match_parent"
     android:layout_height="172dp"
-    android:background="@drawable/header_bg"
+    android:background="@drawable/nav_header_bg"
     >
 
     <com.softdesign.devintensive.ui.views.CircleImageView

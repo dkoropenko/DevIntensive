@@ -93,40 +93,47 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginLeft">@dimen/spacing_16</item>
     </style>
-    <style name="user_info" parent="@style/text.user_info">
+    <style name="edit_text" parent="@style/text.user_info">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
         <item name="android:background">@color/user_info_txt_background</item>
     </style>
-    <style name="user_info.mobile">
+    <style name="edit_text.mobile">
         <item name="android:inputType">phone</item>
         <item name="android:hint">@string/mobile_hint</item>
-        <item name="android:text">@string/mobile_text</item>
     </style>
-    <style name="user_info.email">
+    <style name="edit_text.email">
         <item name="android:inputType">textEmailAddress</item>
         <item name="android:hint">@string/email_hint</item>
-        <item name="android:text">@string/mail_text</item>
     </style>
-    <style name="user_info.vk">
+    <style name="edit_text.vk">
         <item name="android:inputType">textImeMultiLine</item>
         <item name="android:maxLines">2</item>
         <item name="android:hint">@string/vk_hint</item>
-        <item name="android:text">@string/vk_text</item>
     </style>
-    <style name="user_info.repo">
+    <style name="edit_text.repo">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:maxLines">3</item>
         <item name="android:hint">@string/github_hint</item>
-        <item name="android:text">@string/git_text</item>
     </style>
-    <style name="user_info.self">
+    <style name="edit_text.self">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:minLines">1</item>
         <item name="android:hint">@string/self_hint</item>
-        <item name="android:text">@string/self_text</item>
+    </style>
+    <style name="edit_text.login">
+        <item name="android:inputType">text</item>
+        <item name="android:focusable">true</item>
+        <item name="android:enabled">true</item>
+        <item name="android:hint">@string/login_hint</item>
+    </style>
+    <style name="edit_text.password">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:focusable">true</item>
+        <item name="android:enabled">true</item>
+        <item name="android:hint">@string/password_hint</item>
     </style>
     <!--/Body-->
 

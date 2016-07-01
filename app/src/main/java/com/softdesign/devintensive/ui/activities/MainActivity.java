@@ -1,5 +1,7 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
@@ -23,22 +24,42 @@ import com.softdesign.devintensive.utils.ConstantManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     public static String TAG = ConstantManager.PREFIX_TAG + " MainActivity: ";
 
-    private ImageView mCallImg;
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
-    private DrawerLayout mNavigationDrawer;
-    private FloatingActionButton mFab;
-    private EditText userPhone, userMail, userVK, userRepo, userSelf;
-    private View mDrawerHeader;
-    private NavigationView mNavigationView;
-    private ImageView mAvatar;
-    private LinearLayout mInfoPanel;
+    //Инициализация слоев для бокового меню и user content
+    @BindView( R.id.main_coordinator_container) CoordinatorLayout mCoordinatorLayout;
+    @BindView( R.id.navigation_drawer) DrawerLayout mNavigationDrawer;
 
+    //User container
     private List<EditText> mUserInfo;
+    @BindView(R.id.user_phone) EditText userPhone;
+    @BindView(R.id.user_mail) EditText userMail;
+    @BindView(R.id.user_vk) EditText userVK;
+    @BindView(R.id.user_repo) EditText userRepo;
+    @BindView(R.id.user_self) EditText userSelf;
+
+    //Инициализация ярлыков для взаимодействия с user information
+    private List<ImageView> mUserAction;
+    @BindView(R.id.to_call_btn) ImageView mToCall;
+    @BindView(R.id.to_mail_btn) ImageView mToMail;
+    @BindView(R.id.to_vk_btn) ImageView mToVk;
+    @BindView(R.id.to_repo_btn) ImageView mToRepo;
+
+    //Боковое меню
+    @BindView(R.id.navigation_view) NavigationView mNavigationView;
+    private View mDrawerHeader;
+    ImageView mAvatar;
+
+    //ToolBar
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.fab) FloatingActionButton mFab;
+
+
     private boolean mCurrentEditMode;
     private DataManager mDataManager;
 
@@ -47,38 +68,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Инициализация ярлыков для взаимодействия с user information
-        mCallImg = (ImageView) findViewById(R.id.call_img);
-        mCallImg.setOnClickListener(this);
+        ButterKnife.bind(this);
 
-        //Инициализация слоев для бокового меню и user content
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
-        mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
-
-        //User container
-        mInfoPanel = (LinearLayout) findViewById(R.id.info_container);
-        userPhone = (EditText) findViewById(R.id.user_phone);
-        userMail = (EditText) findViewById(R.id.user_mail);
-        userVK = (EditText) findViewById(R.id.user_vk);
-        userRepo = (EditText) findViewById(R.id.user_repo);
-        userSelf = (EditText) findViewById(R.id.user_self);
-
-        mUserInfo = new ArrayList();
-        mUserInfo.add(userPhone);
-        mUserInfo.add(userMail);
-        mUserInfo.add(userVK);
-        mUserInfo.add(userRepo);
-        mUserInfo.add(userSelf);
         mDataManager = DataManager.getInstance();
 
         //Боковое меню
-        mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
         mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
         mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
         mAvatar.setImageResource(R.drawable.empty_avatar);
 
-        //ToolBar
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setupUserInfo();
         setupToolbar();
         setupNavigation();
         loadUserInfoValue();
@@ -101,9 +101,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.call_img:
+        Intent intent = null;
+        Uri data = null;
+        String url = null;
 
+        switch (view.getId()) {
+            case R.id.to_call_btn:
+                intent = new Intent(Intent.ACTION_DIAL);
+                data = Uri.parse("tel:"+ userPhone.getText().toString());
+                intent.setData(data);
+                break;
+            case R.id.to_mail_btn:
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String[] adress = {userMail.getText().toString()};
+                intent.putExtra(Intent.EXTRA_EMAIL, adress);
+                break;
+            case R.id.to_vk_btn:
+                url = userVK.getText().toString();
+
+                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                    url = "http://"+ url;
+
+                data = Uri.parse(url);
+
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(data);
+                break;
+            case R.id.to_repo_btn:
+                url = userRepo.getText().toString();
+
+                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                    url = "http://"+ url;
+
+                data = Uri.parse(url);
+
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(data);
                 break;
             case R.id.fab:
                 if (!mCurrentEditMode) {
@@ -113,6 +147,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     saveUserInfoValue();
                 }
                 break;
+        }
+
+        if (intent != null && intent.resolveActivity(getPackageManager())!= null){
+            startActivity(intent);
+            // TODO: 01.07.16 Добавить зависимости в manifest.
+        }else{
+            showSnackBar("Невозможно открыть!");
         }
     }
 
@@ -173,6 +214,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupUserInfo(){
+        mUserInfo = new ArrayList<>();
+        mUserInfo.add(userPhone);
+        mUserInfo.add(userMail);
+        mUserInfo.add(userVK);
+        mUserInfo.add(userRepo);
+        mUserInfo.add(userSelf);
+
+        mUserAction = new ArrayList<>();
+        mUserAction.add(mToCall);
+        mUserAction.add(mToMail);
+        mUserAction.add(mToVk);
+        mUserAction.add(mToRepo);
+
+        for (int i = 0; i < mUserAction.size(); i++) {
+            mUserAction.get(i).setOnClickListener(this);
+        }
+    }
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
 
@@ -183,14 +242,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-
     private void setupNavigation() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                showSnackBar(item.getTitle().toString());
-                item.setChecked(true);
+
+                switch (item.getItemId()){
+                    case R.id.relogin:
+                        Intent intent = new Intent(getBaseContext(), LogInActivity.class);
+                        startActivity(intent);
+                        break;
+                    default:
+                        showSnackBar(item.getTitle().toString());
+                        item.setChecked(true);
+                        break;
+                }
+
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
                 return false;
             }

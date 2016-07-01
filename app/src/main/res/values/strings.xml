@@ -1,12 +1,14 @@
 <resources>
 
-    <!--User infromation-->
+    <!--EditText's hints-->
     <string name="app_name">Коропенко Дмитрий</string>
     <string name="mobile_hint">Мобильный</string>
     <string name="email_hint">E-mail</string>
     <string name="vk_hint">Профиль в VK</string>
     <string name="github_hint">Репозиторий</string>
     <string name="self_hint">О себе</string>
+    <string name="login_hint">EMAIL</string>
+    <string name="password_hint">Пароль</string>
 
     <!--Drawable menu-->
     <string name="my_profile">Мой профиль</string>
@@ -31,4 +33,6 @@
                             Возраст: 28 \n
                             Привычки: без вредных</string>
     <string name="load_user_avatar">Загрузите свое фото</string>
+    <string name="error_send_intent_message">Извините, невозможно открыть данные</string>
+    <string name="exit">Выход</string>
 </resources>

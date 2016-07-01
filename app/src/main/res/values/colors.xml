@@ -13,6 +13,10 @@
     <!--text colors-->
     <color name="profile_txt">#d7d7d7</color>
     <color name="user_info_txt">#030303</color>
+    <color name="login_main_txt">#cf3c18</color>
+
+
+
 
     <!--debug colors-->
     <color name="white">#ffffff</color>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.softdesign.devintensive.ui.activities.LogInActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/spacing_56"
+            android:layout_marginRight="@dimen/spacing_56"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_16">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="24dp"
+                    android:background="@color/login_main_txt"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/spacing_16"
+                    android:layout_marginLeft="@dimen/font_size_24"
+                    android:text="ВОЙТИ"
+                    android:textColor="@color/login_main_txt"
+                    android:textSize="@dimen/font_size_20"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/spacing_24"
+                android:paddingLeft="@dimen/spacing_24"
+                android:paddingRight="@dimen/spacing_24">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="E-MAIL"
+                        android:text="nikotin13@mail.ru"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Пароль"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/spacing_16"
+                    android:layout_marginLeft="@dimen/spacing_32"
+                    android:layout_marginRight="@dimen/spacing_32"
+                    android:layout_marginTop="@dimen/spacing_16"
+                    android:background="@color/login_main_txt"
+                    android:text="Войти"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size_18"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="Забыли пароль"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
