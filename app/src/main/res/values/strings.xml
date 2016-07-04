@@ -1,4 +1,6 @@
 <resources>
+
+    <!--User infromation-->
     <string name="app_name">Коропенко Дмитрий</string>
     <string name="mobile_hint">Мобильный</string>
     <string name="email_hint">E-mail</string>
@@ -6,7 +8,15 @@
     <string name="github_hint">Репозиторий</string>
     <string name="self_hint">О себе</string>
 
+    <!--Drawable menu-->
+    <string name="my_profile">Мой профиль</string>
+    <string name="my_contacts">Контакты</string>
+
+
     <!--Временный текст для информации-->
+    <string name="my_profile_name">Коропенко Дмитрий</string>
+    <string name="my_profile_mail">nikotin13@mail.ru</string>
+
     <string name="mobile_text">+7(953)7094950</string>
     <string name="mail_text">nikotin13@mail.ru</string>
     <string name="vk_text">www.vk.com/id4646406</string>
@@ -20,4 +30,5 @@
                             Стремления: Спорт \n
                             Возраст: 28 \n
                             Привычки: без вредных</string>
+    <string name="load_user_avatar">Загрузите свое фото</string>
 </resources>

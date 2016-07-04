@@ -1,59 +1,74 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <!--Text Style-->
-    <style name="text_style">
+    <style name="text">
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
-    <style name="text_style.head_num">
-        <item name="android:textColor">@color/head_num_text</item>
-        <item name="android:textSize">@dimen/font_size_24</item>
+    <style name="text.profile">
+        <item name="android:textColor">@color/profile_txt</item>
     </style>
-    <style name="text_style.head_text">
-        <item name="android:textColor">@color/head_info_text</item>
-        <item name="android:textSize">@dimen/font_size_16</item>
-    </style>
-    <style name="text_style.body_edit_text">
-        <item name="android:textColor">@color/edit_text</item>
+    <style name="text.user_info">
+        <item name="android:textColor">@color/user_info_txt</item>
         <item name="android:textSize">@dimen/font_size_18</item>
     </style>
+    <style name="drawable_head_txt">
+        <item name="android:textSize">@dimen/font_size_14</item>
+        <item name="android:textColor">@color/profile_txt</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <style name="drawable_head_txt.name">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="drawable_head_txt.mail">
+        <item name="android:textStyle">normal</item>
+    </style>
+    <!--/Text style-->
 
-    <!--Head-->
-    <style name="head_text_view_container">
+    <!--HEAD-->
+    <style name="profile_info">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>>
-        <item name="android:layout_marginTop">@dimen/margin_24</item>
-        <item name="android:layout_marginBottom">@dimen/margin_24</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="head_text_view_number" parent="text_style.head_num">
+    <style name="profile" parent="text.profile">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
-    <style name="head_text_view_info" parent="text_style.head_text">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>>
-        <item name="android:layout_centerHorizontal">true</item>
+    <style name="profile.num">
+        <item name="android:textSize">@dimen/font_size_24</item>
     </style>
+    <style name="profile.txt">
+        <item name="android:textSize">@dimen/font_size_16</item>
+    </style>
+    <!--/HEAD-->
 
 
     <!--Body-->
     <!-- Information container -->
-    <style name="body_view_container">
+    <style name="user_info_container">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/size_large_72</item>
-        <item name="android:layout_marginTop">@dimen/margin_24</item>
+        <item name="android:layout_height">@dimen/size_72</item>
+        <item name="android:layout_marginTop">@dimen/spacing_24</item>
         <item name="android:orientation">horizontal</item>
     </style>
 
@@ -64,10 +79,10 @@
         <item name="android:layout_gravity">center_vertical</item>
     </style>
     <style name="icon.left">
-        <item name="android:layout_marginLeft">@dimen/margin_16</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_16</item>
     </style>
     <style name="icon.right">
-        <item name="android:layout_marginRight">@dimen/margin_24</item>
+        <item name="android:layout_marginRight">@dimen/spacing_16</item>
     </style>
 
     <!--InputTextEdits-->
@@ -76,58 +91,98 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginLeft">@dimen/margin_8</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_16</item>
     </style>
-
-    <style name="input_text" parent="@style/text_style.body_edit_text">
+    <style name="user_info" parent="@style/text.user_info">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
-        <item name="android:background">@color/edit_text_background</item>
+        <item name="android:background">@color/user_info_txt_background</item>
     </style>
-
-    <style name="input_text.mobile">
+    <style name="user_info.mobile">
         <item name="android:inputType">phone</item>
         <item name="android:hint">@string/mobile_hint</item>
         <item name="android:text">@string/mobile_text</item>
     </style>
-    <style name="input_text.email">
+    <style name="user_info.email">
         <item name="android:inputType">textEmailAddress</item>
         <item name="android:hint">@string/email_hint</item>
         <item name="android:text">@string/mail_text</item>
     </style>
-    <style name="input_text.vk">
+    <style name="user_info.vk">
         <item name="android:inputType">textImeMultiLine</item>
         <item name="android:maxLines">2</item>
         <item name="android:hint">@string/vk_hint</item>
         <item name="android:text">@string/vk_text</item>
     </style>
-    <style name="input_text.repo">
+    <style name="user_info.repo">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:maxLines">3</item>
         <item name="android:hint">@string/github_hint</item>
         <item name="android:text">@string/git_text</item>
     </style>
-    <style name="input_text.self">
+    <style name="user_info.self">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:minLines">1</item>
         <item name="android:hint">@string/self_hint</item>
         <item name="android:text">@string/self_text</item>
     </style>
+    <!--/Body-->
 
     <!--Separator-->
     <style name="separator_horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
-        <item name="android:layout_marginLeft">@dimen/margin_80</item>
-        <item name="android:background">@color/separator</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_88</item>
+        <item name="android:background">@color/separator_background</item>
     </style>
     <style name="separator_vertical">
-        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">@dimen/margin_16</item>
-        <item name="android:layout_marginBottom">@dimen/margin_16</item>
-        <item name="android:background">@color/separator</item>
+        <item name="android:background">@color/separator_background</item>
     </style>
+    <!--/Separator-->
+
+    <style name="custom_dialog">
+        <item name="android:fullDark">@android:color/transparent</item>
+    </style>
+
+    <!--Drawable Menu-->
+    <!--HEADER-->
+    <style name="drawer_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/size_172</item>
+        <item name="android:paddingTop">@dimen/spacing_24</item>
+        <item name="android:paddingBottom">@dimen/spacing_8</item>
+        <item name="android:paddingLeft">@dimen/spacing_16</item>
+        <item name="android:paddingRight">@dimen/spacing_16</item>
+    </style>
+    <style name="drawer_avatar">
+        <item name="android:layout_width">@dimen/size_60</item>
+        <item name="android:layout_height">@dimen/size_60</item>
+        <item name="android:layout_marginTop">@dimen/spacing_16</item>
+    </style>
+
+    <style name="drawer_txt_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/size_56</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="drawer_txt_name" parent="drawable_head_txt.name">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/my_profile_name</item>
+    </style>
+    <style name="drawer_txt_mail" parent="drawable_head_txt.mail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/my_profile_mail</item>
+    </style>
+    <!--/HEADER-->
+
+    <!--/Drawable Menu-->
+
 </resources>
