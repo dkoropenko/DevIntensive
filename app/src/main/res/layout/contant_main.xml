@@ -17,12 +17,13 @@
                 android:src="@drawable/ic_phone_black_24dp"/>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_phone_layout"
                 style="@style/input_text_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.vicmikhailau.maskededittext.MaskedEditText
                     android:id="@+id/user_phone"
                     style="@style/edit_text.mobile">
-                </android.support.design.widget.TextInputEditText>
+                </com.vicmikhailau.maskededittext.MaskedEditText>
             </android.support.design.widget.TextInputLayout>
 
 
@@ -46,12 +47,13 @@
                 android:src="@drawable/ic_email_black_24dp"/>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_mail_layout"
                 style="@style/input_text_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.vicmikhailau.maskededittext.MaskedEditText
                     android:id="@+id/user_mail"
                     style="@style/edit_text.email">
-                </android.support.design.widget.TextInputEditText>
+                </com.vicmikhailau.maskededittext.MaskedEditText>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -74,12 +76,13 @@
                 android:src="@drawable/vk_circle"/>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_vk_layout"
                 style="@style/input_text_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.vicmikhailau.maskededittext.MaskedEditText
                     android:id="@+id/user_vk"
                     style="@style/edit_text.vk">
-                </android.support.design.widget.TextInputEditText>
+                </com.vicmikhailau.maskededittext.MaskedEditText>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -102,12 +105,13 @@
                 android:src="@drawable/github_box"/>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_github_layout"
                 style="@style/input_text_layout">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/user_repo"
+                <com.vicmikhailau.maskededittext.MaskedEditText
+                    android:id="@+id/user_github"
                     style="@style/edit_text.repo">
-                </android.support.design.widget.TextInputEditText>
+                </com.vicmikhailau.maskededittext.MaskedEditText>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -136,10 +140,10 @@
                 style="@style/input_text_layout"
                 android:layout_weight="0.85">
 
-                <android.support.design.widget.TextInputEditText
+                <com.vicmikhailau.maskededittext.MaskedEditText
                     android:id="@+id/user_self"
                     style="@style/edit_text.self">
-                </android.support.design.widget.TextInputEditText>
+                </com.vicmikhailau.maskededittext.MaskedEditText>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </LinearLayout>

@@ -1,38 +1,50 @@
 <resources>
+    <string name="app_name">Коропенко Дмитрий</string>
 
     <!--EditText's hints-->
-    <string name="app_name">Коропенко Дмитрий</string>
-    <string name="mobile_hint">Мобильный</string>
-    <string name="email_hint">E-mail</string>
-    <string name="vk_hint">Профиль в VK</string>
-    <string name="github_hint">Репозиторий</string>
-    <string name="self_hint">О себе</string>
-    <string name="login_hint">EMAIL</string>
-    <string name="password_hint">Пароль</string>
+    <string name="hint_mobile">Мобильный</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_vk">Профиль в VK</string>
+    <string name="hint_github">Репозиторий</string>
+    <string name="hint_about">О себе</string>
+    <string name="hint_login">EMAIL</string>
+    <string name="hint_password">Пароль</string>
+
+    <!--EditText mask-->
+    <string name="mask_phone">Маска для номера +х ххх ххх-хх-хх</string>
+    <string name="mask_mail">Маска для адреса xxx@xx.xx</string>
+    <string name="mask_vk">Маска для адреса vk.com/xxx</string>
+    <string name="mask_git">Маска для адреса github.com/xxx</string>
 
     <!--Drawable menu-->
-    <string name="my_profile">Мой профиль</string>
-    <string name="my_contacts">Контакты</string>
-
+    <string name="menu_my_profile">Мой профиль</string>
+    <string name="menu_my_contacts">Контакты</string>
+    <string name="menu_exit">Выход</string>
 
     <!--Временный текст для информации-->
     <string name="my_profile_name">Коропенко Дмитрий</string>
     <string name="my_profile_mail">nikotin13@mail.ru</string>
 
-    <string name="mobile_text">+7(953)7094950</string>
-    <string name="mail_text">nikotin13@mail.ru</string>
-    <string name="vk_text">www.vk.com/id4646406</string>
-    <string name="git_text">www.github.com/smalew/DevIntensive</string>
-    <string name="self_text">Увлечения: Sci-Fi \n
-                            Автор: Лавкрафт \n
-                            Фильм: Назад в будущее \n
-                            Награды: нет \n
-                            Стремления: Java \n
-                            Стремления: Android \n
-                            Стремления: Спорт \n
-                            Возраст: 28 \n
-                            Привычки: без вредных</string>
-    <string name="load_user_avatar">Загрузите свое фото</string>
-    <string name="error_send_intent_message">Извините, невозможно открыть данные</string>
-    <string name="exit">Выход</string>
+
+    <!--Работа с загрузкой фото для аватара-->
+    <string name="avatar_load">Загрузите фотографию профиля</string>
+    <string name="avatar_load_from_gallary">Загрузить из галареи</string>
+    <string name="avatar_load_from_camera">Сфотографировать</string>
+    <string name="avatar_cancel">Отмена</string>
+    <string name="select_img">Выберите фото</string>
+
+    <!--Работа с intent-->
+    <string name="intent_error_message">Извините, невозможно открыть данные</string>
+    <string name="intent_need_permission">Для работы необходимо дать разрешения</string>
+
+    <!--Экран входа-->
+    <string name="login_forgot_password">Забыли пароль</string>
+    <string name="login_btn">Войти</string>
+    <string name="login_header_text">ВОЙТИ</string>
+
+
+    <string name="error_user_phone_message">Некорректный номер</string>
+    <string name="error_user_mail_message">Некорректный E-mail.</string>
+    <string name="error_user_vk_message">Некорректный адрес страницы ВК.</string>
+    <string name="error_user_github_message">Некорректный адрес git аккаунта.</string>
 </resources>

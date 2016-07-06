@@ -98,42 +98,42 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
-        <item name="android:background">@color/user_info_txt_background</item>
     </style>
     <style name="edit_text.mobile">
         <item name="android:inputType">phone</item>
-        <item name="android:hint">@string/mobile_hint</item>
+        <item name="android:maxLength">25</item>
+        <item name="android:hint">@string/hint_mobile</item>
     </style>
     <style name="edit_text.email">
         <item name="android:inputType">textEmailAddress</item>
-        <item name="android:hint">@string/email_hint</item>
+        <item name="android:hint">@string/hint_email</item>
     </style>
     <style name="edit_text.vk">
         <item name="android:inputType">textImeMultiLine</item>
         <item name="android:maxLines">2</item>
-        <item name="android:hint">@string/vk_hint</item>
+        <item name="android:hint">@string/hint_vk</item>
     </style>
     <style name="edit_text.repo">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:maxLines">3</item>
-        <item name="android:hint">@string/github_hint</item>
+        <item name="android:hint">@string/hint_github</item>
     </style>
     <style name="edit_text.self">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:minLines">1</item>
-        <item name="android:hint">@string/self_hint</item>
+        <item name="android:hint">@string/hint_about</item>
     </style>
     <style name="edit_text.login">
         <item name="android:inputType">text</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
-        <item name="android:hint">@string/login_hint</item>
+        <item name="android:hint">@string/hint_login</item>
     </style>
     <style name="edit_text.password">
         <item name="android:inputType">textPassword</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
-        <item name="android:hint">@string/password_hint</item>
+        <item name="android:hint">@string/hint_password</item>
     </style>
     <!--/Body-->
 
@@ -156,7 +156,6 @@
     </style>
 
     <!--Drawable Menu-->
-    <!--HEADER-->
     <style name="drawer_header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/size_172</item>
@@ -188,8 +187,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">@string/my_profile_mail</item>
     </style>
-    <!--/HEADER-->
-
     <!--/Drawable Menu-->
 
 </resources>
