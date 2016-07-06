@@ -19,13 +19,13 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/profile_background">
+            android:background="@color/background_profile">
             
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/profile_background"
+                app:contentScrim="@color/background_profile"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <FrameLayout
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
-                    android:titleTextColor="@color/profile_background"
+                    android:titleTextColor="@color/background_profile"
                     app:layout_collapseMode="pin"/>
 
 
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/spacing_24"
             android:paddingBottom="@dimen/spacing_24"
-            android:background="@color/profile_background"
+            android:background="@color/background_profile"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_anchor="@id/nested_scroll_view"

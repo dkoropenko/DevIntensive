@@ -34,7 +34,7 @@
     <string name="select_img">Выберите фото</string>
 
     <!--Работа с intent-->
-    <string name="intent_error_message">Извините, невозможно открыть данные</string>
+    <string name="intent_error_open_message">Извините, невозможно открыть приложение</string>
     <string name="intent_need_permission">Для работы необходимо дать разрешения</string>
 
     <!--Экран входа-->
@@ -42,7 +42,7 @@
     <string name="login_btn">Войти</string>
     <string name="login_header_text">ВОЙТИ</string>
 
-
+    <!--Ошибки при валидации введенных данных-->
     <string name="error_user_phone_message">Некорректный номер</string>
     <string name="error_user_mail_message">Некорректный E-mail.</string>
     <string name="error_user_vk_message">Некорректный адрес страницы ВК.</string>

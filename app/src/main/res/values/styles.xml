@@ -22,15 +22,15 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
     <style name="text.profile">
-        <item name="android:textColor">@color/profile_txt</item>
+        <item name="android:textColor">@color/txt_profile</item>
     </style>
     <style name="text.user_info">
-        <item name="android:textColor">@color/user_info_txt</item>
+        <item name="android:textColor">@color/txt_user_info</item>
         <item name="android:textSize">@dimen/font_size_18</item>
     </style>
     <style name="drawable_head_txt">
         <item name="android:textSize">@dimen/font_size_14</item>
-        <item name="android:textColor">@color/profile_txt</item>
+        <item name="android:textColor">@color/txt_profile</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
     <style name="drawable_head_txt.name">
@@ -142,12 +142,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
         <item name="android:layout_marginLeft">@dimen/spacing_88</item>
-        <item name="android:background">@color/separator_background</item>
+        <item name="android:background">@color/background_separator</item>
     </style>
     <style name="separator_vertical">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/separator_background</item>
+        <item name="android:background">@color/background_separator</item>
     </style>
     <!--/Separator-->
 
@@ -170,7 +170,7 @@
         <item name="android:layout_marginTop">@dimen/spacing_16</item>
     </style>
 
-    <style name="drawer_txt_container">
+    <style name="menu_header_txt_holder">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/size_56</item>
         <item name="android:layout_alignParentBottom">true</item>

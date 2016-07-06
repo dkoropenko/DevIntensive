@@ -1,5 +1,8 @@
 package com.softdesign.devintensive.utils;
 
+/**
+ * Интерфейс, содержащий все необходимые константы
+ */
 public interface ConstantManager {
     String PREFIX_TAG = "DevIntensive: ";
 

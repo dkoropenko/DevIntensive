@@ -11,6 +11,9 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
+/**
+ * Вспомогательный класс для скругления фото.
+ */
 public class RoundedAvatarDrawable extends Drawable {
     private final Bitmap mBitmap;
     private final Paint mPaint;

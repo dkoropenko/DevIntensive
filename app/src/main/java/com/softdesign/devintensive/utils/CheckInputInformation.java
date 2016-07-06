@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by smalew on 02.07.16.
+ * Класс проверки введенных пользователем данных
  */
 public class CheckInputInformation extends MaskedWatcher {
 
@@ -30,11 +30,12 @@ public class CheckInputInformation extends MaskedWatcher {
     private TextInputLayout mTextInputLayout;
     private MaskedEditText mUserInfo;
     private int mResId;
+    private String mError;
+    private ImageView mToActionBtn;
+
+    //Переменные для сравнения регулярных выражений.
     private Pattern mPattern;
     private Matcher mMatcher;
-    private String mError;
-
-    private ImageView mToActionBtn;
 
     public CheckInputInformation(Context context, MaskedEditText userInfo, ImageView button, TextInputLayout textInputLayout) {
         super(null);
@@ -47,24 +48,30 @@ public class CheckInputInformation extends MaskedWatcher {
 
         switch (mResId) {
             case R.id.user_phone:
-                mUserInfo.setMask("+# ### ### - ## - ##");
-
+                mUserInfo.setMask("+# ### ###-##-##");
                 break;
         }
     }
 
+    /**
+     * Проверка введенных данных<br>
+     * При несовпадении значений выключается кнопка открытия. Кнопка открытия окрашивается в красный цвет.
+     * Иначе все ограничения снимаются. Кнопка окрашивается в зеленый цвет.
+     * @param pattern регулярное выражение
+     * @param value введенные пользовательские данные
+     */
     private void check(String pattern, String value) {
         mPattern = Pattern.compile(pattern);
         mMatcher = mPattern.matcher(value);
 
         if (!mMatcher.matches()) {
             mToActionBtn.setEnabled(false);
-            mToActionBtn.setColorFilter(mContext.getResources().getColor(R.color.wrong_info_background));
-            mTextInputLayout.setError(mError);
+            mToActionBtn.setColorFilter(mContext.getResources().getColor(R.color.background_wrong_info));
+            mTextInputLayout.setError(mError); //Вывод ошибки о неправильном вводе
 
         } else {
             mToActionBtn.setEnabled(true);
-            mToActionBtn.setColorFilter(mContext.getResources().getColor(R.color.accept_info_background));
+            mToActionBtn.setColorFilter(mContext.getResources().getColor(R.color.background_accept_info));
             mTextInputLayout.setErrorEnabled(false);
         }
     }
@@ -75,6 +82,9 @@ public class CheckInputInformation extends MaskedWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        //Отсекаем лишние значения.
+
         if (charSequence.toString().toLowerCase().contains("https://")) {
             charSequence = charSequence.toString().replaceAll("https://", "");
             mUserInfo.setText(charSequence);

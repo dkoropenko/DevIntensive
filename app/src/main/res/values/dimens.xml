@@ -25,7 +25,9 @@
     <!--spaces-->
     <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_22">22dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_28">28dp</dimen>
     <dimen name="spacing_32">32dp</dimen>
     <dimen name="spacing_48">48dp</dimen>
     <dimen name="spacing_56">56dp</dimen>
@@ -35,7 +37,8 @@
     <dimen name="spacing_96">96dp</dimen>
     <dimen name="spacing_104">104dp</dimen>
     <dimen name="new_photo_size">90dp</dimen>
-    <dimen name="spacing_28">28dp</dimen>
+
+
 
 </resources>
 

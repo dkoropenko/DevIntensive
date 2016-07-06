@@ -57,45 +57,68 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static String TAG = ConstantManager.PREFIX_TAG + " MainActivity: ";
 
     //Инициализация слоев для бокового меню и user content
-    @BindView( R.id.main_coordinator_container) CoordinatorLayout mCoordinatorLayout;
-    @BindView( R.id.navigation_drawer) DrawerLayout mNavigationDrawer;
+    @BindView(R.id.main_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.navigation_drawer)
+    DrawerLayout mNavigationDrawer;
 
     //User EditText layouts
     private List<TextInputLayout> mUserInfoLayouts;
-    @BindView(R.id.user_phone_layout) TextInputLayout userPhoneLayout;
-    @BindView(R.id.user_mail_layout) TextInputLayout userMailLayout;
-    @BindView(R.id.user_vk_layout) TextInputLayout userVkLayout;
-    @BindView(R.id.user_github_layout) TextInputLayout userGitLayout;
+    @BindView(R.id.user_phone_layout)
+    TextInputLayout userPhoneLayout;
+    @BindView(R.id.user_mail_layout)
+    TextInputLayout userMailLayout;
+    @BindView(R.id.user_vk_layout)
+    TextInputLayout userVkLayout;
+    @BindView(R.id.user_github_layout)
+    TextInputLayout userGitLayout;
 
     //User EditTexts
     private List<MaskedEditText> mUserInfo;
-    @BindView(R.id.user_phone) MaskedEditText userPhone;
-    @BindView(R.id.user_mail) MaskedEditText userMail;
-    @BindView(R.id.user_vk) MaskedEditText userVK;
-    @BindView(R.id.user_github) MaskedEditText userRepo;
-    @BindView(R.id.user_self) MaskedEditText userSelf;
+    @BindView(R.id.user_phone)
+    MaskedEditText userPhone;
+    @BindView(R.id.user_mail)
+    MaskedEditText userMail;
+    @BindView(R.id.user_vk)
+    MaskedEditText userVK;
+    @BindView(R.id.user_github)
+    MaskedEditText userRepo;
+    @BindView(R.id.user_self)
+    MaskedEditText userSelf;
 
     //Инициализация ярлыков для взаимодействия с user information
     private List<ImageView> mUserAction;
-    @BindView(R.id.to_call_btn) ImageView mToCall;
-    @BindView(R.id.to_mail_btn) ImageView mToMail;
-    @BindView(R.id.to_vk_btn) ImageView mToVk;
-    @BindView(R.id.to_repo_btn) ImageView mToRepo;
+    @BindView(R.id.to_call_btn)
+    ImageView mToCall;
+    @BindView(R.id.to_mail_btn)
+    ImageView mToMail;
+    @BindView(R.id.to_vk_btn)
+    ImageView mToVk;
+    @BindView(R.id.to_repo_btn)
+    ImageView mToRepo;
 
     //Боковое меню
-    @BindView(R.id.navigation_view) NavigationView mNavigationView;
+    @BindView(R.id.navigation_view)
+    NavigationView mNavigationView;
     private View mDrawerHeader;
     ImageView mAvatar;
 
     //ToolBar
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.fab) FloatingActionButton mFab;
-    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @BindView(R.id.appbar_layout) AppBarLayout mAppBarLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @BindView(R.id.appbar_layout)
+    AppBarLayout mAppBarLayout;
 
-    @BindView(R.id.user_photo_img) ImageView userPhotoImg;
-    @BindView(R.id.new_user_avatar) ImageView userPhotoNew;
-    @BindView(R.id.user_photo_change) RelativeLayout userPhotoChange;
+    @BindView(R.id.user_photo_img)
+    ImageView userPhotoImg;
+    @BindView(R.id.new_user_avatar)
+    ImageView userPhotoNew;
+    @BindView(R.id.user_photo_change)
+    RelativeLayout userPhotoChange;
 
 
     private boolean mCurrentEditMode; //Проверка включения режима редактирования
@@ -116,7 +139,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         //Боковое меню
         mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mAvatar = (ImageView)mDrawerHeader.findViewById(R.id.avatar_img);
+        mAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
         mAvatar.setImageResource(R.drawable.empty_avatar);
 
 
@@ -136,6 +159,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * Сохранения данных при перевороте экрана.
+     *
      * @param outState - переменная, содержащая статус редактирования.
      */
     @Override
@@ -147,6 +171,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * Открытие активности для получения фото из камеры или галереи.
+     *
      * @param intent
      * @param requestCode
      */
@@ -157,6 +182,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * Получение фото от новой активности фото или галереи
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -164,15 +190,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case ConstantManager.REQUEST_CAMERA_PICTURE:
-                if (resultCode == RESULT_OK && mPhotoFile !=null){
+                if (resultCode == RESULT_OK && mPhotoFile != null) {
                     mSelectedImage = Uri.fromFile(mPhotoFile);
 
                     insertPhotoToProfile(mSelectedImage);
                 }
             case ConstantManager.REQUEST_GALLARY_PICTURE:
-                if (resultCode == RESULT_OK && data != null){
+                if (resultCode == RESULT_OK && data != null) {
                     mSelectedImage = data.getData();
 
                     insertPhotoToProfile(mSelectedImage);
@@ -183,6 +209,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * Обработка нажатия кнопок открытия новых intent
+     *
      * @param view - элемент UI
      */
     @Override
@@ -193,9 +220,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.to_call_btn:
-                intent = new Intent(Intent.ACTION_DIAL);
-                data = Uri.parse("tel:"+ userPhone.getText().toString());
-                intent.setData(data);
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == getPackageManager().PERMISSION_GRANTED) {
+                    intent = new Intent(Intent.ACTION_DIAL);
+                    data = Uri.parse("tel:" + userPhone.getText().toString());
+                    intent.setData(data);
+                } else {
+                    showSnackBar(getResources().getString(R.string.intent_need_permission));
+                }
                 break;
             case R.id.to_mail_btn:
                 intent = new Intent(Intent.ACTION_SEND);
@@ -205,13 +236,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.to_vk_btn:
                 url = userVK.getText().toString();
-                data = Uri.parse("http://"+ url);
+                data = Uri.parse("http://" + url);
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(data);
                 break;
             case R.id.to_repo_btn:
                 url = userRepo.getText().toString();
-                data = Uri.parse("http://"+ url);
+                data = Uri.parse("http://" + url);
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(data);
                 break;
@@ -228,9 +259,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
         }
 
-        if (intent != null && intent.resolveActivity(getPackageManager())!= null){
+        if (intent != null && intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
-            // TODO: 01.07.16 Добавить зависимости в manifest.
+        } else {
+            showSnackBar(getResources().getString(R.string.intent_error_open_message));
         }
     }
 
@@ -246,24 +278,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             userValue.setFocusable(mode);
             userValue.setFocusableInTouchMode(mode);
         }
-        if (mode){
+        if (mode) {
             mFab.setImageResource(R.drawable.ic_check_black_24dp);
             userPhone.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(0,0);
+            imm.toggleSoftInput(0, 0);
 
             userPhotoImg.setVisibility(View.GONE);
             userPhotoChange.setVisibility(View.VISIBLE);
             lockAppBarLayout();
             mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
-        }
-        else{
+        } else {
             mFab.setImageResource(R.drawable.ic_mode_edit_black_24dp);
 
             userPhotoImg.setVisibility(View.VISIBLE);
             userPhotoChange.setVisibility(View.GONE);
             unlockAppBarLayout();
-            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.background_white));
         }
 
     }
@@ -274,21 +305,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void loadUserInfoValue() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
 
-        for (int i = 0; i < mUserInfo.size() ; i++) {
+        for (int i = 0; i < mUserInfo.size(); i++) {
             mUserInfo.get(i).setText(userData.get(i));
         }
 
+        //Вставляем аватар в header
         Picasso.with(this).
                 load(mDataManager.getPreferencesManager().
-                        loadUserPhoto()).into(userPhotoImg);
+                        loadUserPhoto()).
+                placeholder(R.drawable.nav_header_bg).
+                into(userPhotoImg);
+
+        //Вставляем аватар в выдвижное меню
+        Picasso.with(this).
+                load(mDataManager.getPreferencesManager().
+                        loadUserPhoto()).
+                placeholder(R.drawable.empty_avatar).
+                into(mAvatar);
     }
+
     /**
      * Сохраняет переменные пользователя
      */
     private void saveUserInfoValue() {
         List<String> userData = new ArrayList<>();
 
-        for (EditText userInfo: mUserInfo) {
+        for (EditText userInfo : mUserInfo) {
             userData.add(userInfo.getText().toString());
         }
 
@@ -297,6 +339,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * Открывает выдвижное меню с помощью кнопки в тулбаре
+     *
      * @param item
      * @return
      */
@@ -312,7 +355,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     /**
      * Инициализирует view элементы пользовательского UI
      */
-    private void setupUserInfo(){
+    private void setupUserInfo() {
         mUserInfoLayouts = new ArrayList<>();
         mUserInfoLayouts.add(userPhoneLayout);
         mUserInfoLayouts.add(userMailLayout);
@@ -368,8 +411,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
-                switch (item.getItemId()){
-                    case R.id.relogin:
+                switch (item.getItemId()) {
+                    case R.id.menu_exit:
                         Intent intent = new Intent(getBaseContext(), LogInActivity.class);
                         startActivity(intent);
                         break;
@@ -385,12 +428,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-
     //************************************************************
     //Код для работы с загрузкой фотографии из галереи или камеры
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id){
+        switch (id) {
             case ConstantManager.LOAD_PROFILE_DATA:
                 String selectItem[] = {getString(R.string.avatar_load_from_gallary),
                         getString(R.string.avatar_load_from_camera),
@@ -402,7 +444,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 builder.setItems(selectItem, new Dialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i){
+                        switch (i) {
                             case 0:
                                 loadPhotoFromGallary();
                                 break;
@@ -421,9 +463,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
+
     private File createImageFile() throws IOException {
         String timeStemp = new SimpleDateFormat("yyyymmdd").format(new Date());
-        String ImageFileName = "IMG_"+ timeStemp;
+        String ImageFileName = "IMG_" + timeStemp;
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(ImageFileName, ".jpg", storageDir);
@@ -437,15 +480,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         return image;
     }
-    private void loadPhotoFromGallary(){
+
+    private void loadPhotoFromGallary() {
         Intent takeGallaryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         takeGallaryIntent.setType("image/*");
 
         startActivityForResult(Intent.createChooser(takeGallaryIntent, getString(R.string.select_img)), ConstantManager.REQUEST_GALLARY_PICTURE);
     }
-    private void loadPhotoFromCamera(){
+
+    private void loadPhotoFromCamera() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
             mPhotoFile = null;
             try {
@@ -454,38 +499,51 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-            if (mPhotoFile != null){
+            if (mPhotoFile != null) {
                 Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
-                startActivityForResult(takeCaptureIntent,ConstantManager.REQUEST_CAMERA_PICTURE);
+                startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
             }
-        } else{
+        } else {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
         }
     }
-    private void insertPhotoToProfile(Uri selectedImage){
+
+    private void insertPhotoToProfile(Uri selectedImage) {
+        //Вставляем фото в header
         Picasso.with(this).
                 load(selectedImage).
                 placeholder(R.drawable.nav_header_bg).
                 into(userPhotoImg);
 
+        //Вставляем фото в выдвижное меню
+        Picasso.with(this).
+                load(selectedImage).
+                placeholder(R.drawable.empty_avatar).
+                into(mAvatar);
+
         mDataManager.getPreferencesManager().saveUserPhoto(selectedImage);
     }
-    private void lockAppBarLayout(){
-        mAppBarLayout.setExpanded(true,true);
+
+    private void lockAppBarLayout() {
+        mAppBarLayout.setExpanded(true, true);
         mLayoutParams.setScrollFlags(0);
         mCollapsingToolbarLayout.setLayoutParams(mLayoutParams);
+
     }
-    private void unlockAppBarLayout(){
+
+    private void unlockAppBarLayout() {
         mLayoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
         mCollapsingToolbarLayout.setLayoutParams(mLayoutParams);
     }
     //************************************************************
+
     /**
      * Обработка permission для получения фото с камеры.
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -497,11 +555,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
             result = true;
 
-        if (result){
+        if (result) {
             loadPhotoFromCamera();
-        }
-        else{
-            Snackbar.make(mCoordinatorLayout, getString(R.string.intent_need_permission),Snackbar.LENGTH_LONG).
+        } else {
+            Snackbar.make(mCoordinatorLayout, getString(R.string.intent_need_permission), Snackbar.LENGTH_LONG).
                     setAction("Настройки", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -510,12 +567,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     }).show();
         }
     }
-    public void openApplicationSetting(){
-        Intent appSettingIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:"+ getPackageName()));
+
+    /**
+     * Открытие настроек permissions в случае отсутвия прав.
+     */
+    public void openApplicationSetting() {
+        Intent appSettingIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
 
         startActivityForResult(appSettingIntent, ConstantManager.PERMISSION_REQUEST_KEY);
     }
-
 
     /**
      * Закрытие выдвижного меню по нажатию кнопки "Назад"
@@ -527,6 +587,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         else
             super.onBackPressed();
     }
+
     private void showSnackBar(String message) {
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }

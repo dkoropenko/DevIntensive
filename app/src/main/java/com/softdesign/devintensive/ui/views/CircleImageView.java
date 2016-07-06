@@ -13,6 +13,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -22,15 +23,13 @@ import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
 
 /**
- * Created by koropenkods on 27.06.16.
+ * Кастомная ImageView, которая позволяет сделать круглое фото для аватара
+ * Вкладываем друг в друга setters для получение единого результата при
+ * загрузке разных данных.
  */
 public class CircleImageView extends ImageView {
 
     private static final String TAG = ConstantManager.PREFIX_TAG + "CircleImageView";
-
-    private float mXRadius;
-    private float mYRadius;
-    private float mRadius;
 
     public CircleImageView(Context context) {
         super(context);
@@ -42,11 +41,6 @@ public class CircleImageView extends ImageView {
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CircleImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
@@ -63,6 +57,15 @@ public class CircleImageView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        super.setImageDrawable(drawable);
+        RoundedAvatarDrawable roundedAvatarDrawable;
+
+        if (drawable instanceof RoundedAvatarDrawable){
+            super.setImageDrawable(drawable);
+        }
+        else{
+            Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+            roundedAvatarDrawable = new RoundedAvatarDrawable(bitmap);
+            super.setImageDrawable(roundedAvatarDrawable);
+        }
     }
 }
