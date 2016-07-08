@@ -21,9 +21,9 @@ public class CheckInputInformation extends MaskedWatcher {
 
     //Регулярные выражения для сравнения.
     private final String phoneNumberPattern = "^\\d{11,20}$";
-    private final String mailAdressPattern = "^[\\w-]{3,}\\@[\\w-]{2,}\\.[a-z]{2,3}$";
-    private final String vkAdressPattern = "^vk.com/[\\w-]{3,}$";
-    private final String gitAdressPattern = "^github.com/[\\w-]{3,}$";
+    private final String mailAdressPattern = "^[\\w.-]{3,}\\@[\\w-]{2,}\\.[a-z]{2,3}$";
+    private final String vkAdressPattern = "^vk\\.com/[\\w-]{3,}$";
+    private final String gitAdressPattern = "^github\\.com/[\\w-]{3,}$";
 
     //Переменные для работы с UI
     private Context mContext;
@@ -67,6 +67,7 @@ public class CheckInputInformation extends MaskedWatcher {
         if (!mMatcher.matches()) {
             mToActionBtn.setEnabled(false);
             mToActionBtn.setColorFilter(mContext.getResources().getColor(R.color.background_wrong_info));
+            mTextInputLayout.setErrorEnabled(true);
             mTextInputLayout.setError(mError); //Вывод ошибки о неправильном вводе
 
         } else {
@@ -82,9 +83,7 @@ public class CheckInputInformation extends MaskedWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         //Отсекаем лишние значения.
-
         if (charSequence.toString().toLowerCase().contains("https://")) {
             charSequence = charSequence.toString().replaceAll("https://", "");
             mUserInfo.setText(charSequence);
@@ -104,15 +103,15 @@ public class CheckInputInformation extends MaskedWatcher {
                 break;
             case R.id.user_mail:
                 mError = mContext.getString(R.string.error_user_mail_message);
-                check(mailAdressPattern, editable.toString());
+                check(mailAdressPattern, editable.toString().toLowerCase());
                 break;
             case R.id.user_vk:
                 mError = mContext.getString(R.string.error_user_vk_message);
-                check(vkAdressPattern, editable.toString());
+                check(vkAdressPattern, editable.toString().toLowerCase());
                 break;
             case R.id.user_github:
                 mError = mContext.getString(R.string.error_user_github_message);
-                check(gitAdressPattern, editable.toString());
+                check(gitAdressPattern, editable.toString().toLowerCase());
                 break;
         }
     }

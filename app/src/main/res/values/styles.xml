@@ -67,7 +67,8 @@
     <!-- Information container -->
     <style name="user_info_container">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/size_72</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/spacing_72</item>
         <item name="android:layout_marginTop">@dimen/spacing_24</item>
         <item name="android:orientation">horizontal</item>
     </style>
@@ -95,13 +96,13 @@
     </style>
     <style name="edit_text" parent="@style/text.user_info">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/spacing_72</item>
         <item name="android:focusable">false</item>
         <item name="android:enabled">false</item>
     </style>
     <style name="edit_text.mobile">
         <item name="android:inputType">phone</item>
-        <item name="android:maxLength">25</item>
+        <item name="android:maxLength">20</item>
         <item name="android:hint">@string/hint_mobile</item>
     </style>
     <style name="edit_text.email">
@@ -119,6 +120,7 @@
         <item name="android:hint">@string/hint_github</item>
     </style>
     <style name="edit_text.self">
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:inputType">textMultiLine</item>
         <item name="android:minLines">1</item>
         <item name="android:hint">@string/hint_about</item>
@@ -188,5 +190,11 @@
         <item name="android:text">@string/my_profile_mail</item>
     </style>
     <!--/Drawable Menu-->
+
+    <!--LogIn-->
+    <style name="login_textinput_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
 </resources>

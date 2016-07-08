@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -63,39 +64,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     DrawerLayout mNavigationDrawer;
 
     //User EditText layouts
-    private List<TextInputLayout> mUserInfoLayouts;
-    @BindView(R.id.user_phone_layout)
-    TextInputLayout userPhoneLayout;
-    @BindView(R.id.user_mail_layout)
-    TextInputLayout userMailLayout;
-    @BindView(R.id.user_vk_layout)
-    TextInputLayout userVkLayout;
-    @BindView(R.id.user_github_layout)
-    TextInputLayout userGitLayout;
+    @BindViews({R.id.user_phone_layout,
+            R.id.user_mail_layout,
+            R.id.user_vk_layout,
+            R.id.user_github_layout}) List<TextInputLayout> mUserInfoLayouts;
 
     //User EditTexts
-    private List<MaskedEditText> mUserInfo;
-    @BindView(R.id.user_phone)
-    MaskedEditText userPhone;
-    @BindView(R.id.user_mail)
-    MaskedEditText userMail;
-    @BindView(R.id.user_vk)
-    MaskedEditText userVK;
-    @BindView(R.id.user_github)
-    MaskedEditText userRepo;
-    @BindView(R.id.user_self)
-    MaskedEditText userSelf;
+    @BindViews({R.id.user_phone,
+            R.id.user_mail,
+            R.id.user_vk,
+            R.id.user_github,
+            R.id.user_self}) List<MaskedEditText> mUserInfo;
 
     //Инициализация ярлыков для взаимодействия с user information
-    private List<ImageView> mUserAction;
-    @BindView(R.id.to_call_btn)
-    ImageView mToCall;
-    @BindView(R.id.to_mail_btn)
-    ImageView mToMail;
-    @BindView(R.id.to_vk_btn)
-    ImageView mToVk;
-    @BindView(R.id.to_repo_btn)
-    ImageView mToRepo;
+    @BindViews({R.id.to_call_btn,
+            R.id.to_mail_btn,
+            R.id.to_vk_btn,
+            R.id.to_repo_btn}) List<ImageView> mUserAction;
+
+    private List<CheckInputInformation> watchers;
+
 
     //Боковое меню
     @BindView(R.id.navigation_view)
@@ -143,7 +131,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mAvatar.setImageResource(R.drawable.empty_avatar);
 
 
-        setupUserInfo();
+        for (int i = 0; i < mUserAction.size(); i++) {
+            mUserAction.get(i).setOnClickListener(this);
+        }
+        watchers = new ArrayList<>();
+
         setupToolbar();
         setupNavigation();
         loadUserInfoValue();
@@ -222,7 +214,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.to_call_btn:
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == getPackageManager().PERMISSION_GRANTED) {
                     intent = new Intent(Intent.ACTION_DIAL);
-                    data = Uri.parse("tel:" + userPhone.getText().toString());
+                    data = Uri.parse("tel:" + mUserInfo.get(0).getText().toString());
                     intent.setData(data);
                 } else {
                     showSnackBar(getResources().getString(R.string.intent_need_permission));
@@ -231,17 +223,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.to_mail_btn:
                 intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                String[] adress = {userMail.getText().toString()};
+                String[] adress = {mUserInfo.get(1).getText().toString()};
                 intent.putExtra(Intent.EXTRA_EMAIL, adress);
                 break;
             case R.id.to_vk_btn:
-                url = userVK.getText().toString();
+                url = mUserInfo.get(2).getText().toString();
                 data = Uri.parse("http://" + url);
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(data);
                 break;
             case R.id.to_repo_btn:
-                url = userRepo.getText().toString();
+                url = mUserInfo.get(3).getText().toString();
                 data = Uri.parse("http://" + url);
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(data);
@@ -280,12 +272,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         if (mode) {
             mFab.setImageResource(R.drawable.ic_check_black_24dp);
-            userPhone.requestFocus();
+            mUserInfo.get(0).requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(0, 0);
 
             userPhotoImg.setVisibility(View.GONE);
             userPhotoChange.setVisibility(View.VISIBLE);
+            enableUserInfo();
             lockAppBarLayout();
             mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
         } else {
@@ -293,6 +286,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
             userPhotoImg.setVisibility(View.VISIBLE);
             userPhotoChange.setVisibility(View.GONE);
+            disableUserInfo();
             unlockAppBarLayout();
             mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.background_white));
         }
@@ -355,37 +349,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     /**
      * Инициализирует view элементы пользовательского UI
      */
-    private void setupUserInfo() {
-        mUserInfoLayouts = new ArrayList<>();
-        mUserInfoLayouts.add(userPhoneLayout);
-        mUserInfoLayouts.add(userMailLayout);
-        mUserInfoLayouts.add(userVkLayout);
-        mUserInfoLayouts.add(userGitLayout);
-
-        mUserInfo = new ArrayList<>();
-        mUserInfo.add(userPhone);
-        mUserInfo.add(userMail);
-        mUserInfo.add(userVK);
-        mUserInfo.add(userRepo);
-        mUserInfo.add(userSelf);
-
-        mUserAction = new ArrayList<>();
-        mUserAction.add(mToCall);
-        mUserAction.add(mToMail);
-        mUserAction.add(mToVk);
-        mUserAction.add(mToRepo);
-
+    private void enableUserInfo() {
         for (int i = 0; i < mUserAction.size(); i++) {
-            mUserInfo.get(i).addTextChangedListener(new CheckInputInformation(getBaseContext(),
+            watchers.add(new CheckInputInformation(getBaseContext(),
                     mUserInfo.get(i),
                     mUserAction.get(i),
                     mUserInfoLayouts.get(i)));
-        }
 
-        for (int i = 0; i < mUserAction.size(); i++) {
-            mUserAction.get(i).setOnClickListener(this);
+            mUserInfo.get(i).addTextChangedListener(watchers.get(i));
         }
     }
+
+    private void disableUserInfo(){
+        for (int i = 0; i < mUserAction.size(); i++) {
+            mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
+        }
+    }
+
 
     /**
      * Устанавливает тулбар вместо стандартного
