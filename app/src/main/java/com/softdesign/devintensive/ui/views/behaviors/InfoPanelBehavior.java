@@ -14,13 +14,10 @@ import com.softdesign.devintensive.utils.ConstantManager;
 
 
 /**
- * Created by smalew on 27.06.16.
+ * Класс для изменения положения панели информации относительно другого элемента.
  */
 public class InfoPanelBehavior extends CoordinatorLayout.Behavior<LinearLayout> {
     private static final String TAG = ConstantManager.PREFIX_TAG + "InfoPanelBehavior";
-
-    private static final String MIN_SCROLL = "minScroll";
-    private static final String CURRENT_PERCENT = "currentPercent";
 
     //Переменные для управления отступами LineatLayout
     private float mMinScroll, mMaxScroll;
@@ -35,10 +32,6 @@ public class InfoPanelBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
     CoordinatorLayout.LayoutParams mNestedScrollParam;
     private int mTopMarginMax;
 
-
-    public InfoPanelBehavior() {
-    }
-
     public InfoPanelBehavior(Context context, AttributeSet attrs) {
         mMinScroll = 0; //Начальный минимальный уровень.
     }
@@ -46,6 +39,7 @@ public class InfoPanelBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, LinearLayout child, View dependency) {
         return dependency instanceof NestedScrollView;
+        // TODO: 06.07.16 Переделать на appbar. Говорят так интереснее.
     }
 
     @Override

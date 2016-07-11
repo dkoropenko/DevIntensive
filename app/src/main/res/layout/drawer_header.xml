@@ -4,26 +4,26 @@
     style="@style/drawer_header"
     android:layout_width="match_parent"
     android:layout_height="172dp"
-    android:background="@drawable/header_bg"
+    android:background="@drawable/nav_header_bg"
     >
 
     <com.softdesign.devintensive.ui.views.CircleImageView
-        android:id="@+id/avatar_img"
+        android:id="@+id/menu_header_avatar"
         style="@style/drawer_avatar"
         android:src="@drawable/empty_avatar"/>
 
     <LinearLayout
-        style="@style/drawer_txt_container"
+        style="@style/menu_header_txt_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/user_profile_name"
+            android:id="@+id/menu_header_user_name"
             style="@style/drawer_txt_name"
             />
 
         <TextView
-            android:id="@+id/user_profile_mail"
+            android:id="@+id/menu_header_user_mail"
             style="@style/drawer_txt_mail"
             />
     </LinearLayout>
