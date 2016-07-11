@@ -37,7 +37,6 @@
                         android:id="@+id/user_photo_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/avatar"
                         android:scaleType="centerCrop"/>
 
                     <RelativeLayout
@@ -112,6 +111,7 @@
                 style="@style/profile_info"
                 android:layout_weight="0.25">
                 <TextView
+                    android:id="@+id/user_rating"
                     style="@style/profile.num"
                     android:text="99"/>
                 <TextView
@@ -126,6 +126,7 @@
                 style="@style/profile_info"
                 android:layout_weight="0.5">
                 <TextView
+                    android:id="@+id/user_code_lines"
                     style="@style/profile.num"
                     android:text="10 000"/>
                 <TextView
@@ -140,6 +141,7 @@
                 style="@style/profile_info"
                 android:layout_weight="0.25">
                 <TextView
+                    android:id="@+id/user_projects"
                     style="@style/profile.num"
                     android:text="8"/>
                 <TextView

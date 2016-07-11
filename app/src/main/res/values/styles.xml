@@ -182,12 +182,10 @@
     <style name="drawer_txt_name" parent="drawable_head_txt.name">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:text">@string/my_profile_name</item>
     </style>
     <style name="drawer_txt_mail" parent="drawable_head_txt.mail">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:text">@string/my_profile_mail</item>
     </style>
     <!--/Drawable Menu-->
 

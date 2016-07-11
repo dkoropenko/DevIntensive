@@ -47,4 +47,7 @@
     <string name="error_user_mail_message">Некорректный E-mail.</string>
     <string name="error_user_vk_message">Некорректный адрес страницы ВК.</string>
     <string name="error_user_github_message">Некорректный адрес git аккаунта.</string>
+    <string name="error_wrong_user_or_password">Неверный логин или пароль</string>
+    <string name="error_server_not_response">Сервер недоступен</string>
+    <string name="error_magic">Неизвестная ошибка</string>
 </resources>
