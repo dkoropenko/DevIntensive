@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.LoginModelRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
@@ -57,6 +58,8 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
         mUserAuth.setOnClickListener(this);
         mRememberPasswd.setOnClickListener(this);
+
+        tokenLogin();
     }
 
     @Override
@@ -83,11 +86,32 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         startActivity(remPass);
     }
 
-    private void loginSuccess(UserModelRes response) {
-        saveUserValues(response);
-
+    private void loginSuccess() {
         Intent login = new Intent(this, MainActivity.class);
         startActivity(login);
+    }
+
+    private void tokenLogin() {
+        if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+            Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
+
+            call.enqueue(new Callback<LoginModelRes>() {
+                @Override
+                public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
+                    if (response.code() == 200) {
+                        saveUserValuesWithToken(response.body());
+                        loginSuccess();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginModelRes> call, Throwable t) {
+
+                }
+            });
+        } else {
+            showSnackBar(getString(R.string.error_server_not_response));
+        }
     }
 
     private void singIn() {
@@ -97,7 +121,13 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                 @Override
                 public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
                     if (response.code() == 200) {
-                        loginSuccess(response.body());
+                        //Сохраняет токен, userId и введенные email
+                        mDataManager.getPreferencesManager().saveAuthToken(response.body().getData().getToken());
+                        mDataManager.getPreferencesManager().saveUserId(response.body().getData().getUser().getId());
+                        mDataManager.getPreferencesManager().saveLoginEmail(mLogin);
+                        saveUserValues(response.body());
+                        loginSuccess();
+
                     } else if (response.code() == 404) {
                         showSnackBar(getString(R.string.error_wrong_user_or_password));
                     } else {
@@ -107,7 +137,6 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    // TODO: 10.07.16 Обработкать ошибки
                 }
             });
         } else {
@@ -116,12 +145,33 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void saveUserValues(UserModelRes modelRes){
-        //Сохраняет токен, userId и введенные email
-        mDataManager.getPreferencesManager().saveAuthToken(modelRes.getData().getToken());
-        mDataManager.getPreferencesManager().saveUserId(modelRes.getData().getUser().getId());
-        mDataManager.getPreferencesManager().saveLoginEmail(mLogin);
+    private void saveUserValuesWithToken(LoginModelRes modelRes) {
+        //Сохраняет данные области информации
+        int[] userValues = {
+                modelRes.getData().profileValues.getRait(),
+                modelRes.getData().profileValues.getLinesCode(),
+                modelRes.getData().profileValues.getProjects()};
+        mDataManager.getPreferencesManager().saveUserValues(userValues);
 
+        //Сохраняем ФИО
+        mDataManager.getPreferencesManager().saveFIO(modelRes.getData().getFirstName() + " " +
+                modelRes.getData().getSecondName());
+
+        //Сохраняет основную информацию
+        List<String> userFields = new ArrayList<>();
+        userFields.add(modelRes.getData().getContacts().getPhone());
+        userFields.add(modelRes.getData().getContacts().getEmail());
+        userFields.add(modelRes.getData().getContacts().getVk());
+        userFields.add(modelRes.getData().getRepositories().getRepo().get(0).getGit());
+        userFields.add(modelRes.getData().getPublicInfo().getBio());
+        mDataManager.getPreferencesManager().saveUserProfileData(userFields);
+
+        //Сохраняет фото и аватар
+        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(modelRes.getData().getPublicInfo().getPhoto()));
+        mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(modelRes.getData().getPublicInfo().getAvatar()));
+    }
+
+    private void saveUserValues(UserModelRes modelRes) {
         //Сохраняет данные области информации
         int[] userValues = {
                 modelRes.getData().getUser().getProfileValues().getRating(),
@@ -130,7 +180,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         mDataManager.getPreferencesManager().saveUserValues(userValues);
 
         //Сохраняем ФИО
-        mDataManager.getPreferencesManager().saveFIO(modelRes.getData().getUser().getFirstName() +" "+
+        mDataManager.getPreferencesManager().saveFIO(modelRes.getData().getUser().getFirstName() + " " +
                 modelRes.getData().getUser().getSecondName());
 
         //Сохраняет основную информацию

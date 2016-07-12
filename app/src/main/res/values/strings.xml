@@ -50,4 +50,6 @@
     <string name="error_wrong_user_or_password">Неверный логин или пароль</string>
     <string name="error_server_not_response">Сервер недоступен</string>
     <string name="error_magic">Неизвестная ошибка</string>
+    <string name="synch_photo">Фото синхронизировано с сервером</string>
+    <string name="error_synch_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
 </resources>

@@ -1,15 +1,13 @@
 package com.softdesign.devintensive.data.managers;
 
-import android.net.Uri;
-
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.LoginModelRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.utils.ConstantManager;
 
-import java.io.File;
-
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -43,9 +41,10 @@ public class DataManager {
         return mRestService.loginUser(req);
     }
 
-//    public Call<ResponseBody> upload(Uri uri){
-//        return mRestService.upload()
-//        // TODO: 11.07.16 Доделать загрузку на сервер фото
-//    }
+    public Call<LoginModelRes> isValid (String userId) {return mRestService.isValid(userId); }
+
+    public Call<ResponseBody> uploadPhoto(MultipartBody.Part file){
+        return mRestService.uploadPhoto(getPreferencesManager().getUserId(), file);
+    }
     //endRegion
 }
