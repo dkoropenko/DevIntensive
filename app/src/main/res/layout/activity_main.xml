@@ -81,30 +81,16 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <!--Content-->
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/spacing_48"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include layout="@layout/contant_main"/>
-        </android.support.v4.widget.NestedScrollView>
-
         <!--HEAD-->
         <LinearLayout
             android:id="@+id/info_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/spacing_24"
-            android:paddingBottom="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_112"
             android:background="@color/background_profile"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_anchor="@id/nested_scroll_view"
-            app:layout_anchorGravity="top"
-            app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior">
+            app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior"
+            app:behavior_min_height="@dimen/size_56">
 
             <!--Рейтинг-->
             <LinearLayout
@@ -149,6 +135,16 @@
                     android:text="Проектов"/>
             </LinearLayout>
         </LinearLayout>
+
+        <!--Content-->
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+
+            <include layout="@layout/contant_main"/>
+        </android.support.v4.widget.NestedScrollView>
 
         <!--FloatActionButton-->
         <android.support.design.widget.FloatingActionButton
