@@ -13,7 +13,15 @@ public interface ConstantManager {
     String USER_VK_KEY = "userKey3";
     String USER_REPO_KEY = "userKey4";
     String USER_SELF_KEY = "userKey5";
-    String REQUEST_PHOTO_KEY = "userKey6";
+    String USER_PHOTO_KEY = "userPhotoKey";
+    String USER_AVATAR_KEY = "userAvatarKey";
+    String LOGIN_KEY = "userLoginKey";
+    String AUTH_TOKEN = "userKey7";
+    String USER_ID = "userID";
+    String USER_RATING = "userRating";
+    String USER_CODE_LINES = "userCodeLines";
+    String USER_PROJECTS = "userProjects";
+    String USER_FIO = "userFIO";
 
     int LOAD_PROFILE_DATA = 1;
     int REQUEST_CAMERA_PICTURE = 91;

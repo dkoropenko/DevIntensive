@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
@@ -28,15 +29,18 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
+import com.softdesign.devintensive.data.network.req.UploadFile;
 import com.softdesign.devintensive.utils.CheckInputInformation;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
@@ -52,6 +56,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -82,6 +90,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             R.id.to_vk_btn,
             R.id.to_repo_btn}) List<ImageView> mUserAction;
 
+    //Инициализация TextView для работы с контейнером
+    @BindViews({R.id.user_rating,
+            R.id.user_code_lines,
+            R.id.user_projects}) List<TextView> mUserValues;
+
     private List<CheckInputInformation> watchers;
 
 
@@ -89,7 +102,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.navigation_view)
     NavigationView mNavigationView;
     private View mDrawerHeader;
-    ImageView mAvatar;
+    ImageView mUserAvatar;
+    TextView mUserFio, mUserEmail;
 
     //ToolBar
     @BindView(R.id.toolbar)
@@ -125,12 +139,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mDataManager = DataManager.getInstance();
 
-        //Боковое меню
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
-        mAvatar.setImageResource(R.drawable.empty_avatar);
-
-
         for (int i = 0; i < mUserAction.size(); i++) {
             mUserAction.get(i).setOnClickListener(this);
         }
@@ -138,7 +146,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         setupToolbar();
         setupNavigation();
-        loadUserInfoValue();
+        initUserFields();
+        initUserValues();
 
         mFab.setOnClickListener(this);
         userPhotoNew.setOnClickListener(this);
@@ -187,13 +196,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (resultCode == RESULT_OK && mPhotoFile != null) {
                     mSelectedImage = Uri.fromFile(mPhotoFile);
 
+                    loadPhotoToServer(mSelectedImage);
                     insertPhotoToProfile(mSelectedImage);
                 }
             case ConstantManager.REQUEST_GALLARY_PICTURE:
                 if (resultCode == RESULT_OK && data != null) {
-                    mSelectedImage = data.getData();
+                    String[] proj = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = this.getContentResolver().query(data.getData(),  proj, null, null, null);
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    String path = cursor.getString(column_index);
+                    cursor.close();
 
-                    insertPhotoToProfile(mSelectedImage);
+                    loadPhotoToServer(Uri.parse(path));
+                    insertPhotoToProfile(data.getData());
                 }
                 break;
         }
@@ -243,7 +259,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     fabChangeMode(true);
                 } else {
                     fabChangeMode(false);
-                    saveUserInfoValue();
+                    saveUserFields();
                 }
                 break;
             case R.id.new_user_avatar:
@@ -293,10 +309,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
-    /**
-     * Загружает переменные бользователя
-     */
-    private void loadUserInfoValue() {
+
+    private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
 
         for (int i = 0; i < mUserInfo.size(); i++) {
@@ -304,24 +318,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         //Вставляем аватар в header
+        Picasso.with(this).invalidate(mDataManager.getPreferencesManager().
+                loadUserPhoto());
+
         Picasso.with(this).
                 load(mDataManager.getPreferencesManager().
                         loadUserPhoto()).
                 placeholder(R.drawable.nav_header_bg).
                 into(userPhotoImg);
-
-        //Вставляем аватар в выдвижное меню
-        Picasso.with(this).
-                load(mDataManager.getPreferencesManager().
-                        loadUserPhoto()).
-                placeholder(R.drawable.empty_avatar).
-                into(mAvatar);
     }
-
-    /**
-     * Сохраняет переменные пользователя
-     */
-    private void saveUserInfoValue() {
+    private void saveUserFields() {
         List<String> userData = new ArrayList<>();
 
         for (EditText userInfo : mUserInfo) {
@@ -329,6 +335,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }
+
+    private void initUserValues(){
+        List<String> userData = mDataManager.getPreferencesManager().loadUserValues();
+
+        for (int i = 0; i < userData.size(); i++) {
+            mUserValues.get(i).setText(userData.get(i));
+        }
     }
 
     /**
@@ -359,17 +373,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mUserInfo.get(i).addTextChangedListener(watchers.get(i));
         }
     }
-
     private void disableUserInfo(){
         for (int i = 0; i < mUserAction.size(); i++) {
             mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
         }
     }
-
-
-    /**
-     * Устанавливает тулбар вместо стандартного
-     */
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
 
@@ -379,13 +387,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(mDataManager.getPreferencesManager().loadFIO());
         }
     }
-
-    /**
-     * Устанавливает взаимодействие с элементами меню выдвижной палели.
-     */
     private void setupNavigation() {
+        //Боковое меню
+        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        mUserAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
+        //Вставляем аватар в выдвижное меню
+        Picasso.with(this).
+                load(mDataManager.getPreferencesManager().
+                        loadUserAvatar()).
+                placeholder(R.drawable.empty_avatar).
+                into(mUserAvatar);
+
+        mUserFio = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_name);
+        mUserFio.setText(mDataManager.getPreferencesManager().loadFIO());
+
+        mUserEmail = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_mail);
+        mUserEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
+
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -492,18 +513,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private void loadPhotoToServer(Uri imageUri){
+        Call<ResponseBody> call = mDataManager.uploadPhoto(new UploadFile().photo(imageUri));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                showSnackBar(getString(R.string.synch_photo));
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                showSnackBar(getString(R.string.error_synch_photo));
+            }
+        });
+
+    }
+
     private void insertPhotoToProfile(Uri selectedImage) {
         //Вставляем фото в header
         Picasso.with(this).
                 load(selectedImage).
                 placeholder(R.drawable.nav_header_bg).
                 into(userPhotoImg);
-
-        //Вставляем фото в выдвижное меню
-        Picasso.with(this).
-                load(selectedImage).
-                placeholder(R.drawable.empty_avatar).
-                into(mAvatar);
 
         mDataManager.getPreferencesManager().saveUserPhoto(selectedImage);
     }

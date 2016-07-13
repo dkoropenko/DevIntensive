@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_coordination_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg"
@@ -40,16 +41,19 @@
                     style="@style/login_textinput_layout">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/login_user"
                         style="@style/edit_text.login"/>
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     style="@style/login_textinput_layout">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/login_password"
                         style="@style/edit_text.password"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    android:id="@+id/login_enter_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -63,6 +67,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/login_remember_paswd"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -73,11 +78,11 @@
 
         <View
             android:layout_width="3dp"
-            android:layout_height="24dp"
+            android:layout_height="@dimen/spacing_32"
             android:layout_marginTop="@dimen/spacing_28"
             android:elevation="3dp"
             android:background="@color/txt_login_main"/>
     </RelativeLayout>
 
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
