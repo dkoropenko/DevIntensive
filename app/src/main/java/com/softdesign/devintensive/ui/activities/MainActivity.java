@@ -44,7 +44,6 @@ import com.softdesign.devintensive.data.network.req.UploadFile;
 import com.softdesign.devintensive.utils.CheckInputInformation;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
-import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             R.id.user_mail,
             R.id.user_vk,
             R.id.user_github,
-            R.id.user_self}) List<MaskedEditText> mUserInfo;
+            R.id.user_self}) List<EditText> mUserInfo;
 
     //Инициализация ярлыков для взаимодействия с user information
     @BindViews({R.id.to_call_btn,
@@ -201,6 +200,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             case ConstantManager.REQUEST_GALLARY_PICTURE:
                 if (resultCode == RESULT_OK && data != null) {
+
                     String[] proj = { MediaStore.Images.Media.DATA };
                     Cursor cursor = this.getContentResolver().query(data.getData(),  proj, null, null, null);
                     int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

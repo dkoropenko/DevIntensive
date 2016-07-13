@@ -9,8 +9,7 @@
 
     <com.softdesign.devintensive.ui.views.CircleImageView
         android:id="@+id/menu_header_avatar"
-        style="@style/drawer_avatar"
-        android:src="@drawable/empty_avatar"/>
+        style="@style/drawer_avatar"/>
 
     <LinearLayout
         style="@style/menu_header_txt_holder"

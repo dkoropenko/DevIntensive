@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--Toolbar-->
+        <!--TOOLBAR-->
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar_layout"
             android:theme="@style/AppTheme.AppBarOverlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_profile">
-            
+
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
@@ -66,22 +66,20 @@
                     </RelativeLayout>
                 </FrameLayout>
 
-
-
                 <android.support.v7.widget.Toolbar
                     android:theme="@style/AppTheme.PopupOverlay"
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
-                    android:titleTextColor="@color/background_profile"
-                    app:layout_collapseMode="pin"/>
-
+                    app:layout_collapseMode="pin">
+                </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
+        <!--END TOOLBAR-->
 
-        <!--HEAD-->
+        <!--STATISTIC-->
         <LinearLayout
             android:id="@+id/info_container"
             android:layout_width="match_parent"
@@ -94,14 +92,13 @@
 
             <!--Рейтинг-->
             <LinearLayout
-                style="@style/profile_info"
+                style="@style/statistic_info"
                 android:layout_weight="0.25">
                 <TextView
                     android:id="@+id/user_rating"
-                    style="@style/profile.num"
-                    android:text="99"/>
+                    style="@style/statistic.number"/>
                 <TextView
-                    style="@style/profile.txt"
+                    style="@style/statistic.text"
                     android:text="Рейтинг"/>
             </LinearLayout>
             <View
@@ -109,14 +106,14 @@
 
             <!--Количество строк-->
             <LinearLayout
-                style="@style/profile_info"
+                style="@style/statistic_info"
                 android:layout_weight="0.5">
                 <TextView
                     android:id="@+id/user_code_lines"
-                    style="@style/profile.num"
+                    style="@style/statistic.number"
                     android:text="10 000"/>
                 <TextView
-                    style="@style/profile.txt"
+                    style="@style/statistic.text"
                     android:text="Написано строк кода"/>
             </LinearLayout>
             <View
@@ -124,19 +121,20 @@
 
             <!--Проекты-->
             <LinearLayout
-                style="@style/profile_info"
+                style="@style/statistic_info"
                 android:layout_weight="0.25">
                 <TextView
                     android:id="@+id/user_projects"
-                    style="@style/profile.num"
+                    style="@style/statistic.number"
                     android:text="8"/>
                 <TextView
-                    style="@style/profile.txt"
+                    style="@style/statistic.text"
                     android:text="Проектов"/>
             </LinearLayout>
         </LinearLayout>
+        <!--END STATISTIC-->
 
-        <!--Content-->
+        <!--CONTENT-->
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
@@ -145,29 +143,26 @@
 
             <include layout="@layout/contant_main"/>
         </android.support.v4.widget.NestedScrollView>
+        <!--END CONTENT-->
 
         <!--FloatActionButton-->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_mode_edit_black_24dp"
+            style="@style/floating_action_btn"
             android:layout_marginRight="@dimen/fab_right_margin"
             app:layout_anchor="@id/appbar_layout"
             app:layout_anchorGravity="bottom|right"/>
     </android.support.design.widget.CoordinatorLayout>
 
-
-    <!--Drawable menu-->
+    <!--DRAWABLE MENU-->
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="left"
         app:menu="@menu/drawer_menu">
-
     </android.support.design.widget.NavigationView>
-
+    <!--END DRAWABLE MENU-->
 </android.support.v4.widget.DrawerLayout>
 
 

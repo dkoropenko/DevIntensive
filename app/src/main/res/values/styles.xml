@@ -11,7 +11,6 @@
     <style name="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
-        <item name="android:textColorPrimary">#ffffff</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -41,26 +40,40 @@
     </style>
     <!--/Text style-->
 
-    <!--HEAD-->
-    <style name="profile_info">
+    <!--STATISTIC CONTAINER-->
+    <style name="statistic_info">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="profile" parent="text.profile">
+    <style name="statistic">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
-    <style name="profile.num">
-        <item name="android:textSize">@dimen/font_size_24</item>
+    <style name="statistic.number">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">@dimen/font_size_20</item>
+        <item name="android:textColor">#ffffff</item>
     </style>
-    <style name="profile.txt">
-        <item name="android:textSize">@dimen/font_size_16</item>
+    <style name="statistic.text">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
+        <item name="android:textColor">#ffffff</item>
     </style>
-    <!--/HEAD-->
+    <!--END STATISTIC CONTAINER-->
+
+    <!--FLOATING ACTIONBUTTON-->
+    <style name="floating_action_btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/ic_mode_edit_black_24dp</item>
+    </style>
+    <!--END FLOATING ACTIONBUTTON-->
 
 
     <!--Body-->
@@ -148,7 +161,7 @@
     </style>
     <style name="separator_vertical">
         <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">@dimen/size_56</item>
         <item name="android:background">@color/background_separator</item>
     </style>
     <!--/Separator-->
