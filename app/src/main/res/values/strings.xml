@@ -52,4 +52,5 @@
     <string name="error_magic">Неизвестная ошибка</string>
     <string name="synch_photo">Фото синхронизировано с сервером</string>
     <string name="error_synch_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
+    <string name="ff_medium">24sp</string>
 </resources>

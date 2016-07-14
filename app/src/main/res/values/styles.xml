@@ -65,6 +65,19 @@
         <item name="android:textSize">@dimen/font_size_14</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+
+    <style name="statistic.list_number">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@string/ff_medium</item>
+        <item name="android:textSize">@dimen/font_size_20</item>
+        <item name="android:textColor">@color/txt_user_info</item>
+    </style>
+    <style name="statistic.list_text">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@string/ff_medium</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
+        <item name="android:textColor">@color/txt_user_info</item>
+    </style>
     <!--END STATISTIC CONTAINER-->
 
     <!--FLOATING ACTIONBUTTON-->
@@ -206,6 +219,12 @@
     <style name="login_textinput_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+    
+    <!--Toolbar-->
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/txt_profile</item>
+        <item name="android:textColorSecondary">@color/background_user_info_txt</item>
     </style>
 
 </resources>

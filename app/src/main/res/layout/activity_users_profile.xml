@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_profile_navigation_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.UsersProfileActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/user_profile_coordinator_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--TOOLBAR-->
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/user_profile_appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_profile"
+            app:theme="@style/ToolBarStyle"
+            app:popupTheme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/user_profile_collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="@color/background_profile"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_256"
+                    android:fitsSystemWindows="true">
+
+                    <ImageView
+                        android:id="@+id/user_profile_user_photo_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"/>
+                </FrameLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/user_profile_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:fitsSystemWindows="true"
+                    android:theme="@style/AppTheme.PopupOverlay"
+                    app:layout_collapseMode="pin">
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+        <!--END TOOLBAR-->
+
+
+        <!--STATISTIC-->
+        <LinearLayout
+            android:id="@+id/user_profile_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_112"
+            android:background="@color/background_profile"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:behavior_min_height="@dimen/size_56"
+            app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior">
+
+            <!--Рейтинг-->
+            <LinearLayout
+                style="@style/statistic_info"
+                android:layout_weight="0.25">
+
+                <TextView
+                    android:id="@+id/user_profile_user_rating"
+                    style="@style/statistic.number"/>
+
+                <TextView
+                    style="@style/statistic.text"
+                    android:text="Рейтинг"/>
+            </LinearLayout>
+
+            <View
+                style="@style/separator_vertical"/>
+
+            <!--Количество строк-->
+            <LinearLayout
+                style="@style/statistic_info"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/user_profile_user_code_lines"
+                    style="@style/statistic.number"
+                    android:text="10 000"/>
+
+                <TextView
+                    style="@style/statistic.text"
+                    android:text="Написано строк кода"/>
+            </LinearLayout>
+
+            <View
+                style="@style/separator_vertical"/>
+
+            <!--Проекты-->
+            <LinearLayout
+                style="@style/statistic_info"
+                android:layout_weight="0.25">
+
+                <TextView
+                    android:id="@+id/user_profile_user_projects"
+                    style="@style/statistic.number"
+                    android:text="8"/>
+
+                <TextView
+                    style="@style/statistic.text"
+                    android:text="Проектов"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!--END STATISTIC-->
+
+        <!--CONTENT-->
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/user_profile_nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+
+            <!--BODY-->
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/spacing_28"
+                android:orientation="vertical">
+
+                <!--Репозиторий-->
+                <LinearLayout
+                    style="@style/user_info_container">
+
+                    <ImageView
+                        style="@style/icon.left"
+                        android:src="@drawable/github_box"/>
+
+                    <ListView
+                        android:id="@+id/user_profile_repo_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/separator_horizontal"/>
+
+                <!--О себе-->
+                <LinearLayout
+                    style="@style/user_info_container"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/icon.left"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.15"
+                        android:src="@drawable/ic_account_circle_black_24dp"/>
+
+                    <android.support.design.widget.TextInputLayout
+                        style="@style/input_text_layout"
+                        android:layout_weight="0.85">
+
+                        <TextView
+                            android:id="@+id/user_profile_user_bio"
+                            style="@style/edit_text.self">
+                        </TextView>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <!--END CONTENT-->
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!--DRAWABLE MENU-->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        app:menu="@menu/drawer_menu">
+    </android.support.design.widget.NavigationView>
+    <!--END DRAWABLE MENU-->
+</android.support.v4.widget.DrawerLayout>
+
+
+
+
+
