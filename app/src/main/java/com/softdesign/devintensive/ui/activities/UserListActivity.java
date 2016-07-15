@@ -30,6 +30,7 @@ import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,13 +41,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener{
+public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "UserListActivity";
-    @BindView(R.id.list_navigation_drawer) DrawerLayout mDrawerLayout;
-    @BindView(R.id.list_coordinator_container) CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.list_toolbar) Toolbar mToolbar;
-    @BindView(R.id.user_list) RecyclerView mUserList;
+    @BindView(R.id.list_navigation_drawer)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.list_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.list_toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.user_list)
+    RecyclerView mUserList;
 
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
@@ -85,7 +90,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home){
+        if (item.getItemId() == R.id.home) {
             mDrawerLayout.openDrawer(Gravity.LEFT);
         }
         return super.onOptionsItemSelected(item);
@@ -98,8 +103,8 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         call.enqueue(new Callback<UserListRes>() {
             @Override
             public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                if (response.code() == 200){
-                    try{
+                if (response.code() == 200) {
+                    try {
                         mUserData = response.body().getData();
 
                         mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
@@ -114,9 +119,9 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                         });
                         mUserList.setAdapter(mUsersAdapter);
                         hideProgress();
-                    }catch (NullPointerException e){
+                    } catch (NullPointerException e) {
                         hideProgress();
-                        Log.d(TAG, "onResponse error: "+ e);
+                        Log.d(TAG, "onResponse error: " + e);
                     }
                 }
             }
@@ -191,57 +196,51 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextSubmit(String query) {
         checkInputInformation(query);
-        Log.d(TAG, "checkInputInformation: "+ query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        checkInputInformation(newText);
         return false;
     }
 
-    private void checkInputInformation(String text){
+    private void checkInputInformation(String text) {
+
+        mSearchUserData = new ArrayList<>();
+
         if (mSearchUserData != null)
             mSearchUserData.clear();
 
-        String textPatter  = "^"+ text.toLowerCase() +"\\w*";
-
-        mPattern = Pattern.compile(textPatter);
-
-        Log.d(TAG, "checkInputInformation: "+ mUserData.get(0).getFullName().toLowerCase());
-        Log.d(TAG, "checkInputInformation: "+ text);
-
         for (int i = 0; i < mUserData.size(); i++) {
-            mMatcher = mPattern.matcher(mUserData.get(i).getFullName().toLowerCase());
-            if (mMatcher.matches()){
-                Log.d(TAG, "checkInputInformation: "+ text);
+            if (mUserData.get(i).getFullName().toLowerCase().contains(text.toLowerCase())) {
+                mSearchUserData.add(mUserData.get(i));
             }
-                //mSearchUserData.add(mUserData.get(i));
-            }
+
         }
 
-//        mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-//            @Override
-//            public void onClickOpenUserInfoListener(int position) {
-//                UserDTO user = null;
-//                for (int i = 0; i < mUserData.size(); i++) {
-//                    for (int j = 0; j < mSearchUserData.size(); j++) {
-//                        if (mUserData.get(i).getId().equals(mSearchUserData.get(j))){
-//                            user = new UserDTO(mUserData.get(i));
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (user != null){
-//                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-//                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-//                    startActivity(openProfile);
-//                }
-//            }
-//        });
-//
-//        mUserList.setAdapter(mUsersAdapter);
-//    }
+        if (!mSearchUserData.isEmpty()){
+            mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                @Override
+                public void onClickOpenUserInfoListener(int position) {
+                    UserDTO user = null;
+                    for (int i = 0; i < mUserData.size(); i++) {
+                        for (int j = 0; j < mSearchUserData.size(); j++) {
+                            if (mUserData.get(i).getId().equals(mSearchUserData.get(j))) {
+                                user = new UserDTO(mUserData.get(i));
+                                break;
+                            }
+                        }
+                    }
+
+                    if (user != null) {
+                        Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                        openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                        startActivity(openProfile);
+                    }
+                }
+            });
+
+            mUserList.setAdapter(mUsersAdapter);
+        }
+    }
 }
