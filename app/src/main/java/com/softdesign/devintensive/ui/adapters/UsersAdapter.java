@@ -41,17 +41,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public void onBindViewHolder(UsersAdapter.UserViewHolder holder, int position) {
         UserListRes.UserData user = mUsers.get(position);
 
-        try {
+        if (!user.getPublicInfo().getPhoto().isEmpty()){
             Picasso.with(mContext).
                     load(user.getPublicInfo().getPhoto()).
                     placeholder(mContext.getResources().getDrawable(R.drawable.nav_header_bg)).
-                    into(holder.mUserFoto);
-        }catch (IllegalArgumentException e){
-            Picasso.with(mContext).load(R.drawable.nav_header_bg).
-                    placeholder(mContext.getResources().getDrawable(R.drawable.nav_header_bg)).
+                    resize(200,0).
                     into(holder.mUserFoto);
         }
-
 
         holder.mUserFullName.setText(user.getFullName());
         holder.mRating.setText(String.valueOf(user.getProfileValues().getRating()));

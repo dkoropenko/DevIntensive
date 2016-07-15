@@ -37,7 +37,8 @@
                         android:id="@+id/user_profile_user_photo_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/nav_header_bg"/>
 
                 </FrameLayout>
 
@@ -117,38 +118,7 @@
         </LinearLayout>
         <!--END STATISTIC-->
 
-
-        <!--BODY-->
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_28"
-            android:orientation="vertical">
-
-            <!--GitGub-->
-            <LinearLayout
-                style="@style/user_info_container">
-
-                <ImageView
-                    style="@style/icon.left"
-                    android:src="@drawable/github_box"
-                    />
-
-                <ListView
-                    android:id="@+id/user_profile_repo_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing_32"/>
-            </LinearLayout>
-
-            <View
-                style="@style/separator_horizontal"/>
-
-            <include layout="@layout/content_user_profile"/>
-        </LinearLayout>
-
-        <!--END CONTENT-->
+        <include layout="@layout/content_user_profile"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.DrawerLayout>

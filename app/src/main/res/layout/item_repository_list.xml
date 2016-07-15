@@ -26,6 +26,7 @@
         android:layout_height="@dimen/size_24"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/spacing_24"
         android:src="@drawable/ic_visibility_black_24dp"
         />
 

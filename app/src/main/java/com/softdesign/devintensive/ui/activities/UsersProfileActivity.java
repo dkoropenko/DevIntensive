@@ -7,14 +7,18 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.RepositoriesAdapter;
+import com.softdesign.devintensive.ui.views.AspectRatioImageView;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
 
@@ -67,12 +71,12 @@ public class UsersProfileActivity extends BaseActivity implements AdapterView.On
         RepositoriesAdapter adapter = new RepositoriesAdapter(this, reposinories);
         mRepoList.setAdapter(adapter);
         mRepoList.setOnItemClickListener(this);
+        setListViewHeightBasedOnChildren(mRepoList);
 
-        if (!mUser.getPhoto().isEmpty()){
+        if (!mUser.getPhoto().isEmpty()) {
             Picasso.with(this).
                     load(mUser.getPhoto()).
                     placeholder(this.getResources().getDrawable(R.drawable.nav_header_bg)).
-                    error(this.getResources().getDrawable(R.drawable.nav_header_bg)).
                     fit().
                     centerCrop().
                     into(mUserPhoto);
@@ -105,5 +109,26 @@ public class UsersProfileActivity extends BaseActivity implements AdapterView.On
         if (intent != null) {
             startActivity(intent);
         }
+    }
+
+    private void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, AbsListView.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }

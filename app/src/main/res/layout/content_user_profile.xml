@@ -1,0 +1,61 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_profile_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_8">
+
+        <!--GitGub-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/spacing_24"
+                android:src="@drawable/github_box"
+                />
+
+            <ListView
+                android:id="@+id/user_profile_repo_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_32"/>
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+
+        <!--О себе-->
+        <LinearLayout
+            style="@style/user_info_container">
+
+            <ImageView
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/spacing_24"
+                android:src="@drawable/ic_account_circle_black_24dp"/>
+
+
+                <TextView
+                    android:id="@+id/user_profile_user_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/spacing_48">
+                </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
