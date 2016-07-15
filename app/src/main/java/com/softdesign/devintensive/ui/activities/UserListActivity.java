@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,12 +29,11 @@ import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.RetainFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,9 +64,8 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     ImageView mUserAvatar;
     TextView mUserFio, mUserEmail;
 
-    private Pattern mPattern;
-    private Matcher mMatcher;
     private List<UserListRes.UserData> mSearchUserData;
+    private RetainFragment mRetainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +75,47 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
         mDataManager = DataManager.getInstance();
 
+        FragmentManager fm = getSupportFragmentManager();
+        mRetainFragment = (RetainFragment) fm.findFragmentByTag("mModel");
+
+        if (mRetainFragment == null) {
+            mRetainFragment = new RetainFragment();
+            fm.beginTransaction().add(mRetainFragment, "mModel").commit();
+
+            mRetainFragment.setModel(mUserData);
+        }
+
+        mUserData = mRetainFragment.getModel();
+
+        if (mUserData == null) {
+            initUsersData();
+        } else {
+            mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                @Override
+                public void onClickOpenUserInfoListener(int position) {
+                    UserDTO user = new UserDTO(mUserData.get(position));
+
+                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                    startActivity(openProfile);
+                }
+            });
+            mUserList.setAdapter(mUsersAdapter);
+        }
+
+
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         mUserList.setLayoutManager(llManager);
 
         setupToolbar();
         setupDrawable();
-        initUsersData();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRetainFragment.setModel(mUserData);
     }
 
     private void showSnackBar(String message) {
@@ -128,7 +162,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
             @Override
             public void onFailure(Call<UserListRes> call, Throwable t) {
-                // TODO: 14.07.16 сделать обработку ошибок. 
+                showSnackBar(getResources().getString(R.string.error_server_not_response));
             }
         });
     }
@@ -154,16 +188,27 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                Intent intent = null;
 
                 switch (item.getItemId()) {
+                    case R.id.menu_user_profile:
+                        intent = new Intent(getBaseContext(), MainActivity.class);
+                        break;
+                    case R.id.menu_contacts:
+                        intent = new Intent(getBaseContext(), UserListActivity.class);
+                        break;
                     case R.id.menu_exit:
-                        Intent intent = new Intent(getBaseContext(), LogInActivity.class);
-                        startActivity(intent);
+                        intent = new Intent(getBaseContext(), LogInActivity.class);
+                        mDataManager.getPreferencesManager().saveAuthToken("");
                         break;
                     default:
                         showSnackBar(item.getTitle().toString());
                         item.setChecked(true);
                         break;
+                }
+
+                if (intent != null) {
+                    startActivity(intent);
                 }
 
                 mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -193,8 +238,10 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onQueryTextSubmit(String query) {
+        //Проверка введенного текста.
         checkInputInformation(query);
         return false;
     }
@@ -204,6 +251,12 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return false;
     }
 
+    /**
+     * Проверяет введенные данные пользователем.
+     * Собирает совпадения в коллекцию mSearchUserData
+     * Выводить данные на экран через адаптер
+     * @param text введенный текст
+     */
     private void checkInputInformation(String text) {
 
         mSearchUserData = new ArrayList<>();
@@ -218,14 +271,14 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
         }
 
-        if (!mSearchUserData.isEmpty()){
+        if (!mSearchUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
                 public void onClickOpenUserInfoListener(int position) {
                     UserDTO user = null;
 
                     for (int i = 0; i < mUserData.size(); i++) {
-                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())){
+                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())) {
                             user = new UserDTO(mUserData.get(i));
                         }
                     }
