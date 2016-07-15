@@ -12,7 +12,7 @@
         android:id="@+id/list_coordinator_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_profile">
+        android:background="@color/background_separator">
 
         <!--TOOLBAR-->
         <android.support.design.widget.AppBarLayout

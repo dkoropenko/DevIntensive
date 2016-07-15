@@ -18,7 +18,6 @@
             android:id="@+id/user_profile_appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_profile"
             app:theme="@style/ToolBarStyle"
             app:popupTheme="@style/AppTheme.AppBarOverlay">
 
@@ -39,6 +38,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"/>
+
                 </FrameLayout>
 
                 <android.support.v7.widget.Toolbar
@@ -49,7 +49,6 @@
                     android:theme="@style/AppTheme.PopupOverlay"
                     app:layout_collapseMode="pin">
                 </android.support.v7.widget.Toolbar>
-
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
         <!--END TOOLBAR-->
@@ -128,24 +127,28 @@
             <!--BODY-->
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_28"
                 android:orientation="vertical">
 
                 <!--Репозиторий-->
                 <LinearLayout
-                    style="@style/user_info_container">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <ImageView
                         style="@style/icon.left"
+                        android:layout_weight="0.15"
                         android:src="@drawable/github_box"/>
 
                     <ListView
                         android:id="@+id/user_profile_repo_list"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"/>
-
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/spacing_16"
+                        android:layout_weight="0.85"/>
                 </LinearLayout>
 
                 <View
@@ -177,16 +180,6 @@
         <!--END CONTENT-->
 
     </android.support.design.widget.CoordinatorLayout>
-
-    <!--DRAWABLE MENU-->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        app:menu="@menu/drawer_menu">
-    </android.support.design.widget.NavigationView>
-    <!--END DRAWABLE MENU-->
 </android.support.v4.widget.DrawerLayout>
 
 

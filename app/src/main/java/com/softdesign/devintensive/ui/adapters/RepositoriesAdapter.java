@@ -1,6 +1,7 @@
 package com.softdesign.devintensive.ui.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +16,14 @@ import java.util.List;
  * Created by smalew on 14.07.16.
  */
 public class RepositoriesAdapter extends BaseAdapter {
-    private Context mContext;
-    private List<String> mRepoList;
 
-    private LayoutInflater mInflater;
+    private static final String TAG = "RepositoriesAdapter";
+    private List<String> mRepoList;
+    private LayoutInflater mLayoutInflater;
 
     public RepositoriesAdapter(Context context, List<String> repoList) {
-        mContext = context;
         mRepoList = repoList;
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -32,26 +32,25 @@ public class RepositoriesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return mRepoList.get(i);
+    public Object getItem(int position) {
+        return mRepoList.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-
-        View itemView = view;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View itemView = convertView;
 
         if (itemView == null) {
-            itemView = mInflater.inflate(R.layout.item_repository_list, viewGroup, false);
+            itemView = mLayoutInflater.inflate(R.layout.item_repository_list, parent, false);
         }
 
-        TextView repoName = (TextView)itemView.findViewById(R.id.user_profile_user_github);
-        repoName.setText(mRepoList.get(i).toString());
+        TextView repoName = (TextView) itemView.findViewById(R.id.user_profile_github_repos);
+        repoName.setText(mRepoList.get(position));
 
         return itemView;
     }

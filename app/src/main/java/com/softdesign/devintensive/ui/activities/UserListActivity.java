@@ -88,22 +88,23 @@ public class UserListActivity extends AppCompatActivity {
         call.enqueue(new Callback<UserListRes>() {
             @Override
             public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                Log.d(TAG, "onResponse: "+ response.code());
-                try{
-                    mUserData = response.body().getData();
-                    mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                        @Override
-                        public void onClickOpenUserInfoListener(int position) {
-                            UserDTO user = new UserDTO(mUserData.get(position));
+                if (response.code() == 200){
+                    try{
+                        mUserData = response.body().getData();
+                        mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                            @Override
+                            public void onClickOpenUserInfoListener(int position) {
+                                UserDTO user = new UserDTO(mUserData.get(position));
 
-                            Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                            openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                            startActivity(openProfile);
-                        }
-                    });
-                    mUserList.setAdapter(mUsersAdapter);    
-                }catch (NullPointerException e){
-                    Log.d(TAG, "onResponse error: "+ e);
+                                Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                                openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                                startActivity(openProfile);
+                            }
+                        });
+                        mUserList.setAdapter(mUsersAdapter);
+                    }catch (NullPointerException e){
+                        Log.d(TAG, "onResponse error: "+ e);
+                    }
                 }
             }
 

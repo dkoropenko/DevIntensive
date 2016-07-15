@@ -2,6 +2,7 @@ package com.softdesign.devintensive.data.storage.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public class UserDTO implements Parcelable {
 
+    private static final String TAG = "UserDTO";
     private String mPhoto;
     private String mFullName;
     private String mRating;

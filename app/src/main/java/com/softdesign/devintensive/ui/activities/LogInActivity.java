@@ -92,25 +92,27 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void tokenLogin() {
-        if (NetworkStatusChecker.isNetworkAvaliable(this)) {
-            Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
+        if (!mDataManager.getPreferencesManager().getAuthToken().isEmpty()){
+            if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+                Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
 
-            call.enqueue(new Callback<LoginModelRes>() {
-                @Override
-                public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
-                    if (response.code() == 200) {
-                        saveUserValuesWithToken(response.body());
-                        loginSuccess();
+                call.enqueue(new Callback<LoginModelRes>() {
+                    @Override
+                    public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
+                        if (response.code() == 200) {
+                            saveUserValuesWithToken(response.body());
+                            loginSuccess();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<LoginModelRes> call, Throwable t) {
-
-                }
-            });
-        } else {
-            showSnackBar(getString(R.string.error_server_not_response));
+                    @Override
+                    public void onFailure(Call<LoginModelRes> call, Throwable t) {
+                        showSnackBar(getString(R.string.error_wrong_user_or_password));
+                    }
+                });
+            } else {
+                showSnackBar(getString(R.string.error_server_not_response));
+            }
         }
     }
 

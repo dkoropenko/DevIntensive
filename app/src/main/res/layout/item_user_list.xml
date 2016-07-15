@@ -30,6 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/txt_profile"
+                android:shadowColor="@color/background_separator"
+                android:shadowRadius="2"
                 android:fontFamily="@string/ff_medium"
                 android:textSize="@dimen/font_size_24"
                 android:text="Имя Фамилия"
@@ -55,10 +57,14 @@
                 android:layout_weight="0.25">
                 <TextView
                     android:id="@+id/list_user_rating"
-                    style="@style/statistic.list_number"/>
+                    style="@style/statistic.list_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <TextView
                     style="@style/statistic.list_text"
-                    android:text="Рейтинг"/>
+                    android:text="Рейтинг"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!--Количество строк-->
@@ -68,10 +74,13 @@
                 <TextView
                     android:id="@+id/list_user_code_lines"
                     style="@style/statistic.list_number"
-                    android:text="10 000"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <TextView
                     style="@style/statistic.list_text"
-                    android:text="Написано строк кода"/>
+                    android:text="Написано строк кода"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!--Проекты-->
@@ -81,10 +90,13 @@
                 <TextView
                     android:id="@+id/list_user_projects"
                     style="@style/statistic.list_number"
-                    android:text="8"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <TextView
                     style="@style/statistic.list_text"
-                    android:text="Проектов"/>
+                    android:text="Проектов"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
         <!--END STATISTIC-->
