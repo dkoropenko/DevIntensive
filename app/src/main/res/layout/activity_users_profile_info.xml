@@ -18,8 +18,8 @@
             android:id="@+id/user_profile_appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:theme="@style/ToolBarStyle"
-            app:popupTheme="@style/AppTheme.AppBarOverlay">
+            app:popupTheme="@style/AppTheme.AppBarOverlay"
+            app:theme="@style/ToolBarStyle">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/user_profile_collapsing_toolbar"
@@ -117,63 +117,58 @@
         </LinearLayout>
         <!--END STATISTIC-->
 
-        <!--CONTENT-->
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/user_profile_nested_scroll_view"
+
+        <!--BODY-->
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_28"
+            android:orientation="vertical"
             app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
 
-            <!--BODY-->
+            <!--Репозиторий-->
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_28"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <!--Репозиторий-->
-                <LinearLayout
+                <ImageView
+                    style="@style/icon.left"
+                    android:src="@drawable/github_box"/>
+
+                <ListView
+                    android:id="@+id/user_profile_repo_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/github_box"/>
-
-                    <ListView
-                        android:id="@+id/user_profile_repo_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/spacing_32"
-                        android:layout_marginLeft="@dimen/spacing_32"/>
-                </LinearLayout>
-
-                <View
-                    style="@style/separator_horizontal"/>
-
-                <!--О себе-->
-                <LinearLayout
-                    style="@style/user_info_container"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_account_circle_black_24dp"/>
-
-                    <android.support.design.widget.TextInputLayout
-                        style="@style/input_text_layout">
-
-                        <TextView
-                            android:id="@+id/user_profile_user_bio"
-                            style="@style/edit_text.self">
-                        </TextView>
-                    </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
+                    android:layout_marginLeft="@dimen/spacing_32"
+                    android:layout_marginRight="@dimen/spacing_32"/>
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+
+            <View
+                style="@style/separator_horizontal"/>
+
+            <!--О себе-->
+            <LinearLayout
+                style="@style/user_info_container"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/icon.left"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_account_circle_black_24dp"/>
+
+                <android.support.design.widget.TextInputLayout
+                    style="@style/input_text_layout">
+
+                    <TextView
+                        android:id="@+id/user_profile_user_bio"
+                        style="@style/edit_text.self">
+                    </TextView>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+
         <!--END CONTENT-->
 
     </android.support.design.widget.CoordinatorLayout>

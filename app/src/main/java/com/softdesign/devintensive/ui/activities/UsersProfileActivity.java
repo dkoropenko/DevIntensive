@@ -1,11 +1,13 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,9 +23,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UsersProfileActivity extends AppCompatActivity {
+public class UsersProfileActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "UsersProfileActivity";
+
+    private UserDTO mUser;
 
     @BindView(R.id.user_profile_user_photo_img)
     ImageView mUserPhoto;
@@ -57,14 +61,15 @@ public class UsersProfileActivity extends AppCompatActivity {
 
     //Инициализация полей профиля.
     private void initFields() {
-        final UserDTO user = getIntent().getParcelableExtra(ConstantManager.PARCEBLE_INFORMATION);
+        mUser = getIntent().getParcelableExtra(ConstantManager.PARCEBLE_INFORMATION);
 
-        List<String> reposinories = user.getGit();
+        List<String> reposinories = mUser.getGit();
         RepositoriesAdapter adapter = new RepositoriesAdapter(this, reposinories);
         mRepoList.setAdapter(adapter);
+        mRepoList.setOnItemClickListener(this);
 
         Picasso.with(this).
-                load(user.getPhoto()).
+                load(mUser.getPhoto()).
                 placeholder(this.getResources().getDrawable(R.drawable.nav_header_bg)).
                 error(this.getResources().getDrawable(R.drawable.nav_header_bg)).
                 fit().
@@ -72,11 +77,11 @@ public class UsersProfileActivity extends AppCompatActivity {
                 into(mUserPhoto);
 
 
-        mRating.setText(user.getRating());
-        mLinesCode.setText(user.getCodeLine());
-        mProjects.setText(user.getProjects());
-        mBio.setText(user.getSelf());
-        mCollapsingToolbarLayout.setTitle(user.getFullName());
+        mRating.setText(mUser.getRating());
+        mLinesCode.setText(mUser.getCodeLine());
+        mProjects.setText(mUser.getProjects());
+        mBio.setText(mUser.getSelf());
+        mCollapsingToolbarLayout.setTitle(mUser.getFullName());
     }
 
 
@@ -87,6 +92,17 @@ public class UsersProfileActivity extends AppCompatActivity {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Uri data = Uri.parse("http://" + mUser.getGit().get(i));
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(data);
+
+        if (intent != null) {
+            startActivity(intent);
         }
     }
 }

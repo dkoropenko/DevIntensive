@@ -53,4 +53,5 @@
     <string name="error_synch_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
     <string name="synch_photo">Фото синхронизировано с сервером</string>
     <string name="ff_medium">24sp</string>
+    <string name="hint_search">Поиск</string>
 </resources>

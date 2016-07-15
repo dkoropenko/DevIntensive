@@ -5,15 +5,18 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +31,8 @@ import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserListActivity extends BaseActivity {
+public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener{
 
     private static final String TAG = "UserListActivity";
     @BindView(R.id.list_navigation_drawer) DrawerLayout mDrawerLayout;
@@ -53,6 +58,10 @@ public class UserListActivity extends BaseActivity {
     private View mDrawerHeader;
     ImageView mUserAvatar;
     TextView mUserFio, mUserEmail;
+
+    private Pattern mPattern;
+    private Matcher mMatcher;
+    private List<UserListRes.UserData> mSearchUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +101,7 @@ public class UserListActivity extends BaseActivity {
                 if (response.code() == 200){
                     try{
                         mUserData = response.body().getData();
+
                         mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                             @Override
                             public void onClickOpenUserInfoListener(int position) {
@@ -159,7 +169,6 @@ public class UserListActivity extends BaseActivity {
 
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
-
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
@@ -167,4 +176,72 @@ public class UserListActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView view = (SearchView) MenuItemCompat.getActionView(item);
+        view.setOnQueryTextListener(this);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        checkInputInformation(query);
+        Log.d(TAG, "checkInputInformation: "+ query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        checkInputInformation(newText);
+        return false;
+    }
+
+    private void checkInputInformation(String text){
+        if (mSearchUserData != null)
+            mSearchUserData.clear();
+
+        String textPatter  = "^"+ text.toLowerCase() +"\\w*";
+
+        mPattern = Pattern.compile(textPatter);
+
+        Log.d(TAG, "checkInputInformation: "+ mUserData.get(0).getFullName().toLowerCase());
+        Log.d(TAG, "checkInputInformation: "+ text);
+
+        for (int i = 0; i < mUserData.size(); i++) {
+            mMatcher = mPattern.matcher(mUserData.get(i).getFullName().toLowerCase());
+            if (mMatcher.matches()){
+                Log.d(TAG, "checkInputInformation: "+ text);
+            }
+                //mSearchUserData.add(mUserData.get(i));
+            }
+        }
+
+//        mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+//            @Override
+//            public void onClickOpenUserInfoListener(int position) {
+//                UserDTO user = null;
+//                for (int i = 0; i < mUserData.size(); i++) {
+//                    for (int j = 0; j < mSearchUserData.size(); j++) {
+//                        if (mUserData.get(i).getId().equals(mSearchUserData.get(j))){
+//                            user = new UserDTO(mUserData.get(i));
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                if (user != null){
+//                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+//                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+//                    startActivity(openProfile);
+//                }
+//            }
+//        });
+//
+//        mUserList.setAdapter(mUsersAdapter);
+//    }
 }
