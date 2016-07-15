@@ -124,49 +124,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_28"
-            android:orientation="vertical"
-            app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+            android:orientation="vertical">
 
-            <!--Репозиторий-->
+            <!--GitGub-->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                style="@style/user_info_container">
 
                 <ImageView
                     style="@style/icon.left"
-                    android:src="@drawable/github_box"/>
+                    android:src="@drawable/github_box"
+                    />
 
                 <ListView
                     android:id="@+id/user_profile_repo_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing_32"
-                    android:layout_marginRight="@dimen/spacing_32"/>
+                    android:layout_marginLeft="@dimen/spacing_32"/>
             </LinearLayout>
 
             <View
                 style="@style/separator_horizontal"/>
 
-            <!--О себе-->
-            <LinearLayout
-                style="@style/user_info_container"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    style="@style/icon.left"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_account_circle_black_24dp"/>
-
-                <android.support.design.widget.TextInputLayout
-                    style="@style/input_text_layout">
-
-                    <TextView
-                        android:id="@+id/user_profile_user_bio"
-                        style="@style/edit_text.self">
-                    </TextView>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+            <include layout="@layout/content_user_profile"/>
         </LinearLayout>
 
         <!--END CONTENT-->

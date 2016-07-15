@@ -68,14 +68,15 @@ public class UsersProfileActivity extends BaseActivity implements AdapterView.On
         mRepoList.setAdapter(adapter);
         mRepoList.setOnItemClickListener(this);
 
-        Picasso.with(this).
-                load(mUser.getPhoto()).
-                placeholder(this.getResources().getDrawable(R.drawable.nav_header_bg)).
-                error(this.getResources().getDrawable(R.drawable.nav_header_bg)).
-                fit().
-                centerCrop().
-                into(mUserPhoto);
-
+        if (!mUser.getPhoto().isEmpty()){
+            Picasso.with(this).
+                    load(mUser.getPhoto()).
+                    placeholder(this.getResources().getDrawable(R.drawable.nav_header_bg)).
+                    error(this.getResources().getDrawable(R.drawable.nav_header_bg)).
+                    fit().
+                    centerCrop().
+                    into(mUserPhoto);
+        }
 
         mRating.setText(mUser.getRating());
         mLinesCode.setText(mUser.getCodeLine());

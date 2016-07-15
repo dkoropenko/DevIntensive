@@ -223,12 +223,10 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                 @Override
                 public void onClickOpenUserInfoListener(int position) {
                     UserDTO user = null;
+
                     for (int i = 0; i < mUserData.size(); i++) {
-                        for (int j = 0; j < mSearchUserData.size(); j++) {
-                            if (mUserData.get(i).getId().equals(mSearchUserData.get(j))) {
-                                user = new UserDTO(mUserData.get(i));
-                                break;
-                            }
+                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())){
+                            user = new UserDTO(mUserData.get(i));
                         }
                     }
 
