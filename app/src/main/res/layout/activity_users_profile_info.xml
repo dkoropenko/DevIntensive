@@ -140,15 +140,14 @@
 
                     <ImageView
                         style="@style/icon.left"
-                        android:layout_weight="0.15"
                         android:src="@drawable/github_box"/>
 
                     <ListView
                         android:id="@+id/user_profile_repo_list"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/spacing_16"
-                        android:layout_weight="0.85"/>
+                        android:layout_marginRight="@dimen/spacing_32"
+                        android:layout_marginLeft="@dimen/spacing_32"/>
                 </LinearLayout>
 
                 <View
@@ -162,12 +161,10 @@
                     <ImageView
                         style="@style/icon.left"
                         android:layout_gravity="center_horizontal"
-                        android:layout_weight="0.15"
                         android:src="@drawable/ic_account_circle_black_24dp"/>
 
                     <android.support.design.widget.TextInputLayout
-                        style="@style/input_text_layout"
-                        android:layout_weight="0.85">
+                        style="@style/input_text_layout">
 
                         <TextView
                             android:id="@+id/user_profile_user_bio"

@@ -35,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends BaseActivity {
 
     private static final String TAG = "UserListActivity";
     @BindView(R.id.list_navigation_drawer) DrawerLayout mDrawerLayout;
@@ -85,6 +85,7 @@ public class UserListActivity extends AppCompatActivity {
     private void initUsersData() {
         Call<UserListRes> call = mDataManager.getUsersList();
 
+        showProgress();
         call.enqueue(new Callback<UserListRes>() {
             @Override
             public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
@@ -102,7 +103,9 @@ public class UserListActivity extends AppCompatActivity {
                             }
                         });
                         mUserList.setAdapter(mUsersAdapter);
+                        hideProgress();
                     }catch (NullPointerException e){
+                        hideProgress();
                         Log.d(TAG, "onResponse error: "+ e);
                     }
                 }

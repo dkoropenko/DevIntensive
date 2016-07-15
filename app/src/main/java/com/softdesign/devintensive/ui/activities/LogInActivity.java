@@ -94,6 +94,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     private void tokenLogin() {
         if (!mDataManager.getPreferencesManager().getAuthToken().isEmpty()){
             if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+                showProgress();
                 Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
 
                 call.enqueue(new Callback<LoginModelRes>() {
@@ -101,6 +102,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                     public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
                         if (response.code() == 200) {
                             saveUserValuesWithToken(response.body());
+                            hideProgress();
                             loginSuccess();
                         }
                     }
@@ -111,6 +113,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                     }
                 });
             } else {
+                hideProgress();
                 showSnackBar(getString(R.string.error_server_not_response));
             }
         }
