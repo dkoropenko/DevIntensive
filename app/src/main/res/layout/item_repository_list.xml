@@ -15,7 +15,7 @@
 
         <EditText
             android:id="@+id/user_profile_github_repos"
-            style="@style/edit_text.repo"
+            style="@style/user_information_edit_text.github"
             android:hint="@string/hint_github"
             android:inputType="textUri"/>
     </android.support.design.widget.TextInputLayout>
@@ -27,7 +27,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/spacing_24"
-        android:src="@drawable/ic_visibility_black_24dp"
+        android:src="@drawable/btn_look_web"
         />
 
 </RelativeLayout>

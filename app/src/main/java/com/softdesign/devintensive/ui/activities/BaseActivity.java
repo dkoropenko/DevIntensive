@@ -22,7 +22,7 @@ public class BaseActivity extends AppCompatActivity {
         if (mProgressDialog == null){
             mProgressDialog = new ProgressDialog(this, R.style.custom_dialog);
             mProgressDialog.setCancelable(false);
-            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.RED));
             mProgressDialog.show();
             mProgressDialog.setContentView(R.layout.progress_splash);
         } else{

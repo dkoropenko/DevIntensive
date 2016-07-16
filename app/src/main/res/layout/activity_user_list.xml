@@ -19,7 +19,7 @@
             android:id="@+id/list_appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_profile"
+            android:background="@color/background_toolbar"
             app:theme="@style/ToolBarStyle"
             app:popupTheme="@style/AppTheme.AppBarOverlay">
 
@@ -41,9 +41,7 @@
     <!--DRAWABLE MENU-->
     <android.support.design.widget.NavigationView
         android:id="@+id/list_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
+        style="@style/drawable_container"
         app:menu="@menu/drawer_menu">
     </android.support.design.widget.NavigationView>
     <!--END DRAWABLE MENU-->

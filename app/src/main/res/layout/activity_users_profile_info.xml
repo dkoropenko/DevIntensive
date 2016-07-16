@@ -25,7 +25,7 @@
                 android:id="@+id/user_profile_collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/background_profile"
+                app:contentScrim="@color/background_statistic"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <FrameLayout
@@ -58,18 +58,14 @@
         <!--STATISTIC-->
         <LinearLayout
             android:id="@+id/user_profile_info_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_112"
-            android:background="@color/background_profile"
-            android:gravity="center"
-            android:orientation="horizontal"
+            style="@style/statistic_container"
             app:behavior_min_height="@dimen/size_56"
             app:layout_behavior=".ui.views.behaviors.InfoPanelBehavior">
 
             <!--Рейтинг-->
             <LinearLayout
                 style="@style/statistic_info"
-                android:layout_weight="0.25">
+                android:layout_weight="0.25">>
 
                 <TextView
                     android:id="@+id/user_profile_user_rating"

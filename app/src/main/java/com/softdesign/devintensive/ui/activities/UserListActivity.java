@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -162,6 +161,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
             @Override
             public void onFailure(Call<UserListRes> call, Throwable t) {
+                hideProgress();
                 showSnackBar(getResources().getString(R.string.error_server_not_response));
             }
         });
@@ -222,7 +222,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.menu_open);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }

@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +36,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     EditText mUserName;
     @BindView(R.id.login_password)
     EditText mUserPassword;
-    @BindView(R.id.login_enter_btn)
+    @BindView(R.id.login_auth_btn)
     Button mUserAuth;
     @BindView(R.id.login_remember_paswd)
     TextView mRememberPasswd;
@@ -65,7 +64,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_enter_btn:
+            case R.id.login_auth_btn:
                 mLogin = mUserName.getText().toString().trim();
                 mPass = mUserPassword.getText().toString().trim();
                 singIn();

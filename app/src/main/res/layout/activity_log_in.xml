@@ -10,78 +10,46 @@
     tools:context="com.softdesign.devintensive.ui.activities.LogInActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/spacing_48"
-        android:layout_marginRight="@dimen/spacing_48">
+        style="@style/login_main_container">
 
         <android.support.v7.widget.CardView
             android:id="@+id/login_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_white"
-            android:paddingLeft="0dp"
-            app:cardCornerRadius="@dimen/spacing_8">
+            style="@style/login_child_container"
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_28"
-                android:orientation="vertical">
+                style="@style/login_information">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_header_text"
-                    android:textColor="@color/txt_login_main"
-                    android:textSize="@dimen/font_size_20"/>
+                    style="@style/login_header_txt"/>
 
                 <android.support.design.widget.TextInputLayout
-                    style="@style/login_textinput_layout">
+                    style="@style/user_information_edit_text">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/login_user"
-                        style="@style/edit_text.login"/>
+                        style="@style/user_information_edit_text.login"/>
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
-                    style="@style/login_textinput_layout">
+                    style="@style/user_information_edit_text">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/login_password"
-                        style="@style/edit_text.password"/>
+                        style="@style/user_information_edit_text.password"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/login_enter_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/spacing_48"
-                    android:layout_marginRight="@dimen/spacing_48"
-                    android:layout_marginTop="@dimen/spacing_16"
-                    android:background="@drawable/shape_rectangle"
-                    android:text="@string/login_btn"
-                    android:textColor="@color/txt_profile"
-                    android:textSize="@dimen/font_size_18"
-                    />
+                    android:id="@+id/login_auth_btn"
+                    style="@style/login_auth_btn"/>
 
                 <TextView
                     android:id="@+id/login_remember_paswd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/spacing_16"
-                    android:text="@string/login_forgot_password"/>
+                    style="@style/login_forgot_passwd_btn"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <View
-            android:layout_width="3dp"
-            android:layout_height="@dimen/spacing_32"
-            android:layout_marginTop="@dimen/spacing_28"
-            android:elevation="3dp"
-            android:background="@color/txt_login_main"/>
+            style="@style/login_magic_view"/>
     </RelativeLayout>
 
 

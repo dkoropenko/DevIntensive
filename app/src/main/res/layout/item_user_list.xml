@@ -29,7 +29,7 @@
                 android:id="@+id/list_user_fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/txt_profile"
+                android:textColor="@color/text_statistic"
                 android:shadowColor="@color/background_separator"
                 android:shadowRadius="2"
                 android:fontFamily="@string/ff_medium"
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Просмотреть"
-            android:textColor="@color/txt_login_main"
+            android:textColor="@color/text_login"
             android:paddingLeft="@dimen/spacing_16"
             android:paddingRight="@dimen/spacing_16"/>
 
