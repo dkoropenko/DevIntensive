@@ -130,7 +130,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     }
 
     private void initUsersData() {
-        Call<UserListRes> call = mDataManager.getUsersList();
+        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
 
         showProgress();
         call.enqueue(new Callback<UserListRes>() {

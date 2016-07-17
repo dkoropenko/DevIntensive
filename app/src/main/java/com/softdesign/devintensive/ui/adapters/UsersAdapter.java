@@ -1,7 +1,9 @@
 package com.softdesign.devintensive.ui.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
+import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,6 +25,7 @@ import java.util.List;
  * Created by smalew on 14.07.16.
  */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
+    private String TAG = "UserAdapter";
 
     private Context mContext;
     private List<UserListRes.UserData> mUsers;
@@ -38,16 +44,37 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     @Override
-    public void onBindViewHolder(UsersAdapter.UserViewHolder holder, int position) {
+    public void onBindViewHolder(final UsersAdapter.UserViewHolder holder, int position) {
         UserListRes.UserData user = mUsers.get(position);
 
-        if (!user.getPublicInfo().getPhoto().isEmpty()){
-            Picasso.with(mContext).
-                    load(user.getPublicInfo().getPhoto()).
-                    placeholder(mContext.getResources().getDrawable(R.drawable.nav_header_bg)).
-                    resize(200,0).
-                    into(holder.mUserFoto);
+        final String photoUri;
+        if (user.getPublicInfo().getPhoto().isEmpty()){
+            photoUri = null;
+        }else{
+            photoUri = user.getPublicInfo().getPhoto();
         }
+
+        DataManager.getInstance().getPicassoCache().getPicassoInstance().with(mContext).
+                load(photoUri).
+                placeholder(holder.mDummy).
+                error(holder.mDummy).
+                networkPolicy(NetworkPolicy.OFFLINE).
+                resize(200,0).
+                into(holder.mUserFoto, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(TAG, "Load photo from cache");
+                    }
+
+                    @Override
+                    public void onError() {
+                        DataManager.getInstance().getPicassoCache().getPicassoInstance().with(mContext).
+                                load(photoUri).
+                                placeholder(holder.mDummy).
+                                resize(200,0).
+                                into(holder.mUserFoto);
+                    }
+                });
 
         holder.mUserFullName.setText(user.getFullName());
         holder.mRating.setText(String.valueOf(user.getProfileValues().getRating()));
@@ -70,6 +97,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private AspectRatioImageView mUserFoto;
+        private Drawable mDummy;
+
         private TextView mUserFullName;
         private TextView mRating;
         private TextView mCodeLines;
@@ -85,6 +114,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             this.mListener = listener;
 
             this.mUserFoto = (AspectRatioImageView) itemView.findViewById(R.id.list_user_photo);
+            mDummy = mUserFoto.getContext().getResources().getDrawable(R.drawable.nav_header_bg);
             this.mUserFullName = (TextView) itemView.findViewById(R.id.list_user_fullname);
             this.mRating = (TextView) itemView.findViewById(R.id.list_user_rating);
             this.mCodeLines = (TextView) itemView.findViewById(R.id.list_user_code_lines);

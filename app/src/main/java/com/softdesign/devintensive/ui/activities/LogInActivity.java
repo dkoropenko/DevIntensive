@@ -2,6 +2,7 @@ package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
@@ -14,7 +15,14 @@ import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
 import com.softdesign.devintensive.data.network.res.LoginModelRes;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.data.storage.models.Repository;
+import com.softdesign.devintensive.data.storage.models.RepositoryDao;
+import com.softdesign.devintensive.data.storage.models.User;
+import com.softdesign.devintensive.data.storage.models.UserDao;
+import com.softdesign.devintensive.ui.adapters.UsersAdapter;
+import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
 import java.util.ArrayList;
@@ -42,8 +50,13 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     TextView mRememberPasswd;
 
     private DataManager mDataManager;
+    private UsersAdapter mUsersAdapter;
+    private List<UserListRes.UserData> mUserData;
     private String mLogin;
     private String mPass;
+
+    private RepositoryDao mRepositoryDao;
+    private UserDao mUserDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +65,10 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
         ButterKnife.bind(this);
         mDataManager = DataManager.getInstance();
-
         mUserName.setText(mDataManager.getPreferencesManager().loadLoginEmail());
+
+        mUserDao = mDataManager.getDaoSession().getUserDao();
+        mRepositoryDao = mDataManager.getDaoSession().getRepositoryDao();
 
         mUserAuth.setOnClickListener(this);
         mRememberPasswd.setOnClickListener(this);
@@ -101,8 +116,17 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                     public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
                         if (response.code() == 200) {
                             saveUserValuesWithToken(response.body());
+                            loadUsers();
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginSuccess();
+                                }
+                            }, AppConfig.START_DELAY);
+
                             hideProgress();
-                            loginSuccess();
                         }
                     }
 
@@ -130,7 +154,15 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                         mDataManager.getPreferencesManager().saveUserId(response.body().getData().getUser().getId());
                         mDataManager.getPreferencesManager().saveLoginEmail(mLogin);
                         saveUserValues(response.body());
-                        loginSuccess();
+                        loadUsers();
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginSuccess();
+                            }
+                        }, AppConfig.START_DELAY);
 
                     } else if (response.code() == 404) {
                         showSnackBar(getString(R.string.error_wrong_user_or_password));
@@ -199,5 +231,53 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         //Сохраняет фото и аватар
         mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(modelRes.getData().getUser().getPublicInfo().getPhoto()));
         mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(modelRes.getData().getUser().getPublicInfo().getAvatar()));
+    }
+
+    private void loadUsers(){
+        // TODO: 17.07.16 Сделал загрузку пользователей в базу из сети.Необходимо сделать по уроку дальше. 1.00
+        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
+
+        call.enqueue(new Callback<UserListRes>() {
+            @Override
+            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
+                try{
+                    if (response.code() == 200){
+
+                        List<User> users = new ArrayList<User>();
+                        List<Repository> repositories = new ArrayList<Repository>();
+
+                        for (UserListRes.UserData user: response.body().getData()
+                             ) {
+                            repositories.addAll(getUserRepositories(user));
+                            users.add(new User(user));
+                        }
+
+                        mRepositoryDao.insertOrReplaceInTx(repositories);
+                        mUserDao.insertOrReplaceInTx(users);
+                    }
+                }catch (NullPointerException e){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserListRes> call, Throwable t) {
+                hideProgress();
+                showSnackBar(getResources().getString(R.string.error_server_not_response));
+            }
+        });
+    }
+
+    private List<Repository> getUserRepositories(UserListRes.UserData userData){
+        final String userId = userData.getId();
+
+        List<Repository> repositories = new ArrayList<>();
+
+        for (UserModelRes.Repo repo: userData.getRepositories().getRepo()
+             ) {
+            repositories.add(new Repository(repo, userId));
+        }
+
+        return repositories;
     }
 }
