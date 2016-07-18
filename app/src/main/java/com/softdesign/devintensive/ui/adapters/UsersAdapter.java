@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -28,10 +29,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private String TAG = "UserAdapter";
 
     private Context mContext;
-    private List<UserListRes.UserData> mUsers;
+    private List<User> mUsers;
     private UserViewHolder.CustomClickListener mCustomClickListener;
 
-    public UsersAdapter(List<UserListRes.UserData> users, UserViewHolder.CustomClickListener listener) {
+    public UsersAdapter(List<User> users, UserViewHolder.CustomClickListener listener) {
         this.mUsers = users;
         this.mCustomClickListener = listener;
     }
@@ -45,13 +46,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(final UsersAdapter.UserViewHolder holder, int position) {
-        UserListRes.UserData user = mUsers.get(position);
+        User user = mUsers.get(position);
 
         final String photoUri;
-        if (user.getPublicInfo().getPhoto().isEmpty()){
+        if (user.getPhoto().isEmpty()){
             photoUri = null;
         }else{
-            photoUri = user.getPublicInfo().getPhoto();
+            photoUri = user.getPhoto();
         }
 
         DataManager.getInstance().getPicassoCache().getPicassoInstance().with(mContext).
@@ -77,14 +78,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 });
 
         holder.mUserFullName.setText(user.getFullName());
-        holder.mRating.setText(String.valueOf(user.getProfileValues().getRating()));
-        holder.mCodeLines.setText(String.valueOf(user.getProfileValues().getLinesCode()));
-        holder.mProjects.setText(String.valueOf(user.getProfileValues().getProjects()));
+        holder.mRating.setText(String.valueOf(user.getRating()));
+        holder.mCodeLines.setText(String.valueOf(user.getCodeLines()));
+        holder.mProjects.setText(String.valueOf(user.getProjects()));
 
-        if (user.getPublicInfo().getBio() != null && user.getPublicInfo().getBio().isEmpty()) {
+        if (user.getBio() != null && user.getBio().isEmpty()) {
             holder.mBio.setVisibility(View.GONE);
         } else {
-            holder.mBio.setText(user.getPublicInfo().getBio());
+            holder.mBio.setText(user.getBio());
             holder.mBio.setVisibility(View.VISIBLE);
         }
     }

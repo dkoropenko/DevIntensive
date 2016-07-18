@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
@@ -36,9 +37,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
@@ -54,7 +52,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
-    private List<UserListRes.UserData> mUserData;
+    private List<User> mUserData;
 
     //Боковое меню
     @BindView(R.id.list_navigation_view)
@@ -74,47 +72,13 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
         mDataManager = DataManager.getInstance();
 
-        FragmentManager fm = getSupportFragmentManager();
-        mRetainFragment = (RetainFragment) fm.findFragmentByTag("mModel");
-
-        if (mRetainFragment == null) {
-            mRetainFragment = new RetainFragment();
-            fm.beginTransaction().add(mRetainFragment, "mModel").commit();
-
-            mRetainFragment.setModel(mUserData);
-        }
-
-        mUserData = mRetainFragment.getModel();
-
-        if (mUserData == null) {
-            initUsersData();
-        } else {
-            mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                @Override
-                public void onClickOpenUserInfoListener(int position) {
-                    UserDTO user = new UserDTO(mUserData.get(position));
-
-                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                    startActivity(openProfile);
-                }
-            });
-            mUserList.setAdapter(mUsersAdapter);
-        }
-
-
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         mUserList.setLayoutManager(llManager);
 
         setupToolbar();
         setupDrawable();
+        loadUsersFromDb();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRetainFragment.setModel(mUserData);
     }
 
     private void showSnackBar(String message) {
@@ -129,42 +93,26 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return super.onOptionsItemSelected(item);
     }
 
-    private void initUsersData() {
-        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
+    private void loadUsersFromDb() {
+        mUserData = mDataManager.getUserListFromDatabase();
+        if (!mUserData.isEmpty()) {
+            mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                @Override
+                public void onClickOpenUserInfoListener(int position) {
+                    UserDTO user = new UserDTO(mUserData.get(position));
 
-        showProgress();
-        call.enqueue(new Callback<UserListRes>() {
-            @Override
-            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                if (response.code() == 200) {
-                    try {
-                        mUserData = response.body().getData();
-
-                        mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                            @Override
-                            public void onClickOpenUserInfoListener(int position) {
-                                UserDTO user = new UserDTO(mUserData.get(position));
-
-                                Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                                openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                                startActivity(openProfile);
-                            }
-                        });
-                        mUserList.setAdapter(mUsersAdapter);
-                        hideProgress();
-                    } catch (NullPointerException e) {
-                        hideProgress();
-                        Log.d(TAG, "onResponse error: " + e);
-                    }
+                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                    startActivity(openProfile);
                 }
-            }
+            });
+            mUserList.setAdapter(mUsersAdapter);
+            hideProgress();
+        } else {
+            hideProgress();
+            showSnackBar(getString(R.string.error_load_users));
+        }
 
-            @Override
-            public void onFailure(Call<UserListRes> call, Throwable t) {
-                hideProgress();
-                showSnackBar(getResources().getString(R.string.error_server_not_response));
-            }
-        });
     }
 
     private void setupDrawable() {
@@ -255,43 +203,44 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
      * Проверяет введенные данные пользователем.
      * Собирает совпадения в коллекцию mSearchUserData
      * Выводить данные на экран через адаптер
+     *
      * @param text введенный текст
      */
     private void checkInputInformation(String text) {
 
-        mSearchUserData = new ArrayList<>();
-
-        if (mSearchUserData != null)
-            mSearchUserData.clear();
-
-        for (int i = 0; i < mUserData.size(); i++) {
-            if (mUserData.get(i).getFullName().toLowerCase().contains(text.toLowerCase())) {
-                mSearchUserData.add(mUserData.get(i));
-            }
-
-        }
-
-        if (!mSearchUserData.isEmpty()) {
-            mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                @Override
-                public void onClickOpenUserInfoListener(int position) {
-                    UserDTO user = null;
-
-                    for (int i = 0; i < mUserData.size(); i++) {
-                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())) {
-                            user = new UserDTO(mUserData.get(i));
-                        }
-                    }
-
-                    if (user != null) {
-                        Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                        openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                        startActivity(openProfile);
-                    }
-                }
-            });
-
-            mUserList.setAdapter(mUsersAdapter);
-        }
+//        mSearchUserData = new ArrayList<>();
+//
+//        if (mSearchUserData != null)
+//            mSearchUserData.clear();
+//
+//        for (int i = 0; i < mUserData.size(); i++) {
+//            if (mUserData.get(i).getFullName().toLowerCase().contains(text.toLowerCase())) {
+//                mSearchUserData.add(mUserData.get(i));
+//            }
+//
+//        }
+//
+//        if (!mSearchUserData.isEmpty()) {
+//            mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+//                @Override
+//                public void onClickOpenUserInfoListener(int position) {
+//                    UserDTO user = null;
+//
+//                    for (int i = 0; i < mUserData.size(); i++) {
+//                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())) {
+//                            user = new UserDTO(mUserData.get(i));
+//                        }
+//                    }
+//
+//                    if (user != null) {
+//                        Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+//                        openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+//                        startActivity(openProfile);
+//                    }
+//                }
+//            });
+//
+//            mUserList.setAdapter(mUsersAdapter);
+//        }
     }
 }

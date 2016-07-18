@@ -11,6 +11,7 @@ import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.data.storage.models.DaoSession;
 import com.softdesign.devintensive.data.storage.models.User;
+import com.softdesign.devintensive.data.storage.models.UserDao;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevIntensiveApp;
 
@@ -75,5 +76,19 @@ public class DataManager {
 
     public DaoSession getDaoSession() { return mDaoSession; }
 
-    public List<User> getUserListFromDatabase() {return new ArrayList<>();}
+    public List<User> getUserListFromDatabase() {
+        List<User> userList = new ArrayList<>();
+
+        try {
+            userList = mDaoSession.queryBuilder(User.class).
+                    where(UserDao.Properties.Id.gt(0)).
+                    orderDesc(UserDao.Properties.CodeLines).
+                    build().
+                    list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return userList;
+    }
 }

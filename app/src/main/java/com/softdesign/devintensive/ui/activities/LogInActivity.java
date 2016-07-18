@@ -234,7 +234,6 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void loadUsers(){
-        // TODO: 17.07.16 Сделал загрузку пользователей в базу из сети.Необходимо сделать по уроку дальше. 1.00
         Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
 
         call.enqueue(new Callback<UserListRes>() {
@@ -243,7 +242,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                 try{
                     if (response.code() == 200){
 
-                        List<User> users = new ArrayList<User>();
+                        List<User> users = new ArrayList<>();
                         List<Repository> repositories = new ArrayList<Repository>();
 
                         for (UserListRes.UserData user: response.body().getData()

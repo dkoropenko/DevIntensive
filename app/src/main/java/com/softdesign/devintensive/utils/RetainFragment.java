@@ -3,7 +3,7 @@ package com.softdesign.devintensive.utils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class RetainFragment extends Fragment {
 
-    List<UserListRes.UserData> mModel;
+    List<User> mModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,11 +20,11 @@ public class RetainFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public List<UserListRes.UserData> getModel() {
+    public List<User> getModel() {
         return mModel;
     }
 
-    public void setModel(List<UserListRes.UserData> model) {
+    public void setModel(List<User> model) {
         mModel = model;
     }
 }

@@ -48,4 +48,5 @@
     <string name="error_server_not_response">Сервер недоступен</string>
     <string name="error_magic">Неизвестная ошибка</string>
     <string name="error_synchro_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
+    <string name="error_load_users">Спосок пользователей не может быть загружен</string>
 </resources>

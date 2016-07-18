@@ -373,8 +373,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
     private void disableUserInfo(){
-        for (int i = 0; i < mUserAction.size(); i++) {
-            mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
+        if (!watchers.isEmpty()){
+            for (int i = 0; i < mUserAction.size(); i++) {
+                mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
+            }
         }
     }
     private void setupToolbar() {
