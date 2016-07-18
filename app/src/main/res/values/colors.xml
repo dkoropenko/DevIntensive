@@ -17,4 +17,5 @@
     <color name="text_statistic">#d7d7d7</color>
     <color name="text_information">#030303</color>
     <color name="text_login">#cf3c18</color>
+    <color name="text_toolbar">#d7d7d7</color>
 </resources>

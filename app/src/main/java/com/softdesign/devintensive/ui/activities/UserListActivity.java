@@ -1,10 +1,10 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,15 +23,12 @@ import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.RetainFragment;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,8 +57,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     ImageView mUserAvatar;
     TextView mUserFio, mUserEmail;
 
-    private List<UserListRes.UserData> mSearchUserData;
-    private RetainFragment mRetainFragment;
+    Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +66,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
+        mHandler = new Handler();
 
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         mUserList.setLayoutManager(llManager);
@@ -95,6 +91,8 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private void loadUsersFromDb() {
         mUserData = mDataManager.getUserListFromDatabase();
+
+        showProgress();
         if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
@@ -112,7 +110,33 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             hideProgress();
             showSnackBar(getString(R.string.error_load_users));
         }
+    }
 
+    /**
+     * Проверяет введенные данные пользователем.
+     * Собирает совпадения в коллекцию mSearchUserData
+     * Выводить данные на экран через адаптер
+     *
+     * @param text введенный текст
+     */
+    private void checkInputInformation(String text) {
+
+        if (text.equals("")){
+            mUserData = mDataManager.getUserListFromDatabase();
+            showUserList();
+        }else {
+            mUserData = mDataManager.getUserListByName(text);
+
+            Runnable searchingUsers = new Runnable() {
+                @Override
+                public void run() {
+                    showUserList();
+                }
+            };
+
+            mHandler.removeCallbacks(searchingUsers);
+            mHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
+        }
     }
 
     private void setupDrawable() {
@@ -189,58 +213,34 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        //Проверка введенного текста.
-        checkInputInformation(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        //Проверка введенного текста.
+        checkInputInformation(newText);
         return false;
     }
 
-    /**
-     * Проверяет введенные данные пользователем.
-     * Собирает совпадения в коллекцию mSearchUserData
-     * Выводить данные на экран через адаптер
-     *
-     * @param text введенный текст
-     */
-    private void checkInputInformation(String text) {
+    private void showUserList(){
+        showProgress();
+        if (!mUserData.isEmpty()) {
+            mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                @Override
+                public void onClickOpenUserInfoListener(int position) {
+                    UserDTO user = new UserDTO(mUserData.get(position));
 
-//        mSearchUserData = new ArrayList<>();
-//
-//        if (mSearchUserData != null)
-//            mSearchUserData.clear();
-//
-//        for (int i = 0; i < mUserData.size(); i++) {
-//            if (mUserData.get(i).getFullName().toLowerCase().contains(text.toLowerCase())) {
-//                mSearchUserData.add(mUserData.get(i));
-//            }
-//
-//        }
-//
-//        if (!mSearchUserData.isEmpty()) {
-//            mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-//                @Override
-//                public void onClickOpenUserInfoListener(int position) {
-//                    UserDTO user = null;
-//
-//                    for (int i = 0; i < mUserData.size(); i++) {
-//                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())) {
-//                            user = new UserDTO(mUserData.get(i));
-//                        }
-//                    }
-//
-//                    if (user != null) {
-//                        Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-//                        openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-//                        startActivity(openProfile);
-//                    }
-//                }
-//            });
-//
-//            mUserList.setAdapter(mUsersAdapter);
-//        }
+                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                    startActivity(openProfile);
+                }
+            });
+            mUserList.swapAdapter(mUsersAdapter, true);
+            hideProgress();
+        } else {
+            hideProgress();
+            showSnackBar(getString(R.string.error_load_users));
+        }
     }
 }

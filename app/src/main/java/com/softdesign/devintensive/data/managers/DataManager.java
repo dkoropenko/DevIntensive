@@ -82,7 +82,7 @@ public class DataManager {
         try {
             userList = mDaoSession.queryBuilder(User.class).
                     where(UserDao.Properties.Id.gt(0)).
-                    orderDesc(UserDao.Properties.CodeLines).
+                    orderDesc(UserDao.Properties.Rating).
                     build().
                     list();
         }catch (Exception e){
@@ -90,5 +90,19 @@ public class DataManager {
         }
 
         return userList;
+    }
+
+    public List<User> getUserListByName(String text){
+        List<User> resultUsers = new ArrayList<>();
+
+        try{
+            resultUsers = mDaoSession.queryBuilder(User.class).
+                    where(UserDao.Properties.SearchName.like("%"+ text.toUpperCase() +"%")).
+                    orderDesc(UserDao.Properties.Rating).
+                    build().list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultUsers;
     }
 }
