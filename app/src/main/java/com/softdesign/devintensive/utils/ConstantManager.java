@@ -6,22 +6,23 @@ package com.softdesign.devintensive.utils;
 public interface ConstantManager {
     String PREFIX_TAG = "DevIntensive: ";
 
-    String EDIT_MODE_KEY = "editMode";
+    String EDIT_MODE_KEY = "com.softdesign.devintensive.utils.ConstantManager.editMode";
 
-    String USER_PHONE_KEY = "userKey1";
-    String USER_MAIL_KEY = "userKey2";
-    String USER_VK_KEY = "userKey3";
-    String USER_REPO_KEY = "userKey4";
-    String USER_SELF_KEY = "userKey5";
-    String USER_PHOTO_KEY = "userPhotoKey";
-    String USER_AVATAR_KEY = "userAvatarKey";
-    String LOGIN_KEY = "userLoginKey";
-    String AUTH_TOKEN = "userKey7";
-    String USER_ID = "userID";
-    String USER_RATING = "userRating";
-    String USER_CODE_LINES = "userCodeLines";
-    String USER_PROJECTS = "userProjects";
-    String USER_FIO = "userFIO";
+    String USER_PHONE_KEY = "com.softdesign.devintensive.utils.ConstantManager.userKey1";
+    String USER_MAIL_KEY = "com.softdesign.devintensive.utils.ConstantManager.userKey2";
+    String USER_VK_KEY = "com.softdesign.devintensive.utils.ConstantManager.userKey3";
+    String USER_REPO_KEY = "com.softdesign.devintensive.utils.ConstantManager.userKey4";
+    String USER_SELF_KEY = "com.softdesign.devintensive.utils.ConstantManager.userKey5";
+    String USER_PHOTO_KEY = "com.softdesign.devintensive.utils.ConstantManager.userPhotoKey";
+    String USER_AVATAR_KEY = "com.softdesign.devintensive.utils.ConstantManager.userAvatarKey";
+    String LOGIN_KEY = "com.softdesign.devintensive.utils.ConstantManager.userLoginKey";
+    String AUTH_TOKEN = "com.softdesign.devintensive.utils.ConstantManager.userKey7";
+    String USER_ID = "com.softdesign.devintensive.utils.ConstantManager.userID";
+    String USER_RATING = "com.softdesign.devintensive.utils.ConstantManager.userRating";
+    String USER_CODE_LINES = "com.softdesign.devintensive.utils.ConstantManager.userCodeLines";
+    String USER_PROJECTS = "com.softdesign.devintensive.utils.ConstantManager.userProjects";
+    String USER_FIO = "com.softdesign.devintensive.utils.ConstantManager.userFIO";
+    String PARCEBLE_INFORMATION = "com.softdesign.devintensive.utils.ConstantManager.userProfileInformation";
 
     int LOAD_PROFILE_DATA = 1;
     int REQUEST_CAMERA_PICTURE = 91;

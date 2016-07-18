@@ -3,11 +3,11 @@ package com.softdesign.devintensive.utils;
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.softdesign.devintensive.R;
-import com.vicmikhailau.maskededittext.MaskedEditText;
-import com.vicmikhailau.maskededittext.MaskedWatcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,12 +15,12 @@ import java.util.regex.Pattern;
 /**
  * Класс проверки введенных пользователем данных
  */
-public class CheckInputInformation extends MaskedWatcher {
+public class CheckInputInformation implements TextWatcher {
 
     private final String TAG = "CheckInputInformation";
 
     //Регулярные выражения для сравнения.
-    private final String phoneNumberPattern = "^\\d{11,20}$";
+    private final String phoneNumberPattern = "^(\\+7|8)[\\s(]*\\d{3}[\\s)]*\\d{3}\\s*-\\s*\\d{2}\\s*-\\s*\\d{2}$";
     private final String mailAdressPattern = "^[\\w.-]{3,}\\@[\\w-]{2,}\\.[a-z]{2,3}$";
     private final String vkAdressPattern = "^vk\\.com/[\\w-]{3,}$";
     private final String gitAdressPattern = "^github\\.com/[\\w-]{3,}$";
@@ -28,7 +28,7 @@ public class CheckInputInformation extends MaskedWatcher {
     //Переменные для работы с UI
     private Context mContext;
     private TextInputLayout mTextInputLayout;
-    private MaskedEditText mUserInfo;
+    private EditText mUserInfo;
     private int mResId;
     private String mError;
     private ImageView mToActionBtn;
@@ -37,20 +37,12 @@ public class CheckInputInformation extends MaskedWatcher {
     private Pattern mPattern;
     private Matcher mMatcher;
 
-    public CheckInputInformation(Context context, MaskedEditText userInfo, ImageView button, TextInputLayout textInputLayout) {
-        super(null);
-
+    public CheckInputInformation(Context context, EditText userInfo, ImageView button, TextInputLayout textInputLayout) {
         this.mContext = context;
         this.mTextInputLayout = textInputLayout;
         this.mUserInfo = userInfo;
         this.mResId = mUserInfo.getId();
         this.mToActionBtn = button;
-
-        switch (mResId) {
-            case R.id.user_phone:
-                mUserInfo.setMask("+# ### ###-##-##");
-                break;
-        }
     }
 
     /**
@@ -99,7 +91,7 @@ public class CheckInputInformation extends MaskedWatcher {
         switch (mResId) {
             case R.id.user_phone:
                 mError = mContext.getString(R.string.error_user_phone_message);
-                check(phoneNumberPattern, mUserInfo.getUnMaskedString());
+                check(phoneNumberPattern, editable.toString());
                 break;
             case R.id.user_mail:
                 mError = mContext.getString(R.string.error_user_mail_message);

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Коропенко Дмитрий</string>
 
+    <string name="ff_medium">24sp</string>
+
     <!--EditText's hints-->
     <string name="hint_mobile">Мобильный</string>
     <string name="hint_email">E-mail</string>
@@ -9,12 +11,7 @@
     <string name="hint_about">О себе</string>
     <string name="hint_login">EMAIL</string>
     <string name="hint_password">Пароль</string>
-
-    <!--EditText mask-->
-    <string name="mask_phone">Маска для номера +х ххх ххх-хх-хх</string>
-    <string name="mask_mail">Маска для адреса xxx@xx.xx</string>
-    <string name="mask_vk">Маска для адреса vk.com/xxx</string>
-    <string name="mask_git">Маска для адреса github.com/xxx</string>
+    <string name="hint_search">Поиск</string>
 
     <!--Drawable menu-->
     <string name="menu_my_profile">Мой профиль</string>
@@ -25,13 +22,13 @@
     <string name="my_profile_name">Коропенко Дмитрий</string>
     <string name="my_profile_mail">nikotin13@mail.ru</string>
 
-
     <!--Работа с загрузкой фото для аватара-->
-    <string name="avatar_load">Загрузите фотографию профиля</string>
+    <string name="avatar_load_info">Загрузите фотографию профиля</string>
     <string name="avatar_load_from_gallary">Загрузить из галареи</string>
     <string name="avatar_load_from_camera">Сфотографировать</string>
     <string name="avatar_cancel">Отмена</string>
-    <string name="select_img">Выберите фото</string>
+    <string name="avatar_select">Выберите фото</string>
+    <string name="avatar_synchronised">Фото синхронизировано с сервером</string>
 
     <!--Работа с intent-->
     <string name="intent_error_open_message">Извините, невозможно открыть приложение</string>
@@ -42,7 +39,7 @@
     <string name="login_btn">Войти</string>
     <string name="login_header_text">ВОЙТИ</string>
 
-    <!--Ошибки при валидации введенных данных-->
+    <!--Ошибки-->
     <string name="error_user_phone_message">Некорректный номер</string>
     <string name="error_user_mail_message">Некорректный E-mail.</string>
     <string name="error_user_vk_message">Некорректный адрес страницы ВК.</string>
@@ -50,6 +47,5 @@
     <string name="error_wrong_user_or_password">Неверный логин или пароль</string>
     <string name="error_server_not_response">Сервер недоступен</string>
     <string name="error_magic">Неизвестная ошибка</string>
-    <string name="synch_photo">Фото синхронизировано с сервером</string>
-    <string name="error_synch_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
+    <string name="error_synchro_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
 </resources>

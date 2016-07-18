@@ -29,7 +29,6 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -44,7 +43,6 @@ import com.softdesign.devintensive.data.network.req.UploadFile;
 import com.softdesign.devintensive.utils.CheckInputInformation;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
-import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     DrawerLayout mNavigationDrawer;
 
     //User EditText layouts
-    @BindViews({R.id.user_phone_layout,
+    @BindViews({R.id.user_information_phone_layout,
             R.id.user_mail_layout,
             R.id.user_vk_layout,
             R.id.user_github_layout}) List<TextInputLayout> mUserInfoLayouts;
@@ -82,13 +80,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             R.id.user_mail,
             R.id.user_vk,
             R.id.user_github,
-            R.id.user_self}) List<MaskedEditText> mUserInfo;
+            R.id.user_about}) List<EditText> mUserInfo;
 
     //Инициализация ярлыков для взаимодействия с user information
     @BindViews({R.id.to_call_btn,
             R.id.to_mail_btn,
             R.id.to_vk_btn,
-            R.id.to_repo_btn}) List<ImageView> mUserAction;
+            R.id.to_github_btn}) List<ImageView> mUserAction;
 
     //Инициализация TextView для работы с контейнером
     @BindViews({R.id.user_rating,
@@ -201,6 +199,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             case ConstantManager.REQUEST_GALLARY_PICTURE:
                 if (resultCode == RESULT_OK && data != null) {
+
                     String[] proj = { MediaStore.Images.Media.DATA };
                     Cursor cursor = this.getContentResolver().query(data.getData(),  proj, null, null, null);
                     int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -248,7 +247,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(data);
                 break;
-            case R.id.to_repo_btn:
+            case R.id.to_github_btn:
                 url = mUserInfo.get(3).getText().toString();
                 data = Uri.parse("http://" + url);
                 intent = new Intent(Intent.ACTION_VIEW);
@@ -287,7 +286,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             userValue.setFocusableInTouchMode(mode);
         }
         if (mode) {
-            mFab.setImageResource(R.drawable.ic_check_black_24dp);
+            mFab.setImageResource(R.drawable.fab_accept_changed);
             mUserInfo.get(0).requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(0, 0);
@@ -298,7 +297,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             lockAppBarLayout();
             mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
         } else {
-            mFab.setImageResource(R.drawable.ic_mode_edit_black_24dp);
+            mFab.setImageResource(R.drawable.fab_change_mode);
 
             userPhotoImg.setVisibility(View.VISIBLE);
             userPhotoChange.setVisibility(View.GONE);
@@ -385,7 +384,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLayoutParams = (AppBarLayout.LayoutParams) mCollapsingToolbarLayout.getLayoutParams();
 
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.menu_open);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mDataManager.getPreferencesManager().loadFIO());
         }
@@ -411,16 +410,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                Intent intent = null;
 
                 switch (item.getItemId()) {
+                    case R.id.menu_user_profile:
+                        intent = new Intent(getBaseContext(), MainActivity.class);
+                        break;
+                    case R.id.menu_contacts:
+                        intent = new Intent(getBaseContext(), UserListActivity.class);
+                        break;
                     case R.id.menu_exit:
-                        Intent intent = new Intent(getBaseContext(), LogInActivity.class);
-                        startActivity(intent);
+                        intent = new Intent(getBaseContext(), LogInActivity.class);
+                        mDataManager.getPreferencesManager().saveAuthToken("");
                         break;
                     default:
                         showSnackBar(item.getTitle().toString());
                         item.setChecked(true);
                         break;
+                }
+
+                if (intent != null){
+                    startActivity(intent);
                 }
 
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
@@ -441,7 +451,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle(getString(R.string.avatar_load));
+                builder.setTitle(getString(R.string.avatar_load_info));
                 builder.setItems(selectItem, new Dialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -486,7 +496,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent takeGallaryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         takeGallaryIntent.setType("image/*");
 
-        startActivityForResult(Intent.createChooser(takeGallaryIntent, getString(R.string.select_img)), ConstantManager.REQUEST_GALLARY_PICTURE);
+        startActivityForResult(Intent.createChooser(takeGallaryIntent, getString(R.string.avatar_select)), ConstantManager.REQUEST_GALLARY_PICTURE);
     }
 
     private void loadPhotoFromCamera() {
@@ -518,12 +528,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                showSnackBar(getString(R.string.synch_photo));
+                showSnackBar(getString(R.string.avatar_synchronised));
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                showSnackBar(getString(R.string.error_synch_photo));
+                showSnackBar(getString(R.string.error_synchro_photo));
             }
         });
 

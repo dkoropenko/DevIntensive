@@ -1,7 +1,10 @@
 package com.softdesign.devintensive.data.network;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
 import com.softdesign.devintensive.data.network.res.LoginModelRes;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 
 import okhttp3.MultipartBody;
@@ -27,4 +30,7 @@ public interface RestService {
     Call<ResponseBody> uploadPhoto(
             @Path("userId") String userId,
             @Part MultipartBody.Part file);
+
+    @GET ("user/list?orderBy=rating")
+    Call<UserListRes> getUsers();
 }

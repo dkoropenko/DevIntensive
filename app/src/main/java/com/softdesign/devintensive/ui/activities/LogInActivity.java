@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +36,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     EditText mUserName;
     @BindView(R.id.login_password)
     EditText mUserPassword;
-    @BindView(R.id.login_enter_btn)
+    @BindView(R.id.login_auth_btn)
     Button mUserAuth;
     @BindView(R.id.login_remember_paswd)
     TextView mRememberPasswd;
@@ -65,7 +64,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_enter_btn:
+            case R.id.login_auth_btn:
                 mLogin = mUserName.getText().toString().trim();
                 mPass = mUserPassword.getText().toString().trim();
                 singIn();
@@ -92,25 +91,30 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void tokenLogin() {
-        if (NetworkStatusChecker.isNetworkAvaliable(this)) {
-            Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
+        if (!mDataManager.getPreferencesManager().getAuthToken().isEmpty()){
+            if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+                showProgress();
+                Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
 
-            call.enqueue(new Callback<LoginModelRes>() {
-                @Override
-                public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
-                    if (response.code() == 200) {
-                        saveUserValuesWithToken(response.body());
-                        loginSuccess();
+                call.enqueue(new Callback<LoginModelRes>() {
+                    @Override
+                    public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
+                        if (response.code() == 200) {
+                            saveUserValuesWithToken(response.body());
+                            hideProgress();
+                            loginSuccess();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<LoginModelRes> call, Throwable t) {
-
-                }
-            });
-        } else {
-            showSnackBar(getString(R.string.error_server_not_response));
+                    @Override
+                    public void onFailure(Call<LoginModelRes> call, Throwable t) {
+                        showSnackBar(getString(R.string.error_wrong_user_or_password));
+                    }
+                });
+            } else {
+                hideProgress();
+                showSnackBar(getString(R.string.error_server_not_response));
+            }
         }
     }
 

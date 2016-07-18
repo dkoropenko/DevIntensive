@@ -1,0 +1,42 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_profile_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+
+    <LinearLayout
+        style="@style/user_information_container">
+
+        <!--GitGub-->
+        <LinearLayout
+            style="@style/user_information_line">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_github"/>
+
+            <ListView
+                android:id="@+id/user_profile_repo_list"
+                style="@style/user_information_input_text_layout"/>
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--О себе-->
+        <LinearLayout
+            style="@style/user_information_line">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_about"/>
+                <TextView
+                    android:id="@+id/user_profile_user_bio"
+                    style="@style/user_information_input_text_layout">
+                </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

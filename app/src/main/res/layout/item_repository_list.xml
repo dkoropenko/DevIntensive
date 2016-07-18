@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_72"
+                tools:ignore="contentDescription">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/gitHub_TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/spacing_72"
+        android:layout_marginRight="@dimen/spacing_72">
+
+        <EditText
+            android:id="@+id/user_profile_github_repos"
+            style="@style/user_information_edit_text.github"
+            android:hint="@string/hint_github"
+            android:inputType="textUri"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/user_profile_to_repo_btn"
+        android:layout_width="@dimen/size_24"
+        android:layout_height="@dimen/size_24"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/spacing_24"
+        android:src="@drawable/btn_look_web"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,131 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior=".ui.views.behaviors.ScrollViewBehavior">
+
+    <LinearLayout
+        style="@style/user_information_container">
+
+        <!--Мобильный-->
+        <LinearLayout
+            style="@style/user_information_line">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_phone"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_information_phone_layout"
+                style="@style/user_information_input_text_layout">
+
+                <EditText
+                    android:id="@+id/user_phone"
+                    style="@style/user_information_edit_text.mobile">
+                </EditText>
+            </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:id="@+id/to_call_btn"
+                style="@style/icon.right"
+                android:src="@drawable/btn_call"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Почта-->
+        <LinearLayout
+            style="@style/user_information_line">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_email"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_mail_layout"
+                style="@style/user_information_input_text_layout">
+                <EditText
+                    android:id="@+id/user_mail"
+                    style="@style/user_information_edit_text.email">
+                </EditText>
+            </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:id="@+id/to_mail_btn"
+                style="@style/icon.right"
+                android:src="@drawable/btn_send_email"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Профиль в VK-->
+        <LinearLayout
+            style="@style/user_information_line">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_vk"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_vk_layout"
+                style="@style/user_information_input_text_layout">
+                <EditText
+                    android:id="@+id/user_vk"
+                    style="@style/user_information_edit_text.vk">
+                </EditText>
+            </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:id="@+id/to_vk_btn"
+                style="@style/icon.right"
+                android:src="@drawable/btn_look_web"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--Репозиторий-->
+        <LinearLayout
+            style="@style/user_information_line">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_github"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/user_github_layout"
+                style="@style/user_information_input_text_layout">
+                <EditText
+                    android:id="@+id/user_github"
+                    style="@style/user_information_edit_text.github">
+                </EditText>
+            </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:id="@+id/to_github_btn"
+                style="@style/icon.right"
+                android:src="@drawable/btn_look_web"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/separator_horizontal"/>
+
+        <!--О себе-->
+        <LinearLayout
+            style="@style/user_information_line"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/image_about"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/user_information_input_text_layout">
+
+                <EditText
+                    android:id="@+id/user_about"
+                    style="@style/user_information_edit_text.about">
+                </EditText>
+            </android.support.design.widget.TextInputLayout>
+            <ImageView
+                style="@style/icon.right"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
