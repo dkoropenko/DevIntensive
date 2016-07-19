@@ -30,4 +30,11 @@ public interface ConstantManager {
     int PERMISSION_REQUEST_KEY = 93;
     int CAMERA_REQUEST_PERMISSION_CODE = 94;
     long DELAY_MILLIS = 1500;
+
+    int MAGIC_ERROR = 100000;
+    int SERVER_NOT_RESPONSE = 100001;
+    int LOAD_SUCCESS = 100002;
+    int WRONG_TOKEN = 100003;
+    int ERROR_WRITE_BASE = 100004;
+    int WRONG_USER_OR_PASSWD = 100005;
 }

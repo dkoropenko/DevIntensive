@@ -24,16 +24,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activities.LogInActivity">
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN"/>
-             <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".ui.activities.MainActivity">
         </activity>
         <activity android:name=".ui.activities.UserListActivity">
         </activity>
-        <activity android:name=".ui.activities.UsersProfileActivity"
+        <activity
+            android:name=".ui.activities.UsersProfileActivity"
             android:parentActivityName=".ui.activities.UserListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,16 +15,19 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
-import com.softdesign.devintensive.data.network.res.LoginModelRes;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.data.storage.models.Repository;
 import com.softdesign.devintensive.data.storage.models.RepositoryDao;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDao;
-import com.softdesign.devintensive.ui.adapters.UsersAdapter;
-import com.softdesign.devintensive.utils.AppConfig;
+import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.LoginInMessage;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +54,58 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
     TextView mRememberPasswd;
 
     private DataManager mDataManager;
-    private UsersAdapter mUsersAdapter;
-    private List<UserListRes.UserData> mUserData;
     private String mLogin;
     private String mPass;
 
     private RepositoryDao mRepositoryDao;
     private UserDao mUserDao;
+    private Handler mHandler;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(LoginInMessage event) {
+        Log.d(TAG, "onMessageEvent: message" + event.sMessage);
+
+        switch (event.sMessage) {
+            case ConstantManager.SERVER_NOT_RESPONSE:
+                if (mDataManager.getUserListFromDatabase().isEmpty()) {
+                    //Нет подключения к серверу и пустая база
+                    hideSplashScreen();
+                    showSnackBar(getResources().getString(R.string.error_can_not_enter));
+                } else {
+                    //Нет подключения к серверу. Есть локальная база
+                    showSnackBar(getResources().getString(R.string.error_enter_with_network_dates));
+                    hideSplashScreen();
+                    Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                break;
+
+            case ConstantManager.MAGIC_ERROR:
+                hideSplashScreen();
+                showSnackBar(getString(R.string.error_magic));
+                break;
+
+            case ConstantManager.WRONG_USER_OR_PASSWD:
+                showSnackBar(getString(R.string.error_wrong_user_or_password));
+            case ConstantManager.WRONG_TOKEN:
+                hideSplashScreen();
+                break;
+
+            case ConstantManager.ERROR_WRITE_BASE:
+                hideSplashScreen();
+                showSnackBar(getString(R.string.error_write_to_db));
+                break;
+
+            case ConstantManager.LOAD_SUCCESS:
+                //Данные удачно загружены
+                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                break;
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +113,8 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_log_in);
 
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
         mDataManager = DataManager.getInstance();
         mUserName.setText(mDataManager.getPreferencesManager().loadLoginEmail());
 
@@ -73,7 +124,26 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         mUserAuth.setOnClickListener(this);
         mRememberPasswd.setOnClickListener(this);
 
-        tokenLogin();
+        mHandler = new Handler();
+        Runnable checkTokenAndRun = new Runnable() {
+            @Override
+            public void run() {
+                loadUsers();
+            }
+        };
+        mHandler.post(checkTokenAndRun);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showSplashScreen();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -82,7 +152,8 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
             case R.id.login_auth_btn:
                 mLogin = mUserName.getText().toString().trim();
                 mPass = mUserPassword.getText().toString().trim();
-                singIn();
+
+                loadDatesAndStartApp();
                 break;
             case R.id.login_remember_paswd:
                 rememberPassword();
@@ -91,55 +162,21 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void showSnackBar(String message) {
-        Snackbar.make(coordLayout, message, Snackbar.LENGTH_SHORT).show();
-    }
-
     private void rememberPassword() {
         Intent remPass = new Intent(Intent.ACTION_VIEW, Uri.parse("http://devintensive.softdesign-apps.ru/forgotpass"));
         startActivity(remPass);
     }
 
-    private void loginSuccess() {
-        Intent login = new Intent(this, MainActivity.class);
-        startActivity(login);
-    }
-
-    private void tokenLogin() {
-        if (!mDataManager.getPreferencesManager().getAuthToken().isEmpty()){
-            if (NetworkStatusChecker.isNetworkAvaliable(this)) {
-                showProgress();
-                Call<LoginModelRes> call = mDataManager.isValid(mDataManager.getPreferencesManager().getUserId());
-
-                call.enqueue(new Callback<LoginModelRes>() {
-                    @Override
-                    public void onResponse(Call<LoginModelRes> call, Response<LoginModelRes> response) {
-                        if (response.code() == 200) {
-                            saveUserValuesWithToken(response.body());
-                            loadUsers();
-
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    loginSuccess();
-                                }
-                            }, AppConfig.START_DELAY);
-
-                            hideProgress();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginModelRes> call, Throwable t) {
-                        showSnackBar(getString(R.string.error_wrong_user_or_password));
-                    }
-                });
-            } else {
-                hideProgress();
-                showSnackBar(getString(R.string.error_server_not_response));
+    private void loadDatesAndStartApp() {
+        Runnable authAndRun = new Runnable() {
+            @Override
+            public void run() {
+                showSplashScreen();
+                singIn();
             }
-        }
+        };
+        mHandler.post(authAndRun);
+
     }
 
     private void singIn() {
@@ -147,27 +184,20 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
             Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin, mPass));
             call.enqueue(new Callback<UserModelRes>() {
                 @Override
-                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
+                public void onResponse(Call<UserModelRes> call, final Response<UserModelRes> response) {
                     if (response.code() == 200) {
                         //Сохраняет токен, userId и введенные email
                         mDataManager.getPreferencesManager().saveAuthToken(response.body().getData().getToken());
                         mDataManager.getPreferencesManager().saveUserId(response.body().getData().getUser().getId());
                         mDataManager.getPreferencesManager().saveLoginEmail(mLogin);
+
                         saveUserValues(response.body());
                         loadUsers();
 
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                loginSuccess();
-                            }
-                        }, AppConfig.START_DELAY);
-
                     } else if (response.code() == 404) {
-                        showSnackBar(getString(R.string.error_wrong_user_or_password));
-                    } else {
-                        showSnackBar(getString(R.string.error_magic));
+                        EventBus.getDefault().post(new LoginInMessage(ConstantManager.WRONG_USER_OR_PASSWD));
+                    } else{
+                        EventBus.getDefault().post(new LoginInMessage(ConstantManager.MAGIC_ERROR));
                     }
                 }
 
@@ -176,38 +206,69 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                 }
             });
         } else {
-            showSnackBar(getString(R.string.error_server_not_response));
+            EventBus.getDefault().post(new LoginInMessage(ConstantManager.SERVER_NOT_RESPONSE));
         }
 
     }
 
-    private void saveUserValuesWithToken(LoginModelRes modelRes) {
-        //Сохраняет данные области информации
-        int[] userValues = {
-                modelRes.getData().profileValues.getRait(),
-                modelRes.getData().profileValues.getLinesCode(),
-                modelRes.getData().profileValues.getProjects()};
-        mDataManager.getPreferencesManager().saveUserValues(userValues);
+    private void loadUsers() {
+        if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+            Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
+            call.enqueue(new Callback<UserListRes>() {
+                @Override
+                public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
+                    //Положительный ответ
+                    if (response.code() == 200) {
+                        try {
+                            List<User> users = new ArrayList<>();
+                            List<Repository> repositories = new ArrayList<Repository>();
 
-        //Сохраняем ФИО
-        mDataManager.getPreferencesManager().saveFIO(modelRes.getData().getFirstName() + " " +
-                modelRes.getData().getSecondName());
+                            for (UserListRes.UserData user : response.body().getData()
+                                    ) {
+                                repositories.addAll(getUserRepositories(user));
+                                users.add(new User(user));
+                            }
 
-        //Сохраняет основную информацию
-        List<String> userFields = new ArrayList<>();
-        userFields.add(modelRes.getData().getContacts().getPhone());
-        userFields.add(modelRes.getData().getContacts().getEmail());
-        userFields.add(modelRes.getData().getContacts().getVk());
-        userFields.add(modelRes.getData().getRepositories().getRepo().get(0).getGit());
-        userFields.add(modelRes.getData().getPublicInfo().getBio());
-        mDataManager.getPreferencesManager().saveUserProfileData(userFields);
+                            mRepositoryDao.insertOrReplaceInTx(repositories);
+                            mUserDao.insertOrReplaceInTx(users);
+                            EventBus.getDefault().post(new LoginInMessage(ConstantManager.LOAD_SUCCESS));
+                        } catch (NullPointerException e) {
+                            EventBus.getDefault().post(new LoginInMessage(ConstantManager.ERROR_WRITE_BASE));
+                        }
+                    } else
+                        //Плохой токен
+                        if (response.code() == 401) {
+                            EventBus.getDefault().post(new LoginInMessage(ConstantManager.WRONG_TOKEN));
+                        }
 
-        //Сохраняет фото и аватар
-        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(modelRes.getData().getPublicInfo().getPhoto()));
-        mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(modelRes.getData().getPublicInfo().getAvatar()));
+                }
+
+                @Override
+                public void onFailure(Call<UserListRes> call, Throwable t) {
+                    // TODO: 19.07.16 Обработать ошибки
+                }
+            });
+        } else {
+            EventBus.getDefault().post(new LoginInMessage(ConstantManager.SERVER_NOT_RESPONSE));
+        }
+
+    }
+
+    private List<Repository> getUserRepositories(UserListRes.UserData userData) {
+        final String userId = userData.getId();
+
+        List<Repository> repositories = new ArrayList<>();
+
+        for (UserModelRes.Repo repo : userData.getRepositories().getRepo()
+                ) {
+            repositories.add(new Repository(repo, userId));
+        }
+
+        return repositories;
     }
 
     private void saveUserValues(UserModelRes modelRes) {
+
         //Сохраняет данные области информации
         int[] userValues = {
                 modelRes.getData().getUser().getProfileValues().getRating(),
@@ -233,50 +294,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(modelRes.getData().getUser().getPublicInfo().getAvatar()));
     }
 
-    private void loadUsers(){
-        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
-
-        call.enqueue(new Callback<UserListRes>() {
-            @Override
-            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                try{
-                    if (response.code() == 200){
-
-                        List<User> users = new ArrayList<>();
-                        List<Repository> repositories = new ArrayList<Repository>();
-
-                        for (UserListRes.UserData user: response.body().getData()
-                             ) {
-                            repositories.addAll(getUserRepositories(user));
-                            users.add(new User(user));
-                        }
-
-                        mRepositoryDao.insertOrReplaceInTx(repositories);
-                        mUserDao.insertOrReplaceInTx(users);
-                    }
-                }catch (NullPointerException e){
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserListRes> call, Throwable t) {
-                hideProgress();
-                showSnackBar(getResources().getString(R.string.error_server_not_response));
-            }
-        });
-    }
-
-    private List<Repository> getUserRepositories(UserListRes.UserData userData){
-        final String userId = userData.getId();
-
-        List<Repository> repositories = new ArrayList<>();
-
-        for (UserModelRes.Repo repo: userData.getRepositories().getRepo()
-             ) {
-            repositories.add(new Repository(repo, userId));
-        }
-
-        return repositories;
+    private void showSnackBar(String message) {
+        Snackbar.make(coordLayout, message, Snackbar.LENGTH_SHORT).show();
     }
 }
