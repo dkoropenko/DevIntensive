@@ -16,7 +16,7 @@ public class DevIntensiveApp extends Application {
 
     public static SharedPreferences sSharedPreferences;
     private static Context sContext;
-    private static DaoSession sDaoSession;
+     static DaoSession sDaoSession;
 
     @Override
     public void onCreate() {

@@ -72,7 +72,7 @@ public class DataManager {
     }
     //endRegion
 
-    //region ========== Databese =============
+    //region ========== Database =============
 
     public DaoSession getDaoSession() { return mDaoSession; }
 

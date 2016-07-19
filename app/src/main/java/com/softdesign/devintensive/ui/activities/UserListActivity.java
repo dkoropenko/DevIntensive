@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +22,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redmadrobot.chronos.ChronosConnector;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.LoadDatestoUi;
+import com.softdesign.devintensive.utils.RetainFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,9 +38,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener{
 
     private static final String TAG = "UserListActivity";
+    private static final int LOADER = 1;
     @BindView(R.id.list_navigation_drawer)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.list_coordinator_container)
@@ -54,10 +59,12 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     @BindView(R.id.list_navigation_view)
     NavigationView mNavigationView;
     private View mDrawerHeader;
-    ImageView mUserAvatar;
-    TextView mUserFio, mUserEmail;
+    private ImageView mUserAvatar;
+    private TextView mUserFio, mUserEmail;
 
-    Handler mHandler;
+    private Handler mSearchHandler;
+    private ChronosConnector mChronosConnector = new ChronosConnector();
+    private RetainFragment mRetainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +73,63 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
-        mHandler = new Handler();
+        mSearchHandler = new Handler();
 
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         mUserList.setLayoutManager(llManager);
 
         setupToolbar();
         setupDrawable();
-        loadUsersFromDb();
 
+        FragmentManager fm = getSupportFragmentManager();
+        mRetainFragment = (RetainFragment) fm.findFragmentByTag("myModel");
+
+        if (mRetainFragment == null) {
+            mRetainFragment = new RetainFragment();
+            fm.beginTransaction().add(mRetainFragment, "myModel").commit();
+
+            mRetainFragment.setModel(mUserData);
+        }
+        mUserData = mRetainFragment.getModel();
+        showData(mUserData);
+
+        mChronosConnector.onCreate(this, savedInstanceState);
+        if (mUserData == null){
+            mChronosConnector.runOperation(new LoadDatestoUi(), false);
+        }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mChronosConnector.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChronosConnector.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChronosConnector.onResume();
+    }
+
+    public void onOperationFinished(final LoadDatestoUi.Result result) {
+        if (result.isSuccessful()) {
+            showData(result.getOutput());
+        }
+    }
+
+    private void showData(List<User> user){
+        if (user != null){
+            mUserData = user;
+            loadUsers();
+        }
+    }
+
 
     private void showSnackBar(String message) {
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
@@ -89,10 +143,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadUsersFromDb() {
-        mUserData = mDataManager.getUserListFromDatabase();
-
-        showProgress();
+    private void loadUsers() {
         if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
@@ -105,9 +156,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                 }
             });
             mUserList.setAdapter(mUsersAdapter);
-            hideProgress();
         } else {
-            hideProgress();
             showSnackBar(getString(R.string.error_load_users));
         }
     }
@@ -134,8 +183,8 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                 }
             };
 
-            mHandler.removeCallbacks(searchingUsers);
-            mHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
+            mSearchHandler.removeCallbacks(searchingUsers);
+            mSearchHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
         }
     }
 
@@ -188,7 +237,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             }
         });
     }
-
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -210,7 +258,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -222,9 +269,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         checkInputInformation(newText);
         return false;
     }
-
     private void showUserList(){
-        showProgress();
         if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
@@ -237,9 +282,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                 }
             });
             mUserList.swapAdapter(mUsersAdapter, true);
-            hideProgress();
         } else {
-            hideProgress();
             showSnackBar(getString(R.string.error_load_users));
         }
     }

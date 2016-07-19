@@ -12,22 +12,18 @@ import org.greenrobot.greendao.DaoException;
 /**
  * Created by smalew on 17.07.16.
  */
-@Entity (active = true , nameInDb = "REPOSITORY")
+@Entity(active = true, nameInDb = "REPOSITORIES")
 public class Repository {
 
     @Id
-    public Long id;
+    private Long id;
 
-    @Unique
     @NotNull
-    public String remoteId;
+    @Unique
+    private String remoteId;
 
-    @Unique
-    @NotNull
-    public String repositoryName;
+    private String repositoryName;
 
-    @Unique
-    @NotNull
     private String userRemoteId;
 
     public Repository(UserModelRes.Repo repo, String userId) {
@@ -35,6 +31,16 @@ public class Repository {
         this.repositoryName = repo.getGit();
         this.userRemoteId = userId;
     }
+    
+    /** Used for active entity operations. */
+    @Generated(hash = 332345895)
+    private transient RepositoryDao myDao;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
@@ -79,14 +85,6 @@ public class Repository {
         myDao = daoSession != null ? daoSession.getRepositoryDao() : null;
     }
 
-    /** Used for active entity operations. */
-    @Generated(hash = 332345895)
-    private transient RepositoryDao myDao;
-
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-
     public String getUserRemoteId() {
         return this.userRemoteId;
     }
@@ -119,9 +117,9 @@ public class Repository {
         this.id = id;
     }
 
-    @Generated(hash = 825410285)
-    public Repository(Long id, @NotNull String remoteId,
-            @NotNull String repositoryName, @NotNull String userRemoteId) {
+    @Generated(hash = 1976272162)
+    public Repository(Long id, @NotNull String remoteId, String repositoryName,
+            String userRemoteId) {
         this.id = id;
         this.remoteId = remoteId;
         this.repositoryName = repositoryName;
@@ -131,4 +129,5 @@ public class Repository {
     @Generated(hash = 984204935)
     public Repository() {
     }
+
 }

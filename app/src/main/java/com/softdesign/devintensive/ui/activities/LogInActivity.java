@@ -128,16 +128,11 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         Runnable checkTokenAndRun = new Runnable() {
             @Override
             public void run() {
+                showSplashScreen();
                 loadUsers();
             }
         };
         mHandler.post(checkTokenAndRun);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        showSplashScreen();
     }
 
     @Override
@@ -221,15 +216,14 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                     if (response.code() == 200) {
                         try {
                             List<User> users = new ArrayList<>();
-                            List<Repository> repositories = new ArrayList<Repository>();
+                            List<Repository> allRepositories = new ArrayList<Repository>();
 
-                            for (UserListRes.UserData user : response.body().getData()
-                                    ) {
-                                repositories.addAll(getUserRepositories(user));
+                            for (UserListRes.UserData user : response.body().getData()) {
+                                allRepositories.addAll(getUserRepositories(user));
                                 users.add(new User(user));
                             }
 
-                            mRepositoryDao.insertOrReplaceInTx(repositories);
+                            mRepositoryDao.insertOrReplaceInTx(allRepositories);
                             mUserDao.insertOrReplaceInTx(users);
                             EventBus.getDefault().post(new LoginInMessage(ConstantManager.LOAD_SUCCESS));
                         } catch (NullPointerException e) {
@@ -259,8 +253,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
         List<Repository> repositories = new ArrayList<>();
 
-        for (UserModelRes.Repo repo : userData.getRepositories().getRepo()
-                ) {
+        for (UserModelRes.Repo repo : userData.getRepositories().getRepo()) {
             repositories.add(new Repository(repo, userId));
         }
 
