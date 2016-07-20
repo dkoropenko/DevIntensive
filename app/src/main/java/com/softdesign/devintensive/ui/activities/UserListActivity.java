@@ -207,6 +207,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         });
     }
     private void setupToolbar() {
+        mToolbar.setTitle("Контакты");
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
 

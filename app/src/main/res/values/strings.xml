@@ -52,4 +52,7 @@
     <string name="error_load_users">Спосок пользователей не может быть загружен</string>
     <string name="error_enter_with_network_dates">Невозможно загрузить данные с сервера.</string>
     <string name="error_write_to_db">Извините. Ошибка записи данных. Попробуйте позже.</string>
+    <string name="menu_calendar">Календарь</string>
+    <string name="menu_todo_list">Список дел</string>
+    <string name="menu_chat">чат</string>
 </resources>

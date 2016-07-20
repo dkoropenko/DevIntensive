@@ -100,20 +100,22 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     @Override
-    public void onItemDismiss(final int position) {
-        mUsers.remove(position);
-        notifyItemRemoved(position);
+    public void onItemDismiss(int position) {
+        final String userId = mUsers.get(position).getRemoteId();
 
         Runnable changeDB = new Runnable() {
             @Override
             public void run() {
-                User user = mUsers.get(position);
+                User user = DataManager.getInstance().getUser(userId).get(0);
                 user.setDeleteFlag(true);
                 DataManager.getInstance().deleteUser(user);
             }
         };
         Handler inJob = new Handler();
+
         inJob.post(changeDB);
+        mUsers.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -132,17 +134,22 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         Runnable changeDB = new Runnable() {
             @Override
             public void run() {
-                User firstUser = mUsers.get(fromPosition);
-                User secondtUser = mUsers.get(toPosition);
+                DataManager mDataManager = DataManager.getInstance();
 
-                int firstPosition = secondtUser.getPositionFlag();
-                int secondPosition = firstUser.getPositionFlag();
+                final String firstUserId = mUsers.get(fromPosition).getRemoteId();
+                final String secondUserId = mUsers.get(toPosition).getRemoteId();
 
-                firstUser.setPositionFlag(firstPosition);
-                secondtUser.setPositionFlag(secondPosition);
+                User firstUser = mDataManager.getUser(firstUserId).get(0);
+                User secondUser = mDataManager.getUser(secondUserId).get(0);
 
-                DataManager.getInstance().setUserPosition(firstUser);
-                DataManager.getInstance().setUserPosition(secondtUser);
+                int firstPosition = firstUser.getPositionFlag();
+                int secondPosition = secondUser.getPositionFlag();
+
+                firstUser.setPositionFlag(secondPosition);
+                secondUser.setPositionFlag(firstPosition);
+
+                mDataManager.setUserPosition(firstUser);
+                mDataManager.setUserPosition(secondUser);
             }
         };
         Handler inJob = new Handler();

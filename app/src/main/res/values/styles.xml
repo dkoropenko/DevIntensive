@@ -251,12 +251,14 @@
         <item name="android:inputType">text</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
         <item name="android:hint">@string/hint_login</item>
     </style>
     <style name="user_information_edit_text.password">
         <item name="android:inputType">textPassword</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
         <item name="android:hint">@string/hint_password</item>
     </style>
     <style name="login_auth_btn" parent="text.login_btn">
