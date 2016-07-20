@@ -290,8 +290,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             mUserList.swapAdapter(mUsersAdapter, true);
             touchHelper.attachToRecyclerView(mUserList);
-        } else {
-            showSnackBar(getString(R.string.error_load_users));
         }
     }
 
@@ -310,11 +308,18 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Открывает выдвижное меню с помощью кнопки в тулбаре
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            mNavigationDrawer.openDrawer(Gravity.LEFT);
-        }
+
+        if (item.getItemId() == android.R.id.home)
+            mNavigationDrawer.openDrawer(GravityCompat.START);
+
         return super.onOptionsItemSelected(item);
     }
 

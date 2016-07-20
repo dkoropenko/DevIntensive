@@ -82,7 +82,8 @@ public class DataManager {
         try {
             userList = mDaoSession.queryBuilder(User.class).
                     where(UserDao.Properties.Id.gt(0)).
-                    orderDesc(UserDao.Properties.Rating).
+                    where(UserDao.Properties.DeleteFlag.notEq(true)).
+                    orderAsc(UserDao.Properties.PositionFlag).
                     build().
                     list();
         }catch (Exception e){
@@ -104,5 +105,31 @@ public class DataManager {
             e.printStackTrace();
         }
         return resultUsers;
+    }
+
+    public List<User> getUser(String id){
+        List<User> result = mDaoSession.queryBuilder(User.class).
+                where(UserDao.Properties.RemoteId.eq(id)).
+                build().
+                list();
+
+        return result;
+    }
+
+    public void deleteUser(User user){
+
+        try{
+            mDaoSession.update(user);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setUserPosition(User user){
+        try{
+            mDaoSession.update(user);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

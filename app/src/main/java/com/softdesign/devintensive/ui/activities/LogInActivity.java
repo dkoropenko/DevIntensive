@@ -74,9 +74,11 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     //Нет подключения к серверу. Есть локальная база
                     showSnackBar(getResources().getString(R.string.error_enter_with_network_dates));
-                    hideSplashScreen();
+
                     Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    finish();
                 }
                 break;
 
@@ -191,7 +193,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
                     } else if (response.code() == 404) {
                         EventBus.getDefault().post(new LoginInMessage(ConstantManager.WRONG_USER_OR_PASSWD));
-                    } else{
+                    } else {
                         EventBus.getDefault().post(new LoginInMessage(ConstantManager.MAGIC_ERROR));
                     }
                 }
@@ -218,9 +220,22 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                             List<User> users = new ArrayList<>();
                             List<Repository> allRepositories = new ArrayList<Repository>();
 
+                            int userPosition = 1;
                             for (UserListRes.UserData user : response.body().getData()) {
                                 allRepositories.addAll(getUserRepositories(user));
-                                users.add(new User(user));
+
+                                User newUser = new User(user);
+                                //Проверяем флаги удаления и позиции в списке.
+                                List<User> userInDB = mDataManager.getUser(user.getId());
+                                if (!userInDB.isEmpty()) {
+                                    newUser.setDeleteFlag(userInDB.get(0).getDeleteFlag());
+                                    newUser.setPositionFlag(userInDB.get(0).getPositionFlag());
+                                } else {
+                                    newUser.setPositionFlag(userPosition);
+                                }
+
+                                users.add(newUser);
+                                userPosition++;
                             }
 
                             mRepositoryDao.insertOrReplaceInTx(allRepositories);

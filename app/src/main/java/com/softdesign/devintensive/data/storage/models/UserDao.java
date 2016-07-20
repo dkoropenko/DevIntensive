@@ -31,6 +31,8 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property CodeLines = new Property(6, int.class, "codeLines", false, "CODE_LINES");
         public final static Property Projects = new Property(7, int.class, "projects", false, "PROJECTS");
         public final static Property Bio = new Property(8, String.class, "bio", false, "BIO");
+        public final static Property DeleteFlag = new Property(9, boolean.class, "deleteFlag", false, "DELETE_FLAG");
+        public final static Property PositionFlag = new Property(10, int.class, "positionFlag", false, "POSITION_FLAG");
     };
 
     private DaoSession daoSession;
@@ -57,7 +59,9 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"RATING\" INTEGER NOT NULL ," + // 5: rating
                 "\"CODE_LINES\" INTEGER NOT NULL ," + // 6: codeLines
                 "\"PROJECTS\" INTEGER NOT NULL ," + // 7: projects
-                "\"BIO\" TEXT);"); // 8: bio
+                "\"BIO\" TEXT," + // 8: bio
+                "\"DELETE_FLAG\" INTEGER NOT NULL ," + // 9: deleteFlag
+                "\"POSITION_FLAG\" INTEGER NOT NULL );"); // 10: positionFlag
     }
 
     /** Drops the underlying database table. */
@@ -90,6 +94,8 @@ public class UserDao extends AbstractDao<User, Long> {
         if (bio != null) {
             stmt.bindString(9, bio);
         }
+        stmt.bindLong(10, entity.getDeleteFlag() ? 1L: 0L);
+        stmt.bindLong(11, entity.getPositionFlag());
     }
 
     @Override
@@ -116,6 +122,8 @@ public class UserDao extends AbstractDao<User, Long> {
         if (bio != null) {
             stmt.bindString(9, bio);
         }
+        stmt.bindLong(10, entity.getDeleteFlag() ? 1L: 0L);
+        stmt.bindLong(11, entity.getPositionFlag());
     }
 
     @Override
@@ -140,7 +148,9 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.getInt(offset + 5), // rating
             cursor.getInt(offset + 6), // codeLines
             cursor.getInt(offset + 7), // projects
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // bio
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // bio
+            cursor.getShort(offset + 9) != 0, // deleteFlag
+            cursor.getInt(offset + 10) // positionFlag
         );
         return entity;
     }
@@ -156,6 +166,8 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setCodeLines(cursor.getInt(offset + 6));
         entity.setProjects(cursor.getInt(offset + 7));
         entity.setBio(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setDeleteFlag(cursor.getShort(offset + 9) != 0);
+        entity.setPositionFlag(cursor.getInt(offset + 10));
      }
     
     @Override

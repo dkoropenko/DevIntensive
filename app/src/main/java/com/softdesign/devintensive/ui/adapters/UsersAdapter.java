@@ -2,6 +2,7 @@ package com.softdesign.devintensive.ui.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,13 +100,24 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     @Override
-    public void onItemDismiss(int position) {
+    public void onItemDismiss(final int position) {
         mUsers.remove(position);
         notifyItemRemoved(position);
+
+        Runnable changeDB = new Runnable() {
+            @Override
+            public void run() {
+                User user = mUsers.get(position);
+                user.setDeleteFlag(true);
+                DataManager.getInstance().deleteUser(user);
+            }
+        };
+        Handler inJob = new Handler();
+        inJob.post(changeDB);
     }
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    public boolean onItemMove(final int fromPosition, final int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(mUsers, i, i + 1);
@@ -116,6 +128,26 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             }
         }
         notifyItemMoved(fromPosition, toPosition);
+
+        Runnable changeDB = new Runnable() {
+            @Override
+            public void run() {
+                User firstUser = mUsers.get(fromPosition);
+                User secondtUser = mUsers.get(toPosition);
+
+                int firstPosition = secondtUser.getPositionFlag();
+                int secondPosition = firstUser.getPositionFlag();
+
+                firstUser.setPositionFlag(firstPosition);
+                secondtUser.setPositionFlag(secondPosition);
+
+                DataManager.getInstance().setUserPosition(firstUser);
+                DataManager.getInstance().setUserPosition(secondtUser);
+            }
+        };
+        Handler inJob = new Handler();
+        inJob.post(changeDB);
+
         return true;
     }
 

@@ -42,6 +42,9 @@ public class User {
     private int projects;
     private String bio;
 
+    private boolean deleteFlag;
+    private int positionFlag;
+
     @ToMany(joinProperties = {
             @JoinProperty(name = "remoteId", referencedName = "userRemoteId")
     })
@@ -56,6 +59,14 @@ public class User {
         codeLines = user.getProfileValues().getLinesCode();
         projects = user.getProfileValues().getProjects();
         bio = user.getPublicInfo().getBio();
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public void setPositionFlag(int positionFlag) {
+        this.positionFlag = positionFlag;
     }
 
     /**
@@ -209,10 +220,18 @@ public class User {
         this.id = id;
     }
 
-    @Generated(hash = 1023608416)
-    public User(Long id, @NotNull String remoteId, String photo,
-            @NotNull String fullName, @NotNull String searchName, int rating,
-            int codeLines, int projects, String bio) {
+    public boolean getDeleteFlag() {
+        return this.deleteFlag;
+    }
+
+    public int getPositionFlag() {
+        return this.positionFlag;
+    }
+
+    @Generated(hash = 1731994918)
+    public User(Long id, @NotNull String remoteId, String photo, @NotNull String fullName,
+            @NotNull String searchName, int rating, int codeLines, int projects, String bio,
+            boolean deleteFlag, int positionFlag) {
         this.id = id;
         this.remoteId = remoteId;
         this.photo = photo;
@@ -222,6 +241,8 @@ public class User {
         this.codeLines = codeLines;
         this.projects = projects;
         this.bio = bio;
+        this.deleteFlag = deleteFlag;
+        this.positionFlag = positionFlag;
     }
 
     @Generated(hash = 586692638)
