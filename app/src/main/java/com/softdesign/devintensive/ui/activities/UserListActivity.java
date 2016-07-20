@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,8 +30,10 @@ import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.ItemTouchHelperAdapter;
 import com.softdesign.devintensive.utils.LoadDatestoUi;
 import com.softdesign.devintensive.utils.RetainFragment;
+import com.softdesign.devintensive.utils.SimpleItemTouchHelperCallback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -132,19 +135,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         }
     }
 
-
-    private void showSnackBar(String message) {
-        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            mNavigationDrawer.openDrawer(Gravity.LEFT);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void loadUsers() {
         if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
@@ -157,36 +147,13 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     startActivity(openProfile);
                 }
             });
+
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mUsersAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             mUserList.setAdapter(mUsersAdapter);
+            touchHelper.attachToRecyclerView(mUserList);
         } else {
             showSnackBar(getString(R.string.error_load_users));
-        }
-    }
-
-    /**
-     * Проверяет введенные данные пользователем.
-     * Собирает совпадения в коллекцию mSearchUserData
-     * Выводить данные на экран через адаптер
-     *
-     * @param text введенный текст
-     */
-    private void checkInputInformation(String text) {
-
-        if (text.equals("")){
-            mUserData = mDataManager.getUserListFromDatabase();
-            showUserList();
-        }else {
-            mUserData = mDataManager.getUserListByName(text);
-
-            Runnable searchingUsers = new Runnable() {
-                @Override
-                public void run() {
-                    showUserList();
-                }
-            };
-
-            mSearchHandler.removeCallbacks(searchingUsers);
-            mSearchHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
         }
     }
 
@@ -271,6 +238,41 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         checkInputInformation(newText);
         return false;
     }
+    /**
+     * Проверяет введенные данные пользователем.
+     * Собирает совпадения в коллекцию mSearchUserData
+     * Выводить данные на экран через адаптер
+     *
+     * @param text введенный текст
+     */
+    private void checkInputInformation(String text) {
+
+        if (text.equals("")){
+            mUserData = mDataManager.getUserListFromDatabase();
+            Runnable searchingUsers = new Runnable() {
+                @Override
+                public void run() {
+                    showUserList();
+                }
+            };
+
+            mSearchHandler.removeCallbacks(searchingUsers);
+            mSearchHandler.post(searchingUsers);
+        }else {
+            mUserData = mDataManager.getUserListByName(text);
+
+            Runnable searchingUsers = new Runnable() {
+                @Override
+                public void run() {
+                    showUserList();
+                }
+            };
+
+            mSearchHandler.removeCallbacks(searchingUsers);
+            mSearchHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
+        }
+    }
+
     private void showUserList(){
         if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
@@ -283,7 +285,11 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     startActivity(openProfile);
                 }
             });
+
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mUsersAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             mUserList.swapAdapter(mUsersAdapter, true);
+            touchHelper.attachToRecyclerView(mUserList);
         } else {
             showSnackBar(getString(R.string.error_load_users));
         }
@@ -298,6 +304,18 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
+    }
+
+    private void showSnackBar(String message) {
+        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            mNavigationDrawer.openDrawer(Gravity.LEFT);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

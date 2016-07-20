@@ -16,17 +16,19 @@ import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
+import com.softdesign.devintensive.utils.ItemTouchHelperAdapter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 
 /**
  * Created by smalew on 14.07.16.
  */
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
+public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> implements ItemTouchHelperAdapter{
     private String TAG = "UserAdapter";
 
     private Context mContext;
@@ -94,6 +96,27 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @Override
     public int getItemCount() {
         return mUsers.size();
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        mUsers.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mUsers, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mUsers, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
