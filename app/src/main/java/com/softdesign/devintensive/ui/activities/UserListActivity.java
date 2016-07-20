@@ -42,10 +42,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private static final String TAG = "UserListActivity";
     private static final int LOADER = 1;
-    @BindView(R.id.list_navigation_drawer)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.list_coordinator_container)
-    CoordinatorLayout mCoordinatorLayout;
+
     @BindView(R.id.list_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.user_list)
@@ -55,9 +52,14 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     private UsersAdapter mUsersAdapter;
     private List<User> mUserData;
 
-    //Боковое меню
+    //Инициализация слоев для бокового меню и user content
+    @BindView(R.id.list_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.list_navigation_view)
     NavigationView mNavigationView;
+    @BindView(R.id.list_navigation_drawer)
+    DrawerLayout mNavigationDrawer;
+
     private View mDrawerHeader;
     private ImageView mUserAvatar;
     private TextView mUserFio, mUserEmail;
@@ -138,7 +140,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.home) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+            mNavigationDrawer.openDrawer(Gravity.LEFT);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -232,7 +234,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     startActivity(intent);
                 }
 
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                mNavigationDrawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });
@@ -286,4 +288,16 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             showSnackBar(getString(R.string.error_load_users));
         }
     }
+
+    /**
+     * Закрытие выдвижного меню по нажатию кнопки "Назад"
+     */
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START))
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
 }
