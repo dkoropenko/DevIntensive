@@ -1,7 +1,7 @@
 package com.softdesign.devintensive.utils;
 
 /**
- * Created by smalew on 18.07.16.
+ * Класс для передачи сообщений из отдельного потока в главный.
  */
 public class LoginInMessage {
     public final int sMessage;

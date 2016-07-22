@@ -12,13 +12,14 @@ import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
 
 /**
- * Created by smalew on 26.06.16.
+ * Оснавная активность с базовым функционалом.
  */
 public class BaseActivity extends AppCompatActivity {
     public static String TAG = ConstantManager.PREFIX_TAG + "BaseActivity";
 
     protected ProgressDialog mProgressDialog;
     protected ProgressDialog mSpashScreen;
+
 
     public void showProgress(){
         if (mProgressDialog == null){

@@ -1,6 +1,5 @@
 package com.softdesign.devintensive.data.storage.models;
 
-import com.softdesign.devintensive.data.network.res.LoginModelRes;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -42,6 +41,7 @@ public class User {
     private int projects;
     private String bio;
 
+    //Поля для сохранения состояния приложения.
     private boolean deleteFlag;
     private int positionFlag;
 

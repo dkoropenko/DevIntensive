@@ -3,6 +3,9 @@ package com.softdesign.devintensive.utils;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+/**
+ * Класс для управления состоянием RecycleView
+ */
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
@@ -23,7 +26,9 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        //Позволяем перетаскивание вверх и вниз
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        //Свайп карточки пользователя справа на лево.
         int swipeFlags = ItemTouchHelper.START;
         return makeMovementFlags(dragFlags, swipeFlags);
     }

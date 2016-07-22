@@ -11,7 +11,9 @@ import com.softdesign.devintensive.data.storage.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Класс для запуска считывания данных из БД
+ */
 public class LoadDatestoUi extends ChronosOperation<List<User>> {
 
 
@@ -24,6 +26,7 @@ public class LoadDatestoUi extends ChronosOperation<List<User>> {
     @Nullable
     @Override
     public List<User> run() {
+        //Забираем данные из БД
         mUserList = DataManager.getInstance().getUserListFromDatabase();
 
         return mUserList;

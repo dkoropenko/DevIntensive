@@ -118,6 +118,8 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         EventBus.getDefault().register(this);
 
         mDataManager = DataManager.getInstance();
+
+        //Вводим логин, если пользователь его уже вводил.
         mUserName.setText(mDataManager.getPreferencesManager().loadLoginEmail());
 
         mUserDao = mDataManager.getDaoSession().getUserDao();
@@ -126,6 +128,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         mUserAuth.setOnClickListener(this);
         mRememberPasswd.setOnClickListener(this);
 
+        //Первоначальная загрузка данных (автологин)
         mHandler = new Handler();
         Runnable checkTokenAndRun = new Runnable() {
             @Override
@@ -148,7 +151,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.login_auth_btn:
                 mLogin = mUserName.getText().toString().trim();
-                mPass = mUserPassword.getText().toString().trim();
+                mPass = mUserPassword.getText().toString();
 
                 loadDatesAndStartApp();
                 break;
@@ -200,6 +203,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
+                    //Обработка ошибок.
                 }
             });
         } else {
@@ -220,6 +224,8 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
                             List<User> users = new ArrayList<>();
                             List<Repository> allRepositories = new ArrayList<Repository>();
 
+                            //Проверяем сохраненное состояние приложения.
+                            //Записываем данные с сервера.
                             int userPosition = 1;
                             for (UserListRes.UserData user : response.body().getData()) {
                                 allRepositories.addAll(getUserRepositories(user));
@@ -254,7 +260,7 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onFailure(Call<UserListRes> call, Throwable t) {
-                    // TODO: 19.07.16 Обработать ошибки
+                    // Обработать ошибки
                 }
             });
         } else {
@@ -277,12 +283,12 @@ public class LogInActivity extends BaseActivity implements View.OnClickListener 
 
     private void saveUserValues(UserModelRes modelRes) {
 
-        //Сохраняет данные области информации
+        //Сохраняет данные области статистики
         int[] userValues = {
                 modelRes.getData().getUser().getProfileValues().getRating(),
                 modelRes.getData().getUser().getProfileValues().getLinesCode(),
                 modelRes.getData().getUser().getProfileValues().getProjects()};
-        mDataManager.getPreferencesManager().saveUserValues(userValues);
+        mDataManager.getPreferencesManager().saveUserStatistic(userValues);
 
         //Сохраняем ФИО
         mDataManager.getPreferencesManager().saveFIO(modelRes.getData().getUser().getFirstName() + " " +

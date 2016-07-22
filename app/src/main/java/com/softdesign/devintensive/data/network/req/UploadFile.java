@@ -12,7 +12,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
- * Created by smalew on 12.07.16.
+ * Отправка файлов фото на сервер
  */
 public class UploadFile {
     private MultipartBody.Part mBody;

@@ -63,10 +63,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     @BindView(R.id.list_navigation_drawer)
     DrawerLayout mNavigationDrawer;
 
-    private View mDrawerHeader;
-    private ImageView mUserAvatar;
-    private TextView mUserFio, mUserEmail;
-
     private Handler mSearchHandler;
     private ChronosConnector mChronosConnector = new ChronosConnector();
     private RetainFragment mRetainFragment;
@@ -86,6 +82,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         setupToolbar();
         setupDrawable();
 
+        //Сохранение и загрузка данных через фаргмент
         FragmentManager fm = getSupportFragmentManager();
         mRetainFragment = (RetainFragment) fm.findFragmentByTag("myModel");
 
@@ -96,11 +93,14 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
             mRetainFragment.setModel(mUserData);
         }
         mUserData = mRetainFragment.getModel();
-        showData(mUserData);
 
         mChronosConnector.onCreate(this, savedInstanceState);
         if (mUserData == null){
+            //Забираем данные из БД, если открываем окно впервые.
             mChronosConnector.runOperation(new LoadDatestoUi(), false);
+        }else{
+            //Выводим данные, если они были сохранены во фрагменте.
+            showData(mUserData);
         }
     }
 
@@ -159,20 +159,20 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private void setupDrawable() {
         //Боковое меню
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mUserAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
+        View drawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        ImageView userAvatar = (ImageView) drawerHeader.findViewById(R.id.menu_header_avatar);
         //Вставляем аватар в выдвижное меню
         Picasso.with(this).
                 load(mDataManager.getPreferencesManager().
                         loadUserAvatar()).
                 placeholder(R.drawable.empty_avatar).
-                into(mUserAvatar);
+                into(userAvatar);
+        //Вставляем ФИО и почту в выдвижное меню
+        TextView userFio = (TextView) drawerHeader.findViewById(R.id.menu_header_user_name);
+        userFio.setText(mDataManager.getPreferencesManager().loadFIO());
 
-        mUserFio = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_name);
-        mUserFio.setText(mDataManager.getPreferencesManager().loadFIO());
-
-        mUserEmail = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_mail);
-        mUserEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
+        TextView userEmail = (TextView) drawerHeader.findViewById(R.id.menu_header_user_mail);
+        userEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.list_navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -241,8 +241,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     }
     /**
      * Проверяет введенные данные пользователем.
-     * Собирает совпадения в коллекцию mSearchUserData
-     * Выводить данные на экран через адаптер
      *
      * @param text введенный текст
      */
@@ -268,7 +266,6 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     showUserList();
                 }
             };
-
             mSearchHandler.removeCallbacks(searchingUsers);
             mSearchHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
         }

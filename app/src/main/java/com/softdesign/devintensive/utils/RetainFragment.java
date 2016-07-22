@@ -8,7 +8,7 @@ import com.softdesign.devintensive.data.storage.models.User;
 import java.util.List;
 
 /**
- * Created by smalew on 15.07.16.
+ * Локальное сохранение данных через фрагмент.
  */
 public class RetainFragment extends Fragment {
 

@@ -26,7 +26,7 @@ public class PreferencesManager {
             ConstantManager.USER_REPO_KEY,
             ConstantManager.USER_SELF_KEY};
 
-    private static final String[] USER_VALUES = {
+    private static final String[] USER_STATISTIC_VALUES = {
             ConstantManager.USER_RATING,
             ConstantManager.USER_CODE_LINES,
             ConstantManager.USER_PROJECTS};
@@ -92,19 +92,19 @@ public class PreferencesManager {
         return mSharedPreferences.getString(ConstantManager.USER_ID, "null");
     }
 
-    public void saveUserValues(int[] userValues) {
+    public void saveUserStatistic(int[] userValues) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
-        for (int i = 0; i < USER_VALUES.length; i++) {
-            editor.putString(USER_VALUES[i], String.valueOf(userValues[i]));
+        for (int i = 0; i < USER_STATISTIC_VALUES.length; i++) {
+            editor.putString(USER_STATISTIC_VALUES[i], String.valueOf(userValues[i]));
         }
         editor.apply();
     }
-    public List<String> loadUserValues(){
+    public List<String> loadUserStatistic(){
         List<String> result = new ArrayList<>();
 
-        for (int i = 0; i < USER_VALUES.length; i++) {
-            result.add(mSharedPreferences.getString(USER_VALUES[i], "0"));
+        for (int i = 0; i < USER_STATISTIC_VALUES.length; i++) {
+            result.add(mSharedPreferences.getString(USER_STATISTIC_VALUES[i], "0"));
         }
         return result;
     }
