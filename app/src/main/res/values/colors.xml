@@ -6,9 +6,9 @@
 
     <!--Background-->
     <color name="background_separator">#ababab</color>
-    <color name="background_statistic">#666666</color>
+    <color name="background_statistic">#416ca7</color>
     <color name="background_statistic_txt">#00fafafa</color>
-    <color name="background_toolbar">#6e6e6e</color>
+    <color name="background_toolbar">#416ca7</color>
     <color name="background_wrong_info">#644f4f</color>
     <color name="background_accept_info">#485b44</color>
     <color name="background_white">#ffffff</color>
@@ -17,4 +17,5 @@
     <color name="text_statistic">#d7d7d7</color>
     <color name="text_information">#030303</color>
     <color name="text_login">#cf3c18</color>
+    <color name="text_toolbar">#d7d7d7</color>
 </resources>

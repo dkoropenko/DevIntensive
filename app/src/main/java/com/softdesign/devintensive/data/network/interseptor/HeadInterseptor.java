@@ -24,7 +24,8 @@ public class HeadInterseptor implements Interceptor {
         Request.Builder builder = original.newBuilder().
                 header("X-Access-Token", token).
                 header("Request-User-Id", userId).
-                header("User-Agent", "DevIntensive");
+                header("User-Agent", "DevIntensive").
+                header("Cache-Control", "max-age"+ (60*60*24));
 
         Request request = builder.build();
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_group_1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/menu_user_profile"
             android:checkable="true"
@@ -11,10 +13,34 @@
             android:id="@+id/menu_contacts"
             android:icon="@drawable/menu_contacts"
             android:title="@string/menu_my_contacts"/>
-
-        <item
-            android:id="@+id/menu_exit"
-            android:icon="@drawable/menu_exit"
-            android:title="@string/menu_exit"/>
     </group>
+
+    <group
+        android:id="@+id/menu_group_2"
+        android:checkableBehavior="single">
+            <item
+                android:id="@+id/menu_calendar"
+                android:icon="@drawable/menu_calendar"
+                android:title="@string/menu_calendar"/>
+
+            <item
+                android:id="@+id/menu_to_do_list"
+                android:icon="@drawable/menu_todo_list"
+                android:title="@string/menu_todo_list"/>
+
+            <item
+                android:id="@+id/menu_chat"
+                android:icon="@drawable/menu_chat"
+                android:title="@string/menu_chat"/>
+    </group>
+
+    <group
+        android:id="@+id/menu_group_3"
+        android:checkableBehavior="single">
+            <item
+                android:id="@+id/menu_exit"
+                android:icon="@drawable/menu_exit"
+                android:title="@string/menu_exit"/>
+    </group>
+
 </menu>

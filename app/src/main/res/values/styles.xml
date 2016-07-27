@@ -12,8 +12,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <!--Text Style-->
     <style name="text">
@@ -251,12 +251,14 @@
         <item name="android:inputType">text</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
         <item name="android:hint">@string/hint_login</item>
     </style>
     <style name="user_information_edit_text.password">
         <item name="android:inputType">textPassword</item>
         <item name="android:focusable">true</item>
         <item name="android:enabled">true</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
         <item name="android:hint">@string/hint_password</item>
     </style>
     <style name="login_auth_btn" parent="text.login_btn">
@@ -284,10 +286,11 @@
     </style>
     <!--End LogIn-->
 
-    
+
     <!--Toolbar-->
-    <style name="ToolBarStyle" parent="Theme.AppCompat">
-        <item name="android:textColor">@color/text_statistic</item>
-        <item name="android:textColorSecondary">@color/background_statistic_txt</item>
+    <style name="ToolbarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/text_toolbar</item>
+        <item name="android:textColorSecondary">@color/text_toolbar</item>
+        <item name="android:actionMenuTextColor">@color/text_toolbar</item>
     </style>
 </resources>

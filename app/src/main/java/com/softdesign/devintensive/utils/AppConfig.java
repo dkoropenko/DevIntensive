@@ -7,4 +7,6 @@ import okhttp3.HttpUrl;
  */
 public interface AppConfig {
     HttpUrl BASE_URL = HttpUrl.parse("http://devintensive.softdesign-apps.ru/api/");
+    long MAX_CONNECT_TIMEOUT = 3000;
+    long MAX_READ_TIMEOUT = 10000;
 }

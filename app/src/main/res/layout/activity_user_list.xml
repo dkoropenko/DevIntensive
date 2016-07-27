@@ -11,8 +11,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/list_coordinator_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_separator">
+        android:layout_height="wrap_content">
 
         <!--TOOLBAR-->
         <android.support.design.widget.AppBarLayout
@@ -20,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_toolbar"
-            app:theme="@style/ToolBarStyle"
-            app:popupTheme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:theme="@style/AppTheme.PopupOverlay"
@@ -29,7 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:fitsSystemWindows="true"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ToolbarStyle">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
         <!--END TOOLBAR-->

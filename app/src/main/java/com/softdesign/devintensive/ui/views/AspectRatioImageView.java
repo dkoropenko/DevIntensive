@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.softdesign.devintensive.R;
 
 /**
- * Created by smalew on 14.07.16.
+ * Класс для изменения размера изображения.
  */
 public class AspectRatioImageView extends ImageView {
     private static final float DEFAULT_RATIO = 1.73f;

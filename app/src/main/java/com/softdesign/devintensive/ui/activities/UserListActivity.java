@@ -1,6 +1,7 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,7 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,31 +23,29 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redmadrobot.chronos.ChronosConnector;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.ItemTouchHelperAdapter;
+import com.softdesign.devintensive.utils.LoadDatestoUi;
 import com.softdesign.devintensive.utils.RetainFragment;
+import com.softdesign.devintensive.utils.SimpleItemTouchHelperCallback;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener{
 
     private static final String TAG = "UserListActivity";
-    @BindView(R.id.list_navigation_drawer)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.list_coordinator_container)
-    CoordinatorLayout mCoordinatorLayout;
+    private static final int LOADER = 1;
+
     @BindView(R.id.list_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.user_list)
@@ -54,16 +53,18 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
-    private List<UserListRes.UserData> mUserData;
+    private List<User> mUserData;
 
-    //Боковое меню
+    //Инициализация слоев для бокового меню и user content
+    @BindView(R.id.list_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.list_navigation_view)
     NavigationView mNavigationView;
-    private View mDrawerHeader;
-    ImageView mUserAvatar;
-    TextView mUserFio, mUserEmail;
+    @BindView(R.id.list_navigation_drawer)
+    DrawerLayout mNavigationDrawer;
 
-    private List<UserListRes.UserData> mSearchUserData;
+    private Handler mSearchHandler;
+    private ChronosConnector mChronosConnector = new ChronosConnector();
     private RetainFragment mRetainFragment;
 
     @Override
@@ -73,22 +74,69 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
+        mSearchHandler = new Handler();
 
+        LinearLayoutManager llManager = new LinearLayoutManager(this);
+        mUserList.setLayoutManager(llManager);
+
+        setupToolbar();
+        setupDrawable();
+
+        //Сохранение и загрузка данных через фаргмент
         FragmentManager fm = getSupportFragmentManager();
-        mRetainFragment = (RetainFragment) fm.findFragmentByTag("mModel");
+        mRetainFragment = (RetainFragment) fm.findFragmentByTag("myModel");
 
         if (mRetainFragment == null) {
             mRetainFragment = new RetainFragment();
-            fm.beginTransaction().add(mRetainFragment, "mModel").commit();
+            fm.beginTransaction().add(mRetainFragment, "myModel").commit();
 
             mRetainFragment.setModel(mUserData);
         }
-
         mUserData = mRetainFragment.getModel();
 
-        if (mUserData == null) {
-            initUsersData();
-        } else {
+        mChronosConnector.onCreate(this, savedInstanceState);
+        if (mUserData == null){
+            //Забираем данные из БД, если открываем окно впервые.
+            mChronosConnector.runOperation(new LoadDatestoUi(), false);
+        }else{
+            //Выводим данные, если они были сохранены во фрагменте.
+            showData(mUserData);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mChronosConnector.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChronosConnector.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChronosConnector.onResume();
+    }
+
+    public void onOperationFinished(final LoadDatestoUi.Result result) {
+        if (result.isSuccessful()) {
+            showData(result.getOutput());
+        }
+    }
+
+    private void showData(List<User> user){
+        if (user != null){
+            mUserData = user;
+            loadUsers();
+        }
+    }
+
+    private void loadUsers() {
+        if (!mUserData.isEmpty()) {
             mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
                 public void onClickOpenUserInfoListener(int position) {
@@ -99,90 +147,32 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     startActivity(openProfile);
                 }
             });
+
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mUsersAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             mUserList.setAdapter(mUsersAdapter);
+            touchHelper.attachToRecyclerView(mUserList);
+        } else {
+            showSnackBar(getString(R.string.error_load_users));
         }
-
-
-        LinearLayoutManager llManager = new LinearLayoutManager(this);
-        mUserList.setLayoutManager(llManager);
-
-        setupToolbar();
-        setupDrawable();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRetainFragment.setModel(mUserData);
-    }
-
-    private void showSnackBar(String message) {
-        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void initUsersData() {
-        Call<UserListRes> call = mDataManager.getUsersList();
-
-        showProgress();
-        call.enqueue(new Callback<UserListRes>() {
-            @Override
-            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                if (response.code() == 200) {
-                    try {
-                        mUserData = response.body().getData();
-
-                        mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                            @Override
-                            public void onClickOpenUserInfoListener(int position) {
-                                UserDTO user = new UserDTO(mUserData.get(position));
-
-                                Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                                openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                                startActivity(openProfile);
-                            }
-                        });
-                        mUserList.setAdapter(mUsersAdapter);
-                        hideProgress();
-                    } catch (NullPointerException e) {
-                        hideProgress();
-                        Log.d(TAG, "onResponse error: " + e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserListRes> call, Throwable t) {
-                hideProgress();
-                showSnackBar(getResources().getString(R.string.error_server_not_response));
-            }
-        });
     }
 
     private void setupDrawable() {
         //Боковое меню
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mUserAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
+        View drawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        ImageView userAvatar = (ImageView) drawerHeader.findViewById(R.id.menu_header_avatar);
         //Вставляем аватар в выдвижное меню
         Picasso.with(this).
                 load(mDataManager.getPreferencesManager().
                         loadUserAvatar()).
                 placeholder(R.drawable.empty_avatar).
-                into(mUserAvatar);
+                into(userAvatar);
+        //Вставляем ФИО и почту в выдвижное меню
+        TextView userFio = (TextView) drawerHeader.findViewById(R.id.menu_header_user_name);
+        userFio.setText(mDataManager.getPreferencesManager().loadFIO());
 
-        mUserFio = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_name);
-        mUserFio.setText(mDataManager.getPreferencesManager().loadFIO());
-
-        mUserEmail = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_mail);
-        mUserEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
+        TextView userEmail = (TextView) drawerHeader.findViewById(R.id.menu_header_user_mail);
+        userEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.list_navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -211,13 +201,13 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     startActivity(intent);
                 }
 
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                mNavigationDrawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });
     }
-
     private void setupToolbar() {
+        mToolbar.setTitle("Контакты");
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
 
@@ -238,60 +228,97 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
-        //Проверка введенного текста.
-        checkInputInformation(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        //Проверка введенного текста.
+        checkInputInformation(newText);
         return false;
     }
-
     /**
      * Проверяет введенные данные пользователем.
-     * Собирает совпадения в коллекцию mSearchUserData
-     * Выводить данные на экран через адаптер
+     *
      * @param text введенный текст
      */
     private void checkInputInformation(String text) {
 
-        mSearchUserData = new ArrayList<>();
+        if (text.equals("")){
+            mUserData = mDataManager.getUserListFromDatabase();
+            Runnable searchingUsers = new Runnable() {
+                @Override
+                public void run() {
+                    showUserList();
+                }
+            };
 
-        if (mSearchUserData != null)
-            mSearchUserData.clear();
+            mSearchHandler.removeCallbacks(searchingUsers);
+            mSearchHandler.post(searchingUsers);
+        }else {
+            mUserData = mDataManager.getUserListByName(text);
 
-        for (int i = 0; i < mUserData.size(); i++) {
-            if (mUserData.get(i).getFullName().toLowerCase().contains(text.toLowerCase())) {
-                mSearchUserData.add(mUserData.get(i));
-            }
-
+            Runnable searchingUsers = new Runnable() {
+                @Override
+                public void run() {
+                    showUserList();
+                }
+            };
+            mSearchHandler.removeCallbacks(searchingUsers);
+            mSearchHandler.postDelayed(searchingUsers, ConstantManager.DELAY_MILLIS);
         }
+    }
 
-        if (!mSearchUserData.isEmpty()) {
-            mUsersAdapter = new UsersAdapter(mSearchUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
+    private void showUserList(){
+        if (!mUserData.isEmpty()) {
+            mUsersAdapter = new UsersAdapter(mUserData, new UsersAdapter.UserViewHolder.CustomClickListener() {
                 @Override
                 public void onClickOpenUserInfoListener(int position) {
-                    UserDTO user = null;
+                    UserDTO user = new UserDTO(mUserData.get(position));
 
-                    for (int i = 0; i < mUserData.size(); i++) {
-                        if (mUserData.get(i).getId().contains(mSearchUserData.get(position).getId())) {
-                            user = new UserDTO(mUserData.get(i));
-                        }
-                    }
-
-                    if (user != null) {
-                        Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
-                        openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
-                        startActivity(openProfile);
-                    }
+                    Intent openProfile = new Intent(UserListActivity.this, UsersProfileActivity.class);
+                    openProfile.putExtra(ConstantManager.PARCEBLE_INFORMATION, user);
+                    startActivity(openProfile);
                 }
             });
 
-            mUserList.setAdapter(mUsersAdapter);
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mUsersAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            mUserList.swapAdapter(mUsersAdapter, true);
+            touchHelper.attachToRecyclerView(mUserList);
         }
     }
+
+    /**
+     * Закрытие выдвижного меню по нажатию кнопки "Назад"
+     */
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START))
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
+    private void showSnackBar(String message) {
+        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Открывает выдвижное меню с помощью кнопки в тулбаре
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home)
+            mNavigationDrawer.openDrawer(GravityCompat.START);
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

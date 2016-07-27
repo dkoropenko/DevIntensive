@@ -1,7 +1,8 @@
 package com.softdesign.devintensive.data.network.req;
 
 /**
- * Created by smalew on 10.07.16.
+ * Класс для отправки данных для авторизации
+ * на сервер
  */
 public class UserLoginReq {
 

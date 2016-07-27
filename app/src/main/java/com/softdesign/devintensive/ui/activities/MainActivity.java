@@ -96,10 +96,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<CheckInputInformation> watchers;
 
 
-    //Боковое меню
+    //Боковое меню с аватаром и текстовыми полями.
     @BindView(R.id.navigation_view)
     NavigationView mNavigationView;
-    private View mDrawerHeader;
     ImageView mUserAvatar;
     TextView mUserFio, mUserEmail;
 
@@ -126,7 +125,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private AppBarLayout.LayoutParams mLayoutParams = null; //Параметры тулбара.
 
     private File mPhotoFile;
-    private Uri mSelectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +143,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setupToolbar();
         setupNavigation();
         initUserFields();
-        initUserValues();
+        initUserStatistic();
 
         mFab.setOnClickListener(this);
         userPhotoNew.setOnClickListener(this);
@@ -192,10 +190,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (requestCode) {
             case ConstantManager.REQUEST_CAMERA_PICTURE:
                 if (resultCode == RESULT_OK && mPhotoFile != null) {
-                    mSelectedImage = Uri.fromFile(mPhotoFile);
+                    Uri selectedImage = Uri.fromFile(mPhotoFile);
 
-                    loadPhotoToServer(mSelectedImage);
-                    insertPhotoToProfile(mSelectedImage);
+                    loadPhotoToServer(selectedImage);
+                    insertPhotoToProfile(selectedImage);
                 }
             case ConstantManager.REQUEST_GALLARY_PICTURE:
                 if (resultCode == RESULT_OK && data != null) {
@@ -227,7 +225,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.to_call_btn:
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == getPackageManager().PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     intent = new Intent(Intent.ACTION_DIAL);
                     data = Uri.parse("tel:" + mUserInfo.get(0).getText().toString());
                     intent.setData(data);
@@ -336,8 +334,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
     }
 
-    private void initUserValues(){
-        List<String> userData = mDataManager.getPreferencesManager().loadUserValues();
+    private void initUserStatistic(){
+        List<String> userData = mDataManager.getPreferencesManager().loadUserStatistic();
 
         for (int i = 0; i < userData.size(); i++) {
             mUserValues.get(i).setText(userData.get(i));
@@ -373,8 +371,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
     private void disableUserInfo(){
-        for (int i = 0; i < mUserAction.size(); i++) {
-            mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
+        if (!watchers.isEmpty()){
+            for (int i = 0; i < mUserAction.size(); i++) {
+                mUserInfo.get(i).removeTextChangedListener(watchers.get(i));
+            }
         }
     }
     private void setupToolbar() {
@@ -391,8 +391,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
     private void setupNavigation() {
         //Боковое меню
-        mDrawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
-        mUserAvatar = (ImageView) mDrawerHeader.findViewById(R.id.menu_header_avatar);
+        View drawerHeader = mNavigationView.inflateHeaderView(R.layout.drawer_header);
+        mUserAvatar = (ImageView) drawerHeader.findViewById(R.id.menu_header_avatar);
         //Вставляем аватар в выдвижное меню
         Picasso.with(this).
                 load(mDataManager.getPreferencesManager().
@@ -400,10 +400,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 placeholder(R.drawable.empty_avatar).
                 into(mUserAvatar);
 
-        mUserFio = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_name);
+        mUserFio = (TextView) drawerHeader.findViewById(R.id.menu_header_user_name);
         mUserFio.setText(mDataManager.getPreferencesManager().loadFIO());
 
-        mUserEmail = (TextView) mDrawerHeader.findViewById(R.id.menu_header_user_mail);
+        mUserEmail = (TextView) drawerHeader.findViewById(R.id.menu_header_user_mail);
         mUserEmail.setText(mDataManager.getPreferencesManager().loadLoginEmail());
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
